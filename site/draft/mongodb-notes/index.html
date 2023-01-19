@@ -1,0 +1,3075 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Data Engineering, Analytics and Visualization">
+      
+      
+        <meta name="author" content="Vaibhav Yadav">
+      
+      
+        <link rel="canonical" href="https://iYadavVaibhav.github.io/wiki/draft/mongodb-notes/">
+      
+      
+        <link rel="prev" href="../mongo%20University%20m101j%20exam%20solutions/">
+      
+      
+        <link rel="next" href="../notepad/">
+      
+      <link rel="icon" href="../../assets/images/apple-touch-icon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
+    
+    
+      
+        <title>Mongo DB - Notes - Vaibhav Yadav's Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/timeago.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mongo-db-notes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Vaibhav Yadav&#39;s Wiki" class="md-header__button md-logo" aria-label="Vaibhav Yadav's Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/apple-touch-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Vaibhav Yadav's Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mongo DB - Notes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/iYadavVaibhav/wiki" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    iyadavvaibhav.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Vaibhav Yadav&#39;s Wiki" class="md-nav__button md-logo" aria-label="Vaibhav Yadav's Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/apple-touch-icon.png" alt="logo">
+
+    </a>
+    Vaibhav Yadav's Wiki
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/iYadavVaibhav/wiki" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    iyadavvaibhav.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="false">
+          Electronics and IoT
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Electronics and IoT" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Electronics and IoT
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Electronics%20and%20IoT/2021-07-27-electronics-notes/" class="md-nav__link">
+        Electronics Notes, IoT, DIY, Hobby
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Functional & Management
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Functional & Management" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Functional & Management
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Functional%20%26%20Management/2020-06-29-banking-notes/" class="md-nav__link">
+        Banking and Finance Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Functional%20%26%20Management/2022-06-08-project-management/" class="md-nav__link">
+        Project Management Notes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          JavaScript
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="JavaScript" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          JavaScript
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JavaScript/2018-07-03-nativescript-notes/" class="md-nav__link">
+        NativeScript Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JavaScript/2018-07-12-javascript-notes/" class="md-nav__link">
+        JavaScript Libraries and Frameworks Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JavaScript/2022-07-11-js-ecma6-notes/" class="md-nav__link">
+        ECMA 6+ Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JavaScript/2022-07-14-react-js-notes/" class="md-nav__link">
+        React JS Notes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          Tech Notes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tech Notes" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Tech Notes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2018-06-28-mac-linux-terminal/" class="md-nav__link">
+        Mac and Linux Ways
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2018-07-02-git-notes/" class="md-nav__link">
+        Git and GitHub
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2019-03-05-flask-notes/" class="md-nav__link">
+        Flask - WebFramework in Python
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2019-06-05-sql-notes/" class="md-nav__link">
+        MySQL, SQLite and SQLAlchemy Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2020-07-14-google-cloud-platform-notes/" class="md-nav__link">
+        Google Cloud Platform (GCP) and its Services
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2020-07-14-text-editors-notes/" class="md-nav__link">
+        Text Editors - Customizations/Plugins/Hacks for Sublime, VS Code and Vim
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2020-07-14-web-server-notes/" class="md-nav__link">
+        Web Server Configuration Guide - Ubuntu Apache WSGI Python Flask MySQL PHP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2020-07-15-flutter-notes/" class="md-nav__link">
+        Flutter BLoC and Firebase Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2020-07-15-vagrant-virtualbox-notes/" class="md-nav__link">
+        Vagrant and Virtual Box Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2020-08-1-pelican-python-notes/" class="md-nav__link">
+        Pelican - Static Site Generator in Python - Basic Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2021-05-05-datascience-notes/" class="md-nav__link">
+        Data Science Learning Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2021-05-05-python-notes/" class="md-nav__link">
+        Python Conda PIPs Venv RegEx R
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2021-08-24-web-development-notes/" class="md-nav__link">
+        Web and App Development
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/2022-05-15-tableau-notes/" class="md-nav__link">
+        Tableau Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tech%20Notes/material_mkdocs/" class="md-nav__link">
+        Material for MkDocs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="false">
+          Blog
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Blog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Blog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/2018-05-02-Hello-Humans/" class="md-nav__link">
+        Hello Humans!
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/2018-06-16-github-pages-jekyll/" class="md-nav__link">
+        Github Pages and Jekyll Sites - Complete Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/2018-07-01-data-wrangling-in-python/" class="md-nav__link">
+        Data Wrangling in Python using Pandas
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blog/2019-06-14-syntax-highlight-jekyll/" class="md-nav__link">
+        How to add syntax highlighting to Jekyll Sites
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="true">
+          Draft
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Draft" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Draft
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HDPCD%20-%20rough/" class="md-nav__link">
+        HDPCD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ISB%20AMPBA%20DS%20ML%20AI%20DL%20Notes/" class="md-nav__link">
+        ISB AMPBA Data Science Machine Learning AI DL Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ITVersity%20-%20HDPCD%2077/" class="md-nav__link">
+        HDPCD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../JSPandServlets/" class="md-nav__link">
+        JSPs and Servlets Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Java%20Notes/" class="md-nav__link">
+        Java Notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Lynda%20-%20Negotiating%20Your%20Job%20Offer/" class="md-nav__link">
+        Negotiating Your Job Offer - Lynda
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flume/" class="md-nav__link">
+        example.conf: A single-node Flume configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hive/" class="md-nav__link">
+        HIVE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mongo%20University%20m101j%20exam%20solutions/" class="md-nav__link">
+        M101 | Exam Solutions | Mongo University
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Mongo DB - Notes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Mongo DB - Notes
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#java-driver-and-web-framework" class="md-nav__link">
+    Java Driver and Web Framework:
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notepad/" class="md-nav__link">
+        Notepad Public
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#java-driver-and-web-framework" class="md-nav__link">
+    Java Driver and Web Framework:
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+    
+                  
+
+  
+    <a href="https://github.com/iYadavVaibhav/wiki/edit/master/docs/draft/mongodb-notes.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/iYadavVaibhav/wiki/raw/master/docs/draft/mongodb-notes.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.15 8.15 0 0 1-1.23-2Z"/></svg>
+    </a>
+  
+
+
+
+<h1 id="mongo-db-notes">Mongo DB - Notes</h1>
+<h2 id="setup">Setup</h2>
+<p><code>~/code/mogodb</code> - it is base for project setup and is imported to eclipse.
+- added new softwares are /usr/local/mogodb, apache-maven.
+- spark and front end framework, FreeMarker, is added as jar to project.</p>
+<ul>
+<li>Non relational JSON db</li>
+<li>Does not save in table, instead stored as JSON document.</li>
+<li>It does not support joins and sql.</li>
+<li>It does not support transactions.</li>
+<li>
+<p>It supports indexes and secondary indexes.</p>
+</li>
+<li>
+<p>MongoD is the process which runs the mongoDB.</p>
+</li>
+<li>Shell is js shell which connects via TCP to mongoD.</li>
+</ul>
+<h2 id="java-driver-and-web-framework">Java Driver and Web Framework:</h2>
+<ul>
+<li>
+<p>SparkJava and FreeMarker are framework which well use to interact with mongoDB.</p>
+</li>
+<li>
+<p>SparkJava is micro web fw to setup routes.</p>
+</li>
+<li>
+<p>FreeMarker is used for HTML views.</p>
+</li>
+<li>
+<p>runs under JVM</p>
+</li>
+<li>
+<p>all this talks to mongoDB via mongoDB java driver.</p>
+</li>
+<li>
+<p>@todo: Quick Introduction to the Mongo Shell - watch at home.</p>
+</li>
+<li>
+<p>mongod is server daemon and mongo is shell that connects to it .</p>
+</li>
+<li>data is saved in /data/db by default</li>
+</ul>
+<h1 id="following-notes-are-from-2nd-revision">Following notes are from 2nd revision</h1>
+<h2 id="using-findone-function">Using findOne function:</h2>
+<ul>
+<li>It takes first argument as document in which we have key and value.</li>
+<li>
+<p>this acts as key = column, value = value like we give in where clause.</p>
+</li>
+<li>
+<p>the second argument to findOne is the document having keys as columns we want to see and value as true to see and false to skip.</p>
+</li>
+<li>
+<p>to use gr and lt we use a sub document in argument.</p>
+</li>
+<li>
+<p>eg. db.score.find ( { score : { $gt : 35 } } )</p>
+</li>
+<li>
+<p>db.score.find ( { score : { $gt : 35 , $lte : 60} , type : "English" } )</p>
+</li>
+<li>
+<p>where score &gt; 35 and score &lt;= 60 and type = "English";</p>
+</li>
+</ul>
+<h2 id="introduction-to-find">Introduction to find()</h2>
+<ul>
+<li>the result is returned in form of batches. say 20.</li>
+<li>to page through type it.</li>
+<li>cursor on server is open. it is closed in say 10 mins on the server.</li>
+<li>.pretty() makes result more readable.</li>
+</ul>
+<h2 id="querying-using-field-selection">Querying using field selection</h2>
+<ul>
+<li>the 1st arg is like where clause. filter the result on matching conditions.</li>
+<li>
+<p>it accepts doc and that is matched for results.</p>
+</li>
+<li>
+<p>@Note: We can give key without quotes but the value has to be in quotes when writing a document.</p>
+</li>
+<li>
+<p>the 2nd arg takes what we want to see in results. by default the _id column is selected. it is analogous to select clause in rdbms.</p>
+</li>
+<li>
+<p>e.g.</p>
+</li>
+<li>
+<blockquote>
+<p>db.scores.find({student:19,type:"essay"} , {score:true,_id:false})</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="querying-using-gt-and-lt">Querying using $gt and $lt</h2>
+<ul>
+<li>e.g.</li>
+<li>
+<blockquote>
+<p>db.scores.find({ score: { $gt : 95  }  })</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>db.scores.find({ score: { $gt : 95 , $lte: 96 }  })</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>db.scores.find({ score: { $gt : 95 , $lte: 96 } , type:"essay"  })</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="inequalities-on-string">Inequalities on String</h2>
+<ul>
+<li>We can use lt, gt, lte, gte but this gives result based on UTF sorting of alphabets.</li>
+<li>
+<p>eg. { name : { $lte : "D" } } # it may produce absurd results as well.</p>
+</li>
+<li>
+<p>We have $type in which we match the datatype of a field. It accepts a number based on BSON type.</p>
+</li>
+<li>
+<p>e.g: name : { $type : 2 } - this gives names having string value</p>
+</li>
+<li>
+<p>We have $regex which accepts regular expressions.</p>
+</li>
+<li>
+<p>We have $exists, it accepts a key name. It returns only that document which has this key in it.</p>
+</li>
+<li>e.g: db.emp.find ( { profession : { $exists : true } } )</li>
+<li>
+<p>Nested content is not matched, only top level array element is matched.</p>
+</li>
+<li>
+<p>$all is is like a sub set of elements. all should be there but in any order</p>
+</li>
+<li>
+<p>$in is like any of it should match.</p>
+</li>
+<li>
+<p>We can use gt and lt in string Comparisons.
+    e.g.
+    &gt; db.people.find()
+    { "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "vaibhav", "age" : 30 }
+    { "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+    { "_id" : ObjectId("57bfa58cdaf90e8c76d19cc8"), "name" : "rahul" }
+    { "_id" : ObjectId("57bfa594daf90e8c76d19cc9"), "name" : "Kashish" }
+    { "_id" : ObjectId("57bfa59bdaf90e8c76d19cca"), "name" : "Vishakha" }
+    { "_id" : ObjectId("57bfa5a3daf90e8c76d19ccb"), "name" : "Jaspreet" }
+    { "_id" : ObjectId("57bfa5aadaf90e8c76d19ccc"), "name" : "Ankit" }
+    { "_id" : ObjectId("57bfa5b1daf90e8c76d19ccd"), "name" : "Hardeep" }
+    { "_id" : ObjectId("57bfa5bcdaf90e8c76d19cce"), "name" : "Anuj" }
+    { "_id" : ObjectId("57bfa5c0daf90e8c76d19ccf"), "name" : "Arjun" }
+    &gt; db.people.find({name:{<span class="arithmatex">\(lt:"D"}})
+    { "_id" : ObjectId("57bfa5aadaf90e8c76d19ccc"), "name" : "Ankit" }
+    { "_id" : ObjectId("57bfa5bcdaf90e8c76d19cce"), "name" : "Anuj" }
+    { "_id" : ObjectId("57bfa5c0daf90e8c76d19ccf"), "name" : "Arjun" }
+    &gt; db.people.find({name:{\)</span>gt:"D",$lt:"M"}})
+    { "_id" : ObjectId("57bfa594daf90e8c76d19cc9"), "name" : "Kashish" }
+    { "_id" : ObjectId("57bfa5a3daf90e8c76d19ccb"), "name" : "Jaspreet" }
+    { "_id" : ObjectId("57bfa5b1daf90e8c76d19ccd"), "name" : "Hardeep" }</p>
+</li>
+<li>
+<p>In mongodb the name field can have numeric value as well. But with above query we will get only the result we got. name:42 for eg will not be retrieved.</p>
+</li>
+<li>hence mongodb Comparison operator donot cross the data type boundary.</li>
+</ul>
+<h2 id="using-regex-exists-and-type">Using $regex, $exists and $type</h2>
+<ul>
+<li>exists is used to find if a certain filed is present in the document.</li>
+<li>type is used to find doc having value of particular type say string or number. the type code can be found from bson.org.</li>
+<li>
+<p>regex is used to match regular expressions.</p>
+<p>e.g.</p>
+<blockquote>
+<p>db.people.find({age:{<span class="arithmatex">\(exists:false}})
+{ "_id" : ObjectId("57bfa58cdaf90e8c76d19cc8"), "name" : "rahul" }
+{ "_id" : ObjectId("57bfa594daf90e8c76d19cc9"), "name" : "Kashish" }
+{ "_id" : ObjectId("57bfa59bdaf90e8c76d19cca"), "name" : "Vishakha" }
+{ "_id" : ObjectId("57bfa5a3daf90e8c76d19ccb"), "name" : "Jaspreet" }
+{ "_id" : ObjectId("57bfa5aadaf90e8c76d19ccc"), "name" : "Ankit" }
+{ "_id" : ObjectId("57bfa5b1daf90e8c76d19ccd"), "name" : "Hardeep" }
+{ "_id" : ObjectId("57bfa5bcdaf90e8c76d19cce"), "name" : "Anuj" }
+{ "_id" : ObjectId("57bfa5c0daf90e8c76d19ccf"), "name" : "Arjun" }
+{ "_id" : ObjectId("57bfa78fdaf90e8c76d19cd0"), "name" : 42 }
+db.people.find({age:{\)</span>exists:true}})
+{ "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "vaibhav", "age" : 30 }
+{ "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+db.people.find({name:{$type:2}}) //2 is code for string
+{ "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "vaibhav", "age" : 30 }
+{ "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+{ "_id" : ObjectId("57bfa58cdaf90e8c76d19cc8"), "name" : "rahul" }
+{ "_id" : ObjectId("57bfa594daf90e8c76d19cc9"), "name" : "Kashish" }
+{ "_id" : ObjectId("57bfa59bdaf90e8c76d19cca"), "name" : "Vishakha" }
+{ "_id" : ObjectId("57bfa5a3daf90e8c76d19ccb"), "name" : "Jaspreet" }
+{ "_id" : ObjectId("57bfa5aadaf90e8c76d19ccc"), "name" : "Ankit" }
+{ "_id" : ObjectId("57bfa5b1daf90e8c76d19ccd"), "name" : "Hardeep" }
+{ "_id" : ObjectId("57bfa5bcdaf90e8c76d19cce"), "name" : "Anuj" }
+{ "_id" : ObjectId("57bfa5c0daf90e8c76d19ccf"), "name" : "Arjun" }
+db.people.find({name:{ $regex: "a"  }}) // all that have a somewhere
+{ "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "vaibhav", "age" : 30 }
+{ "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+{ "_id" : ObjectId("57bfa58cdaf90e8c76d19cc8"), "name" : "rahul" }
+{ "_id" : ObjectId("57bfa594daf90e8c76d19cc9"), "name" : "Kashish" }
+{ "_id" : ObjectId("57bfa59bdaf90e8c76d19cca"), "name" : "Vishakha" }
+{ "_id" : ObjectId("57bfa5a3daf90e8c76d19ccb"), "name" : "Jaspreet" }
+{ "_id" : ObjectId("57bfa5b1daf90e8c76d19ccd"), "name" : "Hardeep" }
+db.people.find({name:{ <span class="arithmatex">\(regex: "e\)</span>"  }}) //ends with e
+db.people.find({name:{ <span class="arithmatex">\(regex: "a\)</span>"  }}) //ends with a
+{ "_id" : ObjectId("57bfa59bdaf90e8c76d19cca"), "name" : "Vishakha" }</p>
+<p>db.people.find({name:{ $regex: "^A"  }}) //begins with A
+{ "_id" : ObjectId("57bfa5aadaf90e8c76d19ccc"), "name" : "Ankit" }
+{ "_id" : ObjectId("57bfa5bcdaf90e8c76d19cce"), "name" : "Anuj" }
+{ "_id" : ObjectId("57bfa5c0daf90e8c76d19ccf"), "name" : "Arjun" }</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="using-or">Using $or</h2>
+<ul>
+<li>
+<p>$or takes in an array of documents and combines them with or conditions.</p>
+</li>
+<li>
+<p>when the value is array in document and we specify it to match in find, then only the outer array is looked in.</p>
+</li>
+<li>
+<p>no recursion occurs or inner depth arrays are matched.</p>
+</li>
+<li>
+<p>MongoDB has no sql language. Instead it has functions that have arguments passes to them.</p>
+<p>e.g.</p>
+<blockquote>
+<p>db.people.find({ <span class="arithmatex">\(or : [ {name:{\)</span>regex:"e"}} , { age : { $exists:true } } ] });
+{ "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "vaibhav", "age" : 30 }
+{ "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+{ "_id" : ObjectId("57bfa5a3daf90e8c76d19ccb"), "name" : "Jaspreet" }
+{ "_id" : ObjectId("57bfa5b1daf90e8c76d19ccd"), "name" : "Hardeep" }</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="using-and">Using $and</h2>
+<ul>
+<li>
+<p>Same as we use $or.
+    e.g.
+    &gt; db.people.find({ <span class="arithmatex">\(and : [ {name:{\)</span>regex:"a"}} , { name : { $gt:"K" } } ] });
+    { "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "vaibhav", "age" : 30 }
+    { "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+    { "_id" : ObjectId("57bfa58cdaf90e8c76d19cc8"), "name" : "rahul" }
+    { "_id" : ObjectId("57bfa594daf90e8c76d19cc9"), "name" : "Kashish" }
+    { "_id" : ObjectId("57bfa59bdaf90e8c76d19cca"), "name" : "Vishakha" }</p>
+<blockquote>
+<p>db.people.find( {name:{$regex:"a"}, name : { $gt:"K" } } );</p>
+</blockquote>
+</li>
+<li>
+<p>This query also gives same result as the above one. And this more efficient as well.</p>
+</li>
+</ul>
+<h2 id="querying-inside-arrays">Querying inside Arrays:</h2>
+<ul>
+<li>
+<p>MongoDB has polymorphic find. It also evaluates for matching array elements.
+    e.g.
+    &gt; db.accounts.find().pretty();
+    { "_id" : ObjectId("57bff4973df8f8d7306e7918") }
+    {
+           "_id" : ObjectId("57bff4d93df8f8d7306e7919"),
+           "name" : "vaibhav",
+           "favorites" : [
+                   "ice cream",
+                   "beer"
+           ]
+    }
+    {
+           "_id" : ObjectId("57bff5043df8f8d7306e791a"),
+           "name" : "Neeraj",
+           "favorites" : [
+                   "beer",
+                   "Spring Roll"
+           ]
+    }</p>
+<blockquote>
+<p>db.accounts.find({favorites:"beer"});
+{ "_id" : ObjectId("57bff4d93df8f8d7306e7919"), "name" : "vaibhav", "favorites"
+: [ "ice cream", "beer" ] }
+{ "_id" : ObjectId("57bff5043df8f8d7306e791a"), "name" : "Neeraj", "favorites" :
+[ "beer", "Spring Roll" ] }
+</p>
+</blockquote>
+</li>
+<li>
+<p>Here nested contents are not matched. Only first level is looked into.</p>
+</li>
+</ul>
+<h2 id="using-in-and-all">Using $in and $all</h2>
+<ul>
+<li>
+<p>The <span class="arithmatex">\(all operator matches all the elements that are specified with elements present inside the array.
+    e.g.
+    db.accounts.find({favorites : {\)</span>all : [ "beer", "cheeze" ]} })</p>
+</li>
+<li>
+<p>The $in operator is used to filter results by having value in the values specified in <span class="arithmatex">\(in array.
+    e.g.
+    &gt; db.accounts.find({name: {\)</span>in: ["Sahiba","Neeraj"]}});
+    { "_id" : ObjectId("57bff5043df8f8d7306e791a"), "name" : "Neeraj", "favorites" :
+    [ "beer", "Spring Roll" ] }
+    { "_id" : ObjectId("57c017fc3df8f8d7306e791b"), "name" : "Sahiba", "favorites" :
+    [ "beer", "Momo", "cheeze" ] }
+    &gt;</p>
+</li>
+</ul>
+<h2 id="queries-with-dot-notation">Queries with dot notation</h2>
+<ul>
+<li>to match nested documents, if we specify document in nested way then it is mactched exactly.</li>
+<li>
+<p>we cannot match one key value. Not even in reversed order.</p>
+<p>{
+    "_id" : ObjectId("57c06919daf90e8c76d19cd2"),
+    "name" : "Rahul",
+    "email" : {
+        "work" : "rahul@info.com",
+        "personal" : "rgw@live.in"
+    }
+}
+- to find with email we have to pass exact email doc in find clause.
+- Even the order of work and personal needs to be same.</p>
+</li>
+<li>
+<p>To query one part of doc, </p>
+<blockquote>
+<p>db.users.find({"email.work":"rahul@info.com"});
+{ "_id" : ObjectId("57c06919daf90e8c76d19cd2"), "name" : "Rahul", "email" : { "work" : "rahul@info.com", "personal" : "rgw@live.in" } }
+</p>
+</blockquote>
+</li>
+<li>
+<p>if we use . notation then we can match on value.</p>
+</li>
+<li>
+<p>e.g. email : { work: "abc", personal: "xyz"}</p>
+</li>
+<li>
+<p>then email.work : "abc" - this fetches and gives result, while</p>
+</li>
+<li>
+<p>email : { work: "abc" } - this will not match as personal is also there in doc and byte by byte match will fail.</p>
+</li>
+<li>
+<p>Suppose a simple e-commerce product catalog called catalog with documents that look like this:
+    { product : "Super Duper-o-phonic",
+     price : 100000000000,
+     reviews : [ { user : "fred", comment : "Great!" , rating : 5 },
+                 { user : "tom" , comment : "I agree with Fred, somewhat!" , rating : 4 } ],
+     ... }</p>
+</li>
+<li>
+<p>Write a query that finds all products that cost more than 10,000 and that have a rating of 5 or better.</p>
+</li>
+<li>
+<p>Ans:
+    db.catalog.find(
+       {
+           "price" : {"<span class="arithmatex">\(gt" : 10000},
+           "reviews.rating" : {"\)</span>gte" : 5}
+       }
+    );</p>
+</li>
+</ul>
+<h2 id="querying-cursors">Querying, Cursors :</h2>
+<ul>
+<li>cur = db.sb.find();</li>
+<li>cur.next(); - returns next doc</li>
+<li>cur.hasNext(); - true if there is next doc</li>
+<li>cur.sort({name:-1}) - sorts by descending name order</li>
+<li>cur.limit(5) - limits result set to 5, database only returns 5 docs.</li>
+<li>cur.sort({name:-1}).limit(5) - can be combined this way.</li>
+<li>cur.sort({name:-1}).limit(5).skip(2) - this sorts, skips 2 and shows 3 results. this sequence is followed by db engine,</li>
+<li>
+<p>the sort, skip and limit is sent to db and performed on server, not on cursor in the memory.</p>
+</li>
+<li>
+<p>limit and sort are processed on server side and not in memory on client side.</p>
+</li>
+</ul>
+<blockquote>
+<p>Q. When can you change the behavior of a cursor, by applying a sort, skip, or limit to it?
+A. This can be done at any point before the first document is called and before you''ve checked to see if it is empty.</p>
+</blockquote>
+<h2 id="counting-results">Counting Results</h2>
+<div class="highlight"><pre><span></span><code>db.abc.count();
+db.abc.count({age : 34}); - arguments accepted are same as find();
+</code></pre></div>
+<h2 id="updates">Updates</h2>
+<ul>
+<li>its accepts two arguments, one is analogous to where clause like we pass in find command.</li>
+<li>The second argument is what we want to replace in the found doc. All the key:value in second arg replaces all the existing key:value in document except the _id field.</li>
+<li>It basically replaces wholosole document but it is dangerous.</li>
+<li>it replaces completely.
+    e.g.
+    &gt; db.people.update({name:"Rahul"},{name:"Rahul",age:32});
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</li>
+</ul>
+<h2 id="set-unset-inc">Set, Unset, Inc</h2>
+<ul>
+<li>We can use update with $set to change only a particular key:value.</li>
+<li>
+<p>e.g. db.people.update({name:Vaibhav},{$set : {  key:value, age:30 }})</p>
+</li>
+<li>
+<p>if the field does not exist then it will be added.</p>
+</li>
+<li>
+<p>db.people.update({ name:"Vaibhav"}, { $inc : { "age" : 1 }}); - this increases age by 1, if it age does not exist then it is crated as age:1.</p>
+</li>
+<li>
+<p>e.g.
+    &gt; db.people.update({name:"vaibhav"},{$set : { "name":"Vaibhav" } });
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</p>
+</li>
+</ul>
+<h2 id="unset-command">$unset Command</h2>
+<ul>
+<li>
+<p>it is used to remove a particular key value from a document.
+    e.g. db.people.update({key:value},{$unset,{key:1}});
+    the second key value is removed from document.</p>
+<p>e.g.</p>
+<blockquote>
+<p>db.people.update({name:"Rahul"},{$unset:{age:1}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+db.people.find();
+{ "_id" : ObjectId("57befca2daf90e8c76d1910e"), "name" : "Vaibhav", "age" : 30 }
+{ "_id" : ObjectId("57befdbddaf90e8c76d1910f"), "name" : "neeraj", "age" : 31 }
+{ "_id" : ObjectId("57bfa58cdaf90e8c76d19cc8"), "name" : "Rahul" }</p>
+<p>db.people.update({name:"Rahul"},{$unset:{age:-1}})
+this also removes the age from the document.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="using-push-pop-pull-pullall-addtoset">Using $push, $pop, $pull, $pullAll, $addToSet</h2>
+<ul>
+<li>a:[1,2,3,4,5] - is and array key value</li>
+<li>.update({find},{$set:{"a.2":5}}) - updates third value in array to 5.</li>
+<li>$push:{a:10} - add 10 in array.</li>
+<li>$pop:{a:1} - removes right most element.</li>
+<li>$pop:{a:-1} - removes left most element.</li>
+<li>$pushAll:{a:[3,54,23,5]} - pushes 4 more element to the array. It duplicates element even if it exists.</li>
+<li>same way we have pull and pullAll operators.</li>
+<li>$addToSet - add element to array if it does not exist. It does not dupicate a value.</li>
+</ul>
+<h2 id="upserts">Upserts</h2>
+<ul>
+<li>Updates if record exists else inserts. So if matching values are found then it updates. else it inserts.</li>
+<li>e.g. db.people.update({name:"Rahul"}, {$set: {age:28}} , { upsert : true } );</li>
+<li>The last argument tells shell to insert if name:Rahul is not in the collection.</li>
+<li>
+<p>If the matching condition is not enought to find a particular result then also mongodb will insert the new doc.
+    e.g.
+    &gt; db.people.update({age:{$gt:50}},{name:"Sunny"},{upsert:true})
+    WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 1,
+        "nModified" : 0,
+        "_id" : ObjectId("57c169edc1fc9c52ee7d6103")
+    })</p>
+<p>This insers a new document to the collection:
+{ "_id" : ObjectId("57c169edc1fc9c52ee7d6103"), "name" : "Sunny" }</p>
+</li>
+<li>
+<p>it can be used when we need to mix data from someother collection and we are not sure if the doc exists or not.</p>
+</li>
+</ul>
+<h2 id="multi-update">Multi-Update</h2>
+<ul>
+<li>by default update command only update a single record even if first argument provides more than one result.</li>
+<li>to update multiple rows provide 3rd argument as { multi : true }</li>
+<li>
+<p>e.g. db.people.update( {}, {$set : { title: "Dr" }} , { multi : true } ) # this matches every doc because of find {}.</p>
+</li>
+<li>
+<p>this happens because MongoDB provides single thread to write operation.</p>
+</li>
+<li>if multiple operations are performed on single document then it is mutually shared and one process updates and waits for other to </li>
+<li>
+<p>update and so on.</p>
+</li>
+<li>
+<p>In multi-update there is pause and yield mechanism that follow. The multi update updates say 4 doc and then  pause to allow other write operation to occur on the document. then again picks the doc and updates other 4 doc.</p>
+</li>
+<li>it allows other readers and writers to operator.</li>
+<li>mongodb does not allow isolated transaction while these multi updates are occurring.</li>
+</ul>
+<h2 id="remove">Remove</h2>
+<ul>
+<li>first argument is same as find, the document should be passed. Must pass a doc, else all doc will be removed.</li>
+<li>
+<p>{name: {$gt : "M"}} - all after m are removed.</p>
+</li>
+<li>
+<p>e.g.</p>
+</li>
+<li>
+<blockquote>
+<p>db.people.remove({name:"Anuj"});</p>
+</blockquote>
+</li>
+<li>
+<p>WriteResult({ "nRemoved" : 1 })</p>
+</li>
+<li>
+<p>blank removes all the records one by one.</p>
+</li>
+<li>contrary to drop.</li>
+<li>db.coll.drop();</li>
+<li>
+<p>which removes all doc at </p>
+</li>
+<li>
+<p>drop is faster and also removes other data associated with the collection.</p>
+</li>
+<li>
+<p>by remove the indexes are not removed, while drop removes the indexes as well.</p>
+</li>
+<li>also in remove a write or read operation may see a collection with half removed records. this does not happen in case of drop.</li>
+<li>also in here one doc is not half removed. it is isolated and atomic to a particular read write operation.</li>
+</ul>
+<h2 id="java-driver">Java driver</h2>
+<ul>
+<li>Add dependecy in pom.xml, it adds necessary jars</li>
+<li>create db connection client,</li>
+<li>db connection handle,</li>
+<li>provide db name.</li>
+</ul>
+<h2 id="java-driver-representing-documents">Java Driver: Representing Documents</h2>
+<ul>
+<li></li>
+<li>We can represent docs using BSON Document class.</li>
+<li>we can append to the object as many doc as we want.</li>
+<li>it accepts different data types as well.</li>
+<li>
+<p>Document class has helper functions like getString(), getInteger() that convert the object to particular data tyoe and then return the value.</p>
+</li>
+<li>
+<p>$or takes in an array of documents and combines them with or conditions.</p>
+</li>
+<li>
+<p>when the value is array in document and we specify it to match in find, then only the outer array is looked in.</p>
+</li>
+<li>
+<p>no recursion occurs or inner depth arrays are matched.</p>
+</li>
+<li>
+<p>projection is used to include and exclude coloumns.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span>col.find<span class="o">(</span>doc<span class="o">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span>.projection<span class="o">(</span>doc<span class="o">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>.sort<span class="o">(</span>doc<span class="o">)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>.skip<span class="o">(</span><span class="m">20</span><span class="o">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>.limit<span class="o">(</span><span class="m">10</span><span class="o">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>.into<span class="o">(</span>doc<span class="o">)</span><span class="p">;</span>
+</code></pre></div></p>
+</li>
+<li>each of above doc can be replaced by builders.</li>
+</ul>
+<h2 id="update-and-replace">Update and replace</h2>
+<ul>
+<li>replaceOne, update is used to update the information.</li>
+</ul>
+<h2 id="delete">delete</h2>
+<ul>
+<li>deleteOne()</li>
+<li>deleteMany()</li>
+<li>find takes filter as document to provide where clause functionality.</li>
+</ul>
+<h2 id="blog-internals">Blog, internals</h2>
+<ul>
+<li>DAO is Data Access Object</li>
+<li>it is java class to access data of various objects. like user, session, blog etc.</li>
+</ul>
+<h2 id="session-management">session management</h2>
+<ul>
+<li>get signup</li>
+<li>result is singup page</li>
+<li>post details</li>
+<li>valid then writes to users, sessions table table, store cookie, redirects to welcome page</li>
+<li>
+<p>sessions table holds new session.</p>
+</li>
+<li>
+<p>the id value in cookie in browser is same what we store in session collection.</p>
+</li>
+</ul>
+<hr />
+<p>week 2 ends</p>
+<h1 id="week-3-begins-schema-design">Week 3 begins: Schema Design</h1>
+<h2 id="schema-design">Schema Design</h2>
+<ul>
+<li>can keep in 3rd normal form.</li>
+<li>but in mongo keep in application read form.</li>
+<li>organise to suit application data access pattern.</li>
+<li>imp fatc</li>
+<li>pre joins/embed</li>
+<li>no join</li>
+<li>no constraints</li>
+<li>atomic operations but no transaction</li>
+<li>no declared schema, but has a similar struct in a collection,</li>
+</ul>
+<h2 id="transaction-in-mongodb">Transaction in MongoDB:</h2>
+<ul>
+<li>we have atomicity possible in MongoDB</li>
+<li>we can achieve Transaction by making the whole Transaction in one doc only, instead of in multiple docs using join.</li>
+<li>MongoDB will make sure that doc is locked and is seen only after an update.</li>
+</ul>
+<h2 id="one-to-one">One to One:</h2>
+<ul>
+<li>eny one can embed in other,</li>
+<li>should avoid embedding if doc size grows more than 16mb</li>
+<li>or to avoid bulk sizing.</li>
+</ul>
+<h2 id="one-to-many">One to many:</h2>
+<ul>
+<li>there should be two collections with link in id.</li>
+<li>in case of, "One to Few", the few ones should be embedded into the one.</li>
+</ul>
+<h2 id="many-to-many">Many to Many:</h2>
+<ul>
+<li>have to embedd into each other as array of IDs,</li>
+<li>for some reasons can be embedded as well.</li>
+</ul>
+<h2 id="benefits-of-embedding">Benefits of embedding:</h2>
+<ul>
+<li>High latency and high bandwidth of disk.</li>
+<li>so if disk spins once then we can quickly get data.</li>
+<li>but for one spin it takes time.</li>
+</ul>
+<h2 id="trees">Trees:</h2>
+<ul>
+<li>To represent trees, add ancestors, complete list with hierarchies.</li>
+</ul>
+<hr />
+<p>week 3 ends</p>
+<h1 id="week-4-performace">Week 4 - Performace</h1>
+<p>Performace can be increased by storage engine. from 3.0 we have pluggable storage engines.</p>
+<h2 id="storage-engines-introduction">Storage Engines: Introduction</h2>
+<p>Engine allows mongodb to talk to disks:
+- Mongo has pluggabel storage engines form 3.0;
+- it decides what ot keep in mem and wht in disk. Since disks are slow.
+- it doesnt effect communication bw servers. </p>
+<p><strong>MMAP:</strong>
+- Asks to read data form memory in a page. If not found then data is brought from disk.
+- multile reader single writer lock
+- collection le=vl locking is done.
+- only one write in 1 collection
+- multile writers can happen in diff coll
+- in place update occurs but if size excceeds then collection is moved to a differnt place.
+- so power of two sizes is used in whcih a collection is kept in mem with more size as required to grow doc.
+- os makes decision for managing in mem and in disk, db does not deciede.
+- the minimum record space in MongoDB 3.0 is 32 bytes.
+- MMAPv1 automatically allocates power-of-two-sized documents when new documents are inserted 
+- MMAPv1 is built on top of the mmap system call that maps files into memory</p>
+<p><strong>WiredTiger:</strong>
+- It is faster
+- document lvl concurrency
+- lock free, optimistic concurrency
+- two writes cannot happen 2gthr.
+- 100gb data file is brought in mem in pages.
+- WT manages what can be in mem and wht can be in disk,
+- in mem not compressed, in disk it is compressed.
+- compresses data of doc and indexes.
+- no inplace update.
+- writes the data to new place. and  frees old one.
+- marks old as unused and creates new.
+- this allows doc lvl concurrency.
+- overall faster.
+<code>mongod -dbpath WT -storageEngine WiredTiger</code></p>
+<ul>
+<li>new dir is required to change engine bcz it cannot read other eni=gine memory.
+<code>mongod -dbpath new_dir -storageEngine WiredTiger</code></li>
+</ul>
+<h2 id="indexes">indexes</h2>
+<ul>
+<li>when a collection is stored in a disk it is stored in random order.</li>
+<li>to find all like name = some. the scan all doc. can be million.</li>
+<li>
+<p>this determines speed and performace.</p>
+</li>
+<li>
+<p>index is ordered set of thing,</p>
+</li>
+<li>
+<p>may be alphabetically sorted. it has pointer to physical location.</p>
+</li>
+<li>
+<p>it uses binaray search and it will take log(2) to provide the doc.</p>
+</li>
+<li>
+<p>index can be for combinarion. like naem, hair color.</p>
+</li>
+<li>
+<p>then index entry is combinarion of cols.</p>
+</li>
+<li>
+<p>it can be used for just.</p>
+</li>
+<li>name</li>
+<li>name, hairColor,</li>
+<li>
+<p>name, hairColor, DOB</p>
+</li>
+<li>
+<p>but not </p>
+</li>
+<li>hairColor</li>
+<li>
+<p>or DOB.</p>
+</li>
+<li>
+<p>if we change anything on doc. then bTree is updated. so writes will be slower.</p>
+</li>
+<li>
+<p>reads will be much faster.</p>
+</li>
+<li>
+<p>insert all data and then create index.</p>
+</li>
+<li>
+<p>index uses disc space too. so cant be crated for all keys,</p>
+</li>
+<li>
+<p>so 10 million reocrds can be indexed for faster reads and redice disc IO.</p>
+</li>
+</ul>
+<h2 id="creating-indexes">Creating Indexes.</h2>
+<ul>
+<li>
+<p>10 million students with score of 4 exams.</p>
+</li>
+<li>
+<p>explain commands tells what db is doing when we query.</p>
+</li>
+<li>
+<p>db.students.explain.find({student_id:5});</p>
+</li>
+<li>
+<p>in winning plan:</p>
+<ul>
+<li>doing a collection scan/</li>
+<li>findOne is faster,</li>
+</ul>
+</li>
+<li>
+<p>db.students.createIndex({student_id:1}); - student id ascending.</p>
+</li>
+<li>
+<p>it takes a while to create an index.</p>
+</li>
+<li>
+<p>now the queries are nice and fast.</p>
+</li>
+<li>
+<p>now on explain the winning plan shows that</p>
+</li>
+<li>
+<p>it uses indexName student_id.</p>
+</li>
+<li>
+<p>db.students.explain(true).find({student_id:5});</p>
+</li>
+<li>this executes and tells docs scanned as well.</li>
+<li>
+<p>it gives execution stages.</p>
+</li>
+<li>
+<p>compound index:</p>
+<ul>
+<li>db.students.explain.find({student_id:1, class_id:-1});</li>
+<li>this sorts the index as stated.</li>
+</ul>
+</li>
+</ul>
+<h2 id="discovering-and-deleting-indexes">Discovering and deleting indexes.</h2>
+<ul>
+<li>db.students.getIndexes(); - lists indexes</li>
+<li>db.students.dropIndex({student_id:1}); - deletes index.</li>
+</ul>
+<h2 id="multikey-indexes">multiKey Indexes</h2>
+<ul>
+<li>these are created on arrays.</li>
+<li>if we have arrays liek tags.</li>
+<li>then index can be created for all elements in array.</li>
+<li>we cant combine two arrays index.</li>
+<li>arrays cna be combined with a single value column.</li>
+</ul>
+<h2 id="dot-notaton-and-multi-key-index">Dot Notaton and multi key index.</h2>
+<ul>
+<li>
+<p>to reach indide an array or embedded doc.</p>
+</li>
+<li>
+<p>to create index on array elemnt.</p>
+</li>
+<li>
+<p>db.students.createIndex({'scores.score':1});</p>
+</li>
+<li>this takes a long time and created an index.</li>
+<li>
+<p>it is multi key index.</p>
+</li>
+<li>
+<p>find scores.score $gt 99 with explain</p>
+</li>
+<li>
+<p>show s winningplan with index being used.</p>
+</li>
+<li>
+<p>find ppl with exam score above 99.</p>
+</li>
+<li>
+<p>db.students.find({'scores': {<span class="arithmatex">\(elemMatch: {type:'exam', score:{\)</span>gt:99.9}}}});</p>
+</li>
+<li>
+<p>it matches for element with match at least one.</p>
+</li>
+<li>
+<p>but if we run it with explain the we see that in winnig plan:</p>
+</li>
+<li>
+<p>it finds score 99.8 to inf </p>
+</li>
+<li>
+<p>then finds docs with type exam, so it examined all document.</p>
+</li>
+<li>
+<p>so all docs were examined.</p>
+</li>
+<li>
+<p>we can make a mistake by using AND operator because it doesnot gurantee the correct result. </p>
+</li>
+<li>explain output tell more.</li>
+<li>next stage in winning plan better explains.</li>
+</ul>
+<h2 id="index-creation-options-unique">Index Creation Options, Unique</h2>
+<ul>
+<li></li>
+<li>
+<p>no two docs can have same key if it is indexed.</p>
+</li>
+<li>
+<p>we can make a unique index.</p>
+</li>
+<li>
+<p>db.stuff.createIndex({thing:1}, {unique:true});</p>
+</li>
+<li>
+<p>this makes things column unique.</p>
+</li>
+<li>
+<p>and if the data has duplicate values then we cannot create the unique index. we get an error.</p>
+</li>
+<li>
+<p>we get duplicate key error if we inset dulplicate value.</p>
+</li>
+</ul>
+<h2 id="sparse-indexes">Sparse Indexes</h2>
+<ul>
+<li>ti can be used when index key is missing in doc.</li>
+<li>so id we have c in few docs.</li>
+<li>
+<p>then  unique index will be created on thise that have c value and rest will be left inseted of having null causing unique to break.</p>
+</li>
+<li>
+<p>so to create a unique index on phone numbers we can make sparse index.</p>
+</li>
+<li>
+<p>db.employees.createIndex({cell:1},{unique:true, sparse:true});</p>
+</li>
+<li>
+<p>this will make an index on and will neglect nulls.</p>
+</li>
+<li>
+<p>check using getIndexes.</p>
+</li>
+</ul>
+<h2 id="background-index-creation">Background Index Creation</h2>
+<ul>
+<li>foreground is fast</li>
+<li>blocks all readers and writes.</li>
+<li>
+<p>so cannot do on prod server.</p>
+</li>
+<li>
+<p>in Background </p>
+</li>
+<li>it is slower</li>
+<li>
+<p>dont block r/w.</p>
+</li>
+<li>
+<p>to work on replica set working set, take one out and create index on one and then rotate around to create on all. without performace bounty.</p>
+</li>
+<li>
+<p>db.students.createIndex({'scores.score':1}, {background:true});</p>
+</li>
+<li>this will not create a r/w lock in collection.</li>
+</ul>
+<h2 id="using-explain">Using Explain:</h2>
+<ul>
+<li>it does not bring data to clientt].</li>
+<li>
+<p>it is used to see whats gonna happen.</p>
+</li>
+<li>
+<p>from 3.0 explain changed</p>
+</li>
+<li>explain returns and explainable object.</li>
+<li>we can see find, updatem remove, aggregate but not</li>
+<li>
+<p>insert.</p>
+</li>
+<li>
+<p>db.foo.explain().find()</p>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>.update() - etc..</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>we can see things like docs scanned ,  n returned</p>
+</li>
+<li>indexes used etc.</li>
+</ul>
+<h2 id="explain-verbosity">Explain verbosity</h2>
+<ul>
+<li></li>
+<li>query Planner is default.</li>
+<li>we have execution stats and </li>
+<li>
+<p>allPlans Execution.</p>
+</li>
+<li>
+<p>these are level of output.</p>
+</li>
+<li>
+<p>var exp =  db.example.explain("executionStats");</p>
+</li>
+<li>
+<p>exp.find({a: 17, b:57});</p>
+</li>
+<li>
+<p>it gives winning plan, query planner.</p>
+</li>
+<li>in executionstats we get </li>
+<li>nReturned, </li>
+<li>executionTimeMillis.</li>
+<li>
+<p>in each stage we ger doc returned,</p>
+</li>
+<li>
+<p>index is bound to min and max.</p>
+</li>
+<li>
+<p>index showuld be created to be used.</p>
+</li>
+<li>
+<p>all query should use atleast one index.</p>
+</li>
+<li>
+<p>so the index which is never used is waste</p>
+</li>
+<li>and query which is not using atleast one index should be optimized.</li>
+</ul>
+<h2 id="covered-queries">Covered queries:</h2>
+<ul>
+<li>
+<p>query which can be looked from index only without examining the documents is called covered query.</p>
+</li>
+<li>
+<p>so if we have i,j,k as keys and we have index on them as well.</p>
+</li>
+<li>and if we find (  { i:25, j:87} )</li>
+<li>then it will use index adn also use the docs.</li>
+<li>docs are used because we need _id filed as well/</li>
+<li>which is not in index and is picked from the docs.</li>
+<li>
+<p>so avoid fetching _id and get faster results.</p>
+</li>
+<li>
+<p>also, we need to project exactly what we need and what we don;t</p>
+</li>
+<li>if we say _id:0</li>
+<li>
+<p>then too the docs will be scanned.</p>
+</li>
+<li>
+<p>mongodb examines docs</p>
+</li>
+<li>we should specify which column we need and also make _id:0 to not show ID.</li>
+<li>then mongodb looks lesser docs. it may only look indexes</li>
+</ul>
+<h2 id="when-is-an-index-used-choosing-an-index">When is an index used, choosing an index:</h2>
+<ul>
+<li>cooses index.</li>
+<li>created query plans for selected.</li>
+<li>then the fastest plan is picked.</li>
+<li>winning is :</li>
+<li>returned all, or</li>
+<li>returned a threshhold sorted.</li>
+</ul>
+<h2 id="index-sizes">Index Sizes</h2>
+<ul>
+<li>we should pay attension on size of indexes</li>
+<li>index should fit into memory (ram) for better performace</li>
+<li>index size depends on storage engines</li>
+<li>In fact, the index size can be considerably smaller (at the cost of some CPU space) in WiredTiger with --wiredTigerIndexPrefixCompression enabled.</li>
+<li>size can be seen using stat command.</li>
+<li>e.g. db.students.stats();</li>
+<li>db.students.totalIndexSize();</li>
+</ul>
+<h2 id="number-of-index-entries-cardinality">Number of Index Entries, Cardinality</h2>
+<ul>
+<li>It depends on the type of values on which index is being created.</li>
+<li>regular index is 1:1</li>
+<li>sparse index, having nulls or other values may have values less than docs</li>
+<li>multikey index, is one that can be on array or orther collection. it has values more than index. significantly larger.</li>
+<li>so on update the entire tag collection need to be built again on the disk.</li>
+</ul>
+<p>--following is not revised.</p>
+<h2 id="geospatial-index">Geospatial Index</h2>
+<ul>
+<li>These index 2d and 3d location indexes.</li>
+<li>e.g.</li>
+<li>'location':[x,y]</li>
+<li>ensureIndex({"location":'2d',type:1});</li>
+<li>find({location:{$near:[x,y]}});</li>
+</ul>
+<h2 id="geospatial-spherical-index">Geospatial Spherical Index:</h2>
+<ul>
+<li>this index is called 2dsphere index.</li>
+<li>
+<p>it is used to represent the earth lat and longitudes.</p>
+</li>
+<li>
+<p>e.g.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>db.places.find<span class="o">({</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span>location:<span class="o">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nv">$near</span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">            </span><span class="nv">$geometry</span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">                </span>type:<span class="w"> </span><span class="s2">&quot;Point&quot;</span>,
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">                </span>coordiantes<span class="w"> </span>:<span class="o">[</span>-125.256,<span class="w"> </span><span class="m">37</span>.1521<span class="o">]</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">            </span><span class="o">}</span>,
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">            </span><span class="nv">$maxDistance</span>:2000
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="o">}</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="o">})</span>.pretty<span class="o">()</span><span class="p">;</span>
+</code></pre></div></p>
+</li>
+</ul>
+<h2 id="text-index">Text Index</h2>
+<ul>
+<li>these are used to create index on text.</li>
+<li>if we normally pass a word in find then it will match that word completely in the document. if whole set of words match a value.</li>
+<li>but if we make a text index on that key. then we can find using the index find.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>db.coll.createIndex<span class="o">({</span><span class="s2">&quot;words&quot;</span>:<span class="s1">&#39;text&#39;</span><span class="o">})</span><span class="p">;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>db.coll.find<span class="o">({</span><span class="nv">$text</span>:<span class="o">{</span><span class="nv">$search</span>:<span class="s1">&#39;dog&#39;</span><span class="o">}})</span><span class="p">;</span>
+</code></pre></div>
+<ul>
+<li>it searches in logical or operator.</li>
+<li>
+<p>that is it matches single words in the index.</p>
+</li>
+<li>
+<p>we can rank them as well using score</p>
+</li>
+<li>
+<p>e.g. 
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>db.coll.find<span class="o">({</span><span class="nv">$text</span>:<span class="o">{</span><span class="nv">$search</span>:<span class="s2">&quot;some text here&quot;</span><span class="o">}}</span>,<span class="w"> </span><span class="o">{</span>score:<span class="o">{</span><span class="nv">$meta</span>:<span class="w"> </span><span class="s1">&#39;textScore&#39;</span><span class="o">}})</span>.sort<span class="o">({</span>score:<span class="o">{</span><span class="nv">$meta</span>:<span class="s1">&#39;textScore&#39;</span><span class="o">}})</span><span class="p">;</span>
+</code></pre></div></p>
+</li>
+</ul>
+<p>-- following is revised.</p>
+<h2 id="efficiency-of-indexes-used">Efficiency of indexes used.</h2>
+<ul>
+<li>Goal is to make r/w faster.</li>
+<li>selectivity - minimize records c=scanned.</li>
+<li>sorts - how sorts are handeled.</li>
+<li>
+<p>Examinig and making indexes fast:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>db.students.find<span class="o">({</span>student_id:<span class="o">{</span><span class="nv">$gt</span>:500000<span class="o">}</span>,<span class="w"> </span>class_id:54<span class="o">})</span>.sort<span class="o">({</span>student_id:1<span class="o">})</span>.hint<span class="o">({</span>class_id:1<span class="o">})</span>.explain<span class="o">(</span><span class="s2">&quot;executionstats&quot;</span><span class="o">)</span><span class="p">;</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>so in the above case 20k docs were returned but 80k docs were examined.</p>
+</li>
+<li>
+<p>to inc the efficiency we can porvide hint() to mongodb.</p>
+</li>
+<li>
+<p>we can pass index name to it so that it can use the index.</p>
+</li>
+<li>passing the hint() after find() reduced the nScanned and made result faster.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>db.grades.find<span class="o">({</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="s2">&quot;score&quot;</span>:<span class="o">{</span><span class="nv">$gte</span>:65<span class="o">}</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="o">})</span>.sort<span class="o">({</span><span class="s2">&quot;score&quot;</span>:1<span class="o">})</span><span class="p">;</span>
+</code></pre></div>
+<ul>
+<li>we should try to eliminate as much part of collection as possible and then further fetch the docs.</li>
+<li>so index should also be created in a way that first it helps in eliminating the max part and then it should sort or filter other values.</li>
+</ul>
+<h2 id="logging-slow-queries">Logging slow queries.</h2>
+<ul>
+<li>to debug we can profile whats slow in our app.</li>
+<li>mongo logs slow queries abive 100 ms </li>
+<li>it comes on the mongoD log screen.</li>
+</ul>
+<h2 id="profiling">profiling</h2>
+<ul>
+<li>writes to system profile.<ul>
+<li>0 off.</li>
+<li>1 log slow queries.</li>
+<li>2 log all queries.</li>
+</ul>
+</li>
+<li>
+<p>logs to system.profile.</p>
+</li>
+<li>
+<p>2 for debugging and see traffic.</p>
+</li>
+<li>
+<blockquote>
+<p>mongod --profile 1 --slowms 2</p>
+</blockquote>
+</li>
+<li>it will log slow queries taking more than 2 ms.</li>
+</ul>
+<p><code>db.system.profile.find({ns:/school.students}).sort({ts:1}).pretty();</code></p>
+<ul>
+<li>this gives all quries logged sorted by timestamp.</li>
+</ul>
+<p><code>db.system.profile.find({millis:{$gt:1}}).sort({ts:1}).pretty();</code></p>
+<ul>
+<li>this gives all queries taking more than a ms.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>db.getProfilingLevel<span class="o">()</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>db.setProfilingLevel<span class="o">(</span><span class="m">1</span>,4<span class="o">)</span><span class="w"> </span>//<span class="w"> </span>level<span class="w"> </span>and<span class="w"> </span>ms.
+</code></pre></div>
+<h2 id="mongostat-command">MongoStat command.</h2>
+<ul>
+<li>like ioStat command in unix.</li>
+<li>
+<p>gives 1sec info about ins, upd etc.</p>
+</li>
+<li>
+<p>:~ mongostat</p>
+</li>
+<li>
+<p>this is run on cmd. this gives all stats.</p>
+<p>e.g.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>&gt;mongostat
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>insert<span class="w"> </span>query<span class="w"> </span>update<span class="w"> </span>delete<span class="w"> </span>getmore<span class="w"> </span><span class="nb">command</span><span class="w"> </span>%<span class="w"> </span>dirty<span class="w"> </span>%<span class="w"> </span>used<span class="w"> </span>flushes<span class="w"> </span>vsize<span class="w">   </span>res<span class="w"> </span>qr<span class="p">|</span>qw<span class="w"> </span>ar<span class="p">|</span>aw<span class="w"> </span>netIn<span class="w"> </span>netOut<span class="w"> </span>conn<span class="w">                      </span><span class="nb">time</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span>*0<span class="w">    </span>*0<span class="w">     </span>*0<span class="w">     </span>*0<span class="w">       </span><span class="m">0</span><span class="w">     </span><span class="m">1</span><span class="p">|</span><span class="m">0</span><span class="w">     </span><span class="m">0</span>.0<span class="w">    </span><span class="m">0</span>.0<span class="w">       </span><span class="m">0</span><span class="w">  </span><span class="m">2</span>.5G<span class="w"> </span><span class="m">24</span>.0M<span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span>79b<span class="w">    </span>17k<span class="w">    </span><span class="m">1</span><span class="w"> </span><span class="m">2016</span>-08-29T16:13:25+05:30
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span>*0<span class="w">    </span>*0<span class="w">     </span>*0<span class="w">     </span>*0<span class="w">       </span><span class="m">0</span><span class="w">     </span><span class="m">1</span><span class="p">|</span><span class="m">0</span><span class="w">     </span><span class="m">0</span>.0<span class="w">    </span><span class="m">0</span>.0<span class="w">       </span><span class="m">0</span><span class="w">  </span><span class="m">2</span>.5G<span class="w"> </span><span class="m">24</span>.0M<span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span>79b<span class="w">    </span>17k<span class="w">    </span><span class="m">1</span><span class="w"> </span><span class="m">2016</span>-08-29T16:13:26+05:30
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span>*0<span class="w">    </span>*0<span class="w">     </span>*0<span class="w">     </span>*0<span class="w">       </span><span class="m">0</span><span class="w">     </span><span class="m">1</span><span class="p">|</span><span class="m">0</span><span class="w">     </span><span class="m">0</span>.0<span class="w">    </span><span class="m">0</span>.0<span class="w">       </span><span class="m">0</span><span class="w">  </span><span class="m">2</span>.5G<span class="w"> </span><span class="m">24</span>.0M<span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span>79b<span class="w">    </span>17k<span class="w">    </span><span class="m">1</span><span class="w"> </span><span class="m">2016</span>-08-29T16:13:27+05:30
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span>*0<span class="w">    </span>*0<span class="w">     </span>*0<span class="w">     </span>*0<span class="w">       </span><span class="m">0</span><span class="w">     </span><span class="m">1</span><span class="p">|</span><span class="m">0</span><span class="w">     </span><span class="m">0</span>.0<span class="w">    </span><span class="m">0</span>.0<span class="w">       </span><span class="m">0</span><span class="w">  </span><span class="m">2</span>.5G<span class="w"> </span><span class="m">24</span>.0M<span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span><span class="m">0</span><span class="p">|</span><span class="m">0</span><span class="w">   </span>79b<span class="w">    </span>17k<span class="w">    </span><span class="m">1</span><span class="w"> </span><span class="m">2016</span>-08-29T16:13:28+05:30
+</code></pre></div></p>
+</li>
+</ul>
+<p>these are pretty obvi.</p>
+<h2 id="mongotop">mongotop</h2>
+<ul>
+<li></li>
+<li>it is same as unix top command.</li>
+<li>
+<p>it gives a high level view of where mongo is spending its time.</p>
+</li>
+<li>
+<p>it tell db on which time is spent most. it tells read time and write time.</p>
+</li>
+</ul>
+<h2 id="sharding">Sharding</h2>
+<ul>
+<li></li>
+<li>Splitting large collection into multiple servers.</li>
+<li>when we cannot get performace from a single server then we can shard.</li>
+<li>mongos is mongo shard that connects to shards.</li>
+<li>mongod has replicas.</li>
+<li>app talks to router, mongos.</li>
+<li>
+<p>mongos talks to mongod on each server.</p>
+</li>
+<li>
+<p>when u can;t get performace from one server.</p>
+</li>
+<li>
+<p>insert must include shard key. should be aware fo shard key for collection</p>
+</li>
+<li>
+<p>for update if there is no shard key then the request will be broadcasted.</p>
+</li>
+<li>
+<p>multi update is broadcasted.</p>
+</li>
+<li>
+<p>update, remove and find are broadcasted to all shard.</p>
+</li>
+</ul>
+<p><strong><em>*## Week 5 </em></strong>**</p>
+<h2 id="simple-aggregation-example">Simple Aggregation Example</h2>
+<ul>
+<li>Same as below.</li>
+</ul>
+<h2 id="aggregation-pipeline">Aggregation pipeline</h2>
+<p>Same as we pass in unix thru pipe.</p>
+<div class="highlight"><pre><span></span><code>$project    - reshape   - 1:1
+$match      - filter    - n:1
+$group      - aggregate - n:1
+$sort       - sort      - 1:1
+$skip       - skips     - n:1
+$limit      - limits    - n:1
+$unwind     - denormalize 1:n
+$out        - output    - 1:1
+</code></pre></div>
+<p>we will using all these.</p>
+<h2 id="simple-agg-example-exlained">Simple agg example exlained</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="w">    </span>db.products.aggregate<span class="o">([</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$group</span>:
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">            </span><span class="o">{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">                </span>_id<span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$manufacturer</span><span class="s2">&quot;</span>,
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">                </span>nProd:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="nv">$sum</span><span class="w"> </span>:<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+</code></pre></div>
+<p>This will group by manufacturer and find number of products.</p>
+<h2 id="compound-grouping">Compound Grouping</h2>
+<p>group by more than a key.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">    </span>db.products.aggregate<span class="o">([</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$group</span>:
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">            </span><span class="o">{</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">                </span>_id<span class="w"> </span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">                    </span><span class="s2">&quot;manufacturer&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$manufacturer</span><span class="s2">&quot;</span>,
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">                    </span><span class="s2">&quot;category&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$category</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">}</span><span class="w"> </span>,
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">                </span>nProd:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="nv">$sum</span><span class="w"> </span>:<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+</code></pre></div></p>
+<blockquote>
+<p>Note: the _id in mongoDB can be a document as well.</p>
+</blockquote>
+<h2 id="aggregation-expressions-overview">Aggregation expressions overview:</h2>
+<ul>
+<li>$sum - sum or count</li>
+<li>$avg</li>
+<li>$min</li>
+<li>$max</li>
+<li>$push - builds arrays.</li>
+<li>$addToSet - does not duplicates.</li>
+<li>$first - sort the doc and then find first from group</li>
+<li>$last - same but last.</li>
+</ul>
+<h2 id="sum">sum</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="w">    </span>db.products.aggregate<span class="o">([</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$group</span>:
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">            </span><span class="o">{</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">                </span>_id<span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;maker&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$manufacturer</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">}</span>,
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">                </span>Sum_Prices<span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="nv">$sum</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$price</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="avg">avg</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="w">    </span>db.zips.aggregate<span class="o">([</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$group</span><span class="w"> </span>:<span class="w"> </span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">            </span><span class="o">{</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">                </span><span class="s2">&quot;_id&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$state</span><span class="s2">&quot;</span>,
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">                </span><span class="s2">&quot;avg_pop&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$avg</span><span class="s2">&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$pop</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+</code></pre></div>
+<p>this groups by state and finds avg of population.</p>
+<h2 id="addtoset">addToSet</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="w">    </span>db.zips.aggregate<span class="o">([{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">        </span><span class="nv">$group</span>:<span class="o">{</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">            </span><span class="s2">&quot;_id&quot;</span>:<span class="s2">&quot;</span><span class="nv">$city</span><span class="s2">&quot;</span>,
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">            </span><span class="s2">&quot;postal_codes&quot;</span>:<span class="o">{</span><span class="s2">&quot;</span><span class="nv">$addToSet</span><span class="s2">&quot;</span>:<span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="o">}])</span><span class="p">;</span>
+</code></pre></div>
+<ul>
+<li>ids are postalcodes, what it does is, it adds all postalcodes to new</li>
+<li>key postal_codes and groups by city.</li>
+</ul>
+<h2 id="max">max</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="w">    </span>db.zips.aggregate<span class="o">([{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">        </span><span class="nv">$group</span>:<span class="o">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">            </span><span class="s2">&quot;_id&quot;</span>:<span class="s2">&quot;</span><span class="nv">$state</span><span class="s2">&quot;</span>,
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">            </span><span class="s2">&quot;max_pop&quot;</span>:<span class="o">{</span><span class="s2">&quot;</span><span class="nv">$max</span><span class="s2">&quot;</span>:<span class="s2">&quot;</span><span class="nv">$pop</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="o">}])</span><span class="p">;</span>
+</code></pre></div>
+<ul>
+<li>this groups by state and finds maximum population.</li>
+</ul>
+<h2 id="group-stages">Group stages:</h2>
+<p>Pass result through pipe line.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="w">    </span>db.fun.aggregate<span class="o">([</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$group</span>:<span class="o">{</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">                </span>_id:<span class="o">{</span>a:<span class="s2">&quot;</span><span class="nv">$a</span><span class="s2">&quot;</span>,<span class="w"> </span>b:<span class="s2">&quot;</span><span class="nv">$b</span><span class="s2">&quot;</span><span class="o">}</span>,
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">                </span>c:<span class="o">{</span><span class="nv">$max</span>:<span class="s2">&quot;</span><span class="nv">$c</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">            </span><span class="o">}</span>,
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">                </span><span class="o">{</span><span class="nv">$group</span>:<span class="o">{</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">                    </span>_id:<span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">.a&quot;</span>,
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">                    </span>c:<span class="o">{</span><span class="nv">$min</span>:<span class="s2">&quot;</span><span class="nv">$c</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">    </span><span class="o">])</span>
+</code></pre></div>
+<h2 id="projections">Projections:</h2>
+<ul>
+<li>we can:<ul>
+<li>remove key</li>
+<li>add new keys</li>
+<li>reshape keys</li>
+<li>use func:<ul>
+<li>$toUpper</li>
+<li>$toLower</li>
+<li>$add</li>
+<li>$multiply</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>-we can show results as we want to by some operations on the values of keys.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="w">    </span>db.products.aggregate<span class="o">([</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$project</span>:
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">            </span><span class="o">{</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">                </span>_id:0,
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">                </span><span class="s1">&#39;maker&#39;</span>:<span class="o">{</span><span class="w"> </span><span class="nv">$toLower</span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$manufacturer</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">}</span>,
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">                </span><span class="s1">&#39;details&#39;</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">                                </span><span class="s1">&#39;category&#39;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$category</span><span class="s2">&quot;</span><span class="w"> </span>,
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">                                </span><span class="s1">&#39;price&#39;</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$multiply</span><span class="s2">&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="o">[</span><span class="s2">&quot;</span><span class="nv">$price</span><span class="s2">&quot;</span>,10<span class="o">]</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">                            </span><span class="o">}</span>,
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">                </span><span class="s1">&#39;item&#39;</span><span class="w"> </span>:<span class="w"> </span><span class="s1">&#39;$name&#39;</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">    </span>//<span class="w"> </span>below<span class="w"> </span><span class="k">in</span><span class="w"> </span>wrong<span class="w"> </span>query:
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">    </span>db.zips.aggregate<span class="o">([{</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">        </span><span class="nv">$project</span>:<span class="o">{</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">            </span>_id:0,
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">            </span>city:<span class="o">{</span><span class="nv">$toLower</span>:<span class="nv">$city</span><span class="o">}</span>,<span class="w"> </span>//wrong!<span class="w"> </span><span class="nv">$city</span><span class="w"> </span>has<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>.<span class="w"> </span><span class="k">for</span><span class="w"> </span>_id<span class="w"> </span>as<span class="w"> </span>well
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="w">            </span>pop:1,
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">            </span>state:1,
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="w">            </span>zip:<span class="nv">$_id</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="w">    </span><span class="o">}])</span><span class="p">;</span>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="w">    </span>//<span class="w"> </span>correct:
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="w">    </span>db.zips.aggregate<span class="o">([{</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="w">        </span><span class="nv">$project</span>:<span class="o">{</span>
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="w">            </span>_id:0,
+<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="w">            </span>city:<span class="o">{</span><span class="nv">$toLower</span>:<span class="s2">&quot;</span><span class="nv">$city</span><span class="s2">&quot;</span><span class="o">}</span>,
+<a id="__codelineno-15-32" name="__codelineno-15-32" href="#__codelineno-15-32"></a><span class="w">            </span>pop:1,
+<a id="__codelineno-15-33" name="__codelineno-15-33" href="#__codelineno-15-33"></a><span class="w">            </span>state:1,
+<a id="__codelineno-15-34" name="__codelineno-15-34" href="#__codelineno-15-34"></a><span class="w">            </span>zip:<span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">&quot;</span>
+<a id="__codelineno-15-35" name="__codelineno-15-35" href="#__codelineno-15-35"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-15-36" name="__codelineno-15-36" href="#__codelineno-15-36"></a><span class="w">    </span><span class="o">}])</span><span class="p">;</span>
+</code></pre></div></p>
+<h2 id="match">Match:</h2>
+<p>filter, if matches doc is pushed to pipeline.
+pre aggregate the filter.</p>
+<p>e.g. filter state CA, and then do the stuff.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="w">    </span>db.zips.aggregate<span class="o">([</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$match</span>:<span class="o">{</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">            </span>state:<span class="s2">&quot;CA&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$group</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">            </span>_id:<span class="s2">&quot;</span><span class="nv">$city</span><span class="s2">&quot;</span>,
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">            </span>population:<span class="o">{</span><span class="nv">$sum</span>:<span class="s2">&quot;</span><span class="nv">$pop</span><span class="s2">&quot;</span><span class="o">}</span>,
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">            </span>zip_codes:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="nv">$addToSet</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$project</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">                </span>_id:0,
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">                </span>city:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">&quot;</span><span class="w"> </span>,
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">                </span>population:1,
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">                </span>zip_codes:1,
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="w">        </span><span class="o">}</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+</code></pre></div></p>
+<blockquote>
+<p>Note: One thing to note about $match (and $sort) is that they can use indexes, but only if done at the beginning of the aggregation pipeline.</p>
+</blockquote>
+<h2 id="sort-skip-limit">Sort, Skip, Limit:</h2>
+<ul>
+<li>it is disk and memory based.</li>
+<li>it can be done before and after grouping.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="w">    </span>db.zips.aggregate<span class="o">([</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">        </span><span class="o">{</span><span class="nv">$match</span>:<span class="o">{</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">                </span>state:<span class="s2">&quot;NY&quot;</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$group</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">                </span>_id:<span class="s2">&quot;</span><span class="nv">$city</span><span class="s2">&quot;</span>,
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">                </span>population:<span class="o">{</span><span class="nv">$sum</span>:<span class="s2">&quot;</span><span class="nv">$pop</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$project</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">                </span>_id:0,
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">                </span>city:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">&quot;</span><span class="w"> </span>,
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="w">                </span>population:1
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$sort</span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="w">                </span>population:<span class="w"> </span>-1
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$skip</span>:<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="o">}</span>,
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$limit</span>:<span class="w"> </span><span class="m">5</span><span class="o">}</span>
+<a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>
+<a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="w">    </span><span class="o">])</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="first-and-last">First and Last:</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="w">    </span>db.zips.aggregate<span class="o">([</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$group</span><span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">                </span>_id:<span class="o">{</span>state:<span class="s2">&quot;</span><span class="nv">$state</span><span class="s2">&quot;</span>,<span class="w"> </span>city:<span class="s2">&quot;</span><span class="nv">$city</span><span class="s2">&quot;</span><span class="o">}</span>,
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">                </span>population:<span class="o">{</span><span class="nv">$sum</span>:<span class="s2">&quot;</span><span class="nv">$pop</span><span class="s2">&quot;</span><span class="o">}</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$sort</span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">                </span><span class="s2">&quot;_id.state&quot;</span>:1,
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">                </span><span class="s2">&quot;population&quot;</span>:-1
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">        </span>/##<span class="w"> </span>group<span class="w"> </span>by<span class="w"> </span>state,<span class="w"> </span>get<span class="w"> </span>first<span class="w"> </span>city<span class="w"> </span>*/
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">        </span><span class="o">{</span><span class="w"> </span><span class="nv">$group</span>:<span class="o">{</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">                </span>_id:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">.state&quot;</span>,
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">                </span>city<span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="nv">$first</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$_id</span><span class="s2">.city&quot;</span><span class="w"> </span><span class="o">}</span>,
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">                </span>population<span class="w"> </span>:<span class="w"> </span><span class="o">{</span><span class="nv">$first</span>:<span class="s2">&quot;population&quot;</span><span class="o">}</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="w">        </span><span class="o">}</span>,
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="w">        </span><span class="o">{</span><span class="nv">$sort</span>:<span class="o">{</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="w">                </span>_id:1
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">            </span><span class="o">}</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">        </span><span class="o">}</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="unwind-example">$unwind example</h2>
+<h2 id="double-unwind">Double $unwind</h2>
+<h2 id="mapping-between-sql-and-aggregation">Mapping between SQL and Aggregation</h2>
+<h2 id="some-common-sql-examples">Some Common SQL examples</h2>
+<h2 id="limitations-of-the-aggregation-framework">Limitations of the Aggregation Framework</h2>
+<div class="highlight"><pre><span></span><code>100 mb limit for pipeline.
+16 mb limit for python.
+
+in sharded system when we group by then aggregation query goes to 
+each shard. then when we require all data, then all data goes to 
+primary shard. so same level of scalability is not found which can be
+found in map reduce jobs in Hadoop.
+</code></pre></div>
+<h2 id="aggregation-framework-with-the-java-driver">Aggregation Framework with the Java Driver</h2>
+<p><strong><em>*## Week 6 : APPLICATION ENGINEERING </em></strong>*##    </p>
+<div class="highlight"><pre><span></span><code>durability, that data is on disk
+fault taulerance, what happens on crash.
+sharding, distribution across servers.
+</code></pre></div>
+<h2 id="write-concern">Write Concern</h2>
+<div class="highlight"><pre><span></span><code>DB writes pages to memory.
+thse are written to disk, depending on mem pressure,
+
+journal is log of every single thing happening on db.
+writes to journal as well.
+when journal is written then data is actually written on disk.
+
+
+
+When a data is persistent. we have two values that govern this, 
+one is W and other is J.
+
+w=1 denotes that data is written, it can be written to memnory or to 
+disk but no surity of it,
+
+j means weather or not we wait for journal to be written to disk before we continue.
+
+by default, j= false and w=1. 
+j=true is that data in journal is written to disk. this gives surity
+that the data is persistent now.
+
+the operation performed in MongoDB is on memory and not on disk. (fast)
+journal is written periodically.
+
+if server crashed we may loose data. (w came back but journal is not written)
+disk is 100 to 1000 times slower.
+
+by default w=1, j=false. 
+this means we;ll wait for write to be acknowledged but not journal
+to be written
+this is fast. lil vulnerable.
+
+w=1.j=true can be done by driver at db or coll level.
+slow. vulnerability is removed.
+
+w=0 is not recommended. and the write is not acknowledged.
+
+in replicated env we have other values of w that have significance.
+</code></pre></div>
+<h2 id="network-errors">Network Errors</h2>
+<div class="highlight"><pre><span></span><code>we might not get response from server about write when write happened but n/w error occured.
+
+in case of insert we can try again with same _id and can at max
+get duplicate key error.
+
+in update problem occurs. so for $inc we cannot determine that 
+update occured or not.
+
+to avoid update we can convert update to insert. delete and insert.
+</code></pre></div>
+<h2 id="introduction-to-replication">Introduction to Replication</h2>
+<div class="highlight"><pre><span></span><code>availability and fault toleracne. (in case of fire.)
+all are mongod.
+replicates asynchronously to sec.
+sec elect, strict majority.
+data written to p will be asynchronously will be written to s.
+when p goes down then election occurs.
+by majority the s becomes p.
+then s becomes p and later when p comes up it comes as s.
+
+by default we have 3 replications.
+</code></pre></div>
+<h2 id="replica-set-elections">Replica Set Elections</h2>
+<div class="highlight"><pre><span></span><code>type of nodes:
+    regular - 
+    arbiter (voting) - to vote in case of even nodes.
+    delayed/regular - disaster recovery, can be an hr behind, can;t become primary node. priority 0
+    hidden - can;t be primary. used for analytics. p=0.
+</code></pre></div>
+<h2 id="write-consistency">Write Consistency</h2>
+<div class="highlight"><pre><span></span><code>write will goto p 
+reads can goto s as well. but may be stale data.
+lag is not determined as sync is asynchronous.
+</code></pre></div>
+<h2 id="creating-a-replica-set">Creating a Replica Set</h2>
+<div class="highlight"><pre><span></span><code>in real we keep on diff phy servers.
+in our case we make on one server with diff dir and diff ports.
+3 mondod instances are started.
+
+replSet rs1 : this tells that they belong to one replica set.
+
+mkdir -p /data/rs1 /data/rs2 /data/rs3
+mongod --replSet m101 --logpath &quot;1.log&quot; --dbpath /data/rs1 --port 27017 --oplogSize 64 --fork --smallfiles
+mongod --replSet m101 --logpath &quot;2.log&quot; --dbpath /data/rs2 --port 27018 --oplogSize 64 --smallfiles --fork
+mongod --replSet m101 --logpath &quot;3.log&quot; --dbpath /data/rs3 --port 27019 --oplogSize 64 --smallfiles --fork
+
+To run a mongod process as a daemon (i.e. fork), and write its output to a log file, use the --fork and --logpath options.
+
+we also need to tie them together so that they can work in sync,
+
+we need to config and tell that all are associated with each other.
+
+config = { _id: &quot;m101&quot;, members:[
+    { _id : 0, host : &quot;localhost:27017&quot;},
+    { _id : 1, host : &quot;localhost:27018&quot;},
+    { _id : 2, host : &quot;localhost:27019&quot;} ]
+};
+
+rs.initiate(config);
+rs.status();
+
+After starting mongod s and then tying them together we start a 
+client using:
+mongo --port 27018
+we don;t get a normal port.
+rs1.SECONDARY&gt; rs.status();
+
+we get above. and the result is:
+all nodes status. a big doc.
+sec, pri, sec. all nodes info comes.
+
+we cannot write on secondary.
+
+we then move to primary and insert a doc.
+then goto sec and find the same collection.
+we can&#39;t query sec&#39;.
+we set 
+&gt;rs.slaveOk();
+then we can read form s.
+</code></pre></div>
+<h2 id="replica-set-internals">Replica Set Internals</h2>
+<div class="highlight"><pre><span></span><code>the replica sets have oplog. this is a log of change.
+the primary writes all to oplog.
+the secondary reads the oplog from primary and makes changes to primary.
+
+to see oplog on primary
+&gt; use local
+&gt; show collections
+oplog.rs is one we need.
+it has detail of insert just performed.
+
+now do:
+$ ps -ef | grep mongod 
+the find process id of mongod primary/
+$ kill 60494
+this will bring down the primary.
+
+then secondary becomes primary.
+rs.status() shows the down server as not reachable.
+</code></pre></div>
+<p>Failover and Rollback 
+    When p fails and secondary takes its place.
+    now s may be behind and does not have some writes.
+    the p gets back as s in some time.
+    then p syncs with secondary to take new writes and realises that it has extra writes.
+    it then rollsback those writes and saves to a file.
+    this is failover and Rollback.</p>
+<p>Connecting to a Replica Set from the Java Driver </p>
+<p>When Bad Things Happen to Good Nodes </p>
+<h2 id="write-concern-revisited">Write Concern Revisited</h2>
+<div class="highlight"><pre><span></span><code>concerns which arise when we write to hard disk.
+w and j are the properties that govern how write will work.
+setting w=1 will wait for primary node to respond to acknowledgement of write.
+w=2 will wait for primary as well as secondary.
+w=3 will wait for 3 to respond.
+j=1 will wait for primary to write the journal to the disk.
+how long we wait is, is called wtimeout. it can be set in drivers.
+these 3, w,j and wtimeout define write concern.
+these can be set in connection, collection driver or when defining replica set.
+w:majority is used to wait until majority acknowledges the write.
+</code></pre></div>
+<h2 id="read-preferences">Read Preferences</h2>
+<div class="highlight"><pre><span></span><code>we usually read and write to the primary but we can set it to read from the secondary as well.
+it can be set to:
+primary - read only from primary
+primary preferred - if not available then read from secondary
+secondary - only rotate among secondaries
+secondary preferred - if not available then primary
+Nearest - sends to nearest one.
+tags - sends to tagged node.
+we can configure program to connect to secondary.
+then we can fail primary by
+rs.stepDown()
+then also the read continues with on secondary without faliure.
+
+e.g.
+import pymongo
+import time
+
+read_pref = pymongo.read_preferences.ReadPreference.SECONDARY
+
+c = pymongo.MongoClient(host=[&quot;mongodb://localhost:27017&quot;,
+                              &quot;mongodb://localhost:27018&quot;,
+                              &quot;mongodb://localhost:27019&quot;],
+                              read_preference=read_pref)
+
+db = c.m101
+things = db.things
+
+for i in range(1000):
+    doc = things.find_one({&#39;_id&#39;:i})
+    print &quot;Found doc &quot;, doc
+    time.sleep(.1)
+
+
+    during execution if we stepDown primary. the read continues.
+</code></pre></div>
+<h2 id="review-of-implications-of-replication">Review of Implications of Replication</h2>
+<div class="highlight"><pre><span></span><code>seed lists - this is info and responsibility of driver to elect primary, keep all nodes data and keep track of them all.
+write concern - concern that w,j and wtimeout determine.
+read Preferences - how we set the reads.
+errors can happen - event after replications, errors can happen and will continue to happen because of n/w failure, h/w failure etc. for this knowledge of data and where it goes in application is necessary.
+
+One thing to remember is that the driver will check, upon attempting to write, whether or not its write concern is valid. It will error if, for example, w=4 but there are 3 data-bearing replica set members. This will happen quickly in both the Java and pymongo drivers. Reading with an invalid readPreference will take longer, but will also result in an error. Be aware, though, that this behavior can vary a little between drivers and between versions.
+</code></pre></div>
+<h2 id="introduction-to-sharding">Introduction to Sharding</h2>
+<div class="highlight"><pre><span></span><code>horizontal scalabiling.
+Shard are dbs distributed.
+each shards can have replicas. these are different hosts.
+so shard s1 can have 3 replicas. R0. so s1-s5 will have 15 hosts. (5*3).
+router is calles mongos.
+it does sometimes range based sharding.
+so on Querying mongos knows where that particaular order_id will fall.
+it conncects quesries to diff hosts.
+we use range based distribution.
+done on the basis of shard key, may be order_id.
+mongos for certain order no. will send to particaular chuck.
+these chunks lives on particular shards.
+all replicas in shards are mondgod.
+If shard key is not in knowledge of mongos then the request is sent to all shards.
+As of MongoDB 2.4, we also offer hash-based sharding, which offers a more even distribution of data as a function of shard key, at the expense of worse performance for range-based queries.
+Sharding is at db level.
+MongoS are stateless and can easily be replicated.
+</code></pre></div>
+<h2 id="building-a-sharded-environment">Building a sharded environment</h2>
+<div class="highlight"><pre><span></span><code>this more of a DBA task.
+we can setup 3 shards having 3 replicas in each.
+we ll  have a mongos server connected to app. it listens to port number 27017 which is default.
+the other relicas use non standard ports as these are all on same pc (hosts) and act as different hosts.
+then we have config server (3). these have information about the shards.
+so data is broken into chunks.
+sharding can be done on
+range based - it uses a range on say some id
+hash based - is uses hash algorithm to shard the data.
+
+below is the script to start a sharded system on local computer.
+our mongo will connect to mongos and not mongo d.
+the sh.status() gives data of sharded system.
+
+
+
+# Andrew Erlichson
+# MongoDB
+# script to start a sharded environment on localhost
+
+# clean everything up
+echo &quot;killing mongod and mongos&quot;
+killall mongod
+killall mongos                                                                                                                                                                                                                                 
+echo &quot;removing data files&quot;
+rm -rf /data/config
+rm -rf /data/shard*
+
+
+# start a replica set and tell it that it will be shard0
+echo &quot;starting servers for shard 0&quot;
+mkdir -p /data/shard0/rs0 /data/shard0/rs1 /data/shard0/rs2
+mongod --replSet s0 --logpath &quot;s0-r0.log&quot; --dbpath /data/shard0/rs0 --port 37017 --fork --shardsvr --smallfiles
+mongod --replSet s0 --logpath &quot;s0-r1.log&quot; --dbpath /data/shard0/rs1 --port 37018 --fork --shardsvr --smallfiles
+mongod --replSet s0 --logpath &quot;s0-r2.log&quot; --dbpath /data/shard0/rs2 --port 37019 --fork --shardsvr --smallfiles
+
+sleep 5
+# connect to one server and initiate the set
+echo &quot;Configuring s0 replica set&quot;
+mongo --port 37017 &lt;&lt; &#39;EOF&#39;
+config = { _id: &quot;s0&quot;, members:[
+          { _id : 0, host : &quot;localhost:37017&quot; },
+          { _id : 1, host : &quot;localhost:37018&quot; },
+          { _id : 2, host : &quot;localhost:37019&quot; }]};
+rs.initiate(config)
+EOF
+
+# start a replicate set and tell it that it will be a shard1
+echo &quot;starting servers for shard 1&quot;
+mkdir -p /data/shard1/rs0 /data/shard1/rs1 /data/shard1/rs2
+mongod --replSet s1 --logpath &quot;s1-r0.log&quot; --dbpath /data/shard1/rs0 --port 47017 --fork --shardsvr --smallfiles
+mongod --replSet s1 --logpath &quot;s1-r1.log&quot; --dbpath /data/shard1/rs1 --port 47018 --fork --shardsvr --smallfiles
+mongod --replSet s1 --logpath &quot;s1-r2.log&quot; --dbpath /data/shard1/rs2 --port 47019 --fork --shardsvr --smallfiles
+
+sleep 5
+
+echo &quot;Configuring s1 replica set&quot;
+mongo --port 47017 &lt;&lt; &#39;EOF&#39;
+config = { _id: &quot;s1&quot;, members:[
+          { _id : 0, host : &quot;localhost:47017&quot; },
+          { _id : 1, host : &quot;localhost:47018&quot; },
+          { _id : 2, host : &quot;localhost:47019&quot; }]};
+rs.initiate(config)
+EOF
+
+# start a replicate set and tell it that it will be a shard2
+echo &quot;starting servers for shard 2&quot;
+mkdir -p /data/shard2/rs0 /data/shard2/rs1 /data/shard2/rs2
+mongod --replSet s2 --logpath &quot;s2-r0.log&quot; --dbpath /data/shard2/rs0 --port 57017 --fork --shardsvr --smallfiles
+mongod --replSet s2 --logpath &quot;s2-r1.log&quot; --dbpath /data/shard2/rs1 --port 57018 --fork --shardsvr --smallfiles
+mongod --replSet s2 --logpath &quot;s2-r2.log&quot; --dbpath /data/shard2/rs2 --port 57019 --fork --shardsvr --smallfiles
+
+sleep 5
+
+echo &quot;Configuring s2 replica set&quot;
+mongo --port 57017 &lt;&lt; &#39;EOF&#39;
+config = { _id: &quot;s2&quot;, members:[
+          { _id : 0, host : &quot;localhost:57017&quot; },
+          { _id : 1, host : &quot;localhost:57018&quot; },
+          { _id : 2, host : &quot;localhost:57019&quot; }]};
+rs.initiate(config)
+EOF
+
+
+# now start 3 config servers
+echo &quot;Starting config servers&quot;
+mkdir -p /data/config/config-a /data/config/config-b /data/config/config-c
+mongod --logpath &quot;cfg-a.log&quot; --dbpath /data/config/config-a --port 57040 --fork --configsvr --smallfiles
+mongod --logpath &quot;cfg-b.log&quot; --dbpath /data/config/config-b --port 57041 --fork --configsvr --smallfiles
+mongod --logpath &quot;cfg-c.log&quot; --dbpath /data/config/config-c --port 57042 --fork --configsvr --smallfiles
+
+
+# now start the mongos on a standard port
+mongos --logpath &quot;mongos-1.log&quot; --configdb localhost:57040,localhost:57041,localhost:57042 --fork
+echo &quot;Waiting 60 seconds for the replica sets to fully come online&quot;
+sleep 60
+echo &quot;Connnecting to mongos and enabling sharding&quot;
+
+# add shards and enable sharding on the test db
+mongo &lt;&lt;&#39;EOF&#39;
+db.adminCommand( { addshard : &quot;s0/&quot;+&quot;localhost:37017&quot; } );
+db.adminCommand( { addshard : &quot;s1/&quot;+&quot;localhost:47017&quot; } );
+db.adminCommand( { addshard : &quot;s2/&quot;+&quot;localhost:57017&quot; } );
+db.adminCommand({enableSharding: &quot;school&quot;})
+db.adminCommand({shardCollection: &quot;school.students&quot;, key: {student_id:1}});
+EOF
+</code></pre></div>
+<h2 id="implications-of-sharding">Implications of sharding</h2>
+<div class="highlight"><pre><span></span><code>every doc shud hav shard key and it is immutable (it can;t be changed).
+index is req for shard key
+index should start with shard key if multiKey.
+in update, either shard key should be there or mulli update should be true. 
+for update shard key has to be specified. else it is sent to all nodes.
+
+no unique index can be set unless it is part of shard key.
+reason for no unique is that it doesn;t know about other shards.
+we should choose shard key as one that we are going to use in most of our query as a key,
+</code></pre></div>
+<h2 id="sharding-and-replication">Sharding and replication</h2>
+<div class="highlight"><pre><span></span><code>they both are usually done togther.
+mongos connects to pimary of replica mainly
+for failover within shard, mongos reconnects.
+write concers are still there.
+j true or w majority are still there.
+they apply to each node.
+availability and concerns still apply.
+</code></pre></div>
+<h2 id="choosing-a-shard-key">Choosing a shard key</h2>
+<div class="highlight"><pre><span></span><code>it shud have sufficient cardinality (variety of values.)
+so that it can be put in all shards
+hotspoting (all requests going to one single place) shud be avoided.
+so inserts should be such that the inserts goto different shards
+e.g so username can be used as shard key. it gives nice parallelism.
+
+hotspoting in writes should be avoided. anything that is monotonously increasing should be avoided
+in shards there are $minKey and $maxKey and values within it goes into the shard.
+when any value is greater than highest value of $maxKey then it always goes to the highest chunk,
+so all inserts will goto one shard only.
+sharding on (vendor,order_date) is pretty well as we get lot of cardinallity.
+</code></pre></div>
+<p><strong><em>*</em></strong><em>## Assignments </em><strong><em>*</em></strong>*</p>
+<p>4.3
+    most recent 10 blog posts.
+    most recent 10 post for given tag.
+    blog post page by permalink.</p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2023-01-19T21:24:37+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-01-19</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2023-01-19T21:24:37+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-01-19</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2016 - 2023 Vaibhav Yadav
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://in.linkedin.com/in/iyadavvaibhav" target="_blank" rel="noopener" title="in.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/iYadavVaibhav/" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/iYadavVaibhav/" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://www.kaggle.com/iyadavvaibhav/kernels" target="_blank" rel="noopener" title="www.kaggle.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M304.2 501.5 158.4 320.3 298.2 185c2.6-2.7 1.7-10.5-5.3-10.5h-69.2c-3.5 0-7 1.8-10.5 5.3L80.9 313.5V7.5q0-7.5-7.5-7.5H21.5Q14 0 14 7.5v497q0 7.5 7.5 7.5h51.9q7.5 0 7.5-7.5v-109l30.8-29.3 110.5 140.6c3 3.5 6.5 5.3 10.5 5.3h66.9q5.25 0 6-3z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://public.tableau.com/profile/iyadavvaibhav" target="_blank" rel="noopener" title="public.tableau.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.654.174v2.203H9.682v.58h1.972V5.16h.696V2.957h1.97v-.58h-1.97V.174h-.348zm6.03 2.262-.002 1.623v1.623h-2.957v.927h2.957v3.188h1.043l.011-1.582.02-1.576 1.465-.02 1.46-.01v-.927h-2.953V2.436h-.522zm-12.407.06v3.19H2.291v.925h2.986v3.19h.985V6.61h3.013v-.925H6.262V2.496H5.77zm6.086 5.27v3.593H8.06v1.188h3.304v3.596h1.28v-3.596h3.309v-1.188h-3.31V7.766h-.637zm9.721 1.55v2.221h-2.012v.811h2.012v2.261h.887v-2.261H24v-.811h-2.029v-2.22h-.422zm-19.111.131v2.174H0v.621h1.973v2.194h.667v-2.194h2v-.62H2.609V9.446h-.318zm15.709 4.516v3.254h-3.016v.927h3.016v3.217h1.072v-3.216h2.986v-.928h-2.986v-3.254h-.533zm-12.463.008v3.246H2.262v.928h2.957v3.189H6.32v-3.189h2.955v-.928H6.32V13.97h-.55zm6.316 4.578.002 1.103v1.1H9.566v.812h1.971v2.262h.928l.012-1.119.017-1.143h1.969v-.812h-2v-2.203h-.465z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.follow", "navigation.top", "search.highlight", "search.suggest", "content.action.edit", "content.action.view", "content.code.copy"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../js/timeago.min.js"></script>
+      
+        <script src="../../js/timeago_mkdocs_material.js"></script>
+      
+        <script src="../../assets/javascripts/extra.js"></script>
+      
+        <script src="../../assets/javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

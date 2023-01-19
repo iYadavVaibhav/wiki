@@ -1,9 +1,10 @@
-site_author: Vaibhav Yadav
-site_description: Data Engineering, Analytics and Visualization
 site_name: Vaibhav Yadav's Wiki
+site_description: Data Engineering, Analytics and Visualization
+site_url: https://iYadavVaibhav.github.io/wiki/
+site_author: Vaibhav Yadav
 
-repo_url: https://github.com/iYadavVaibhav/iyadavvaibhav.github.io
-repo_name: iyadavvaibhav.github.io
+repo_url: https://github.com/iYadavVaibhav/wiki
+repo_name: iyadavvaibhav/wiki
 
 theme:
   name: material
@@ -58,6 +59,7 @@ extra:
 
 
 plugins:
+  - search
   - git-revision-date-localized:
       enable_creation_date: true
       fallback_to_build_date: true

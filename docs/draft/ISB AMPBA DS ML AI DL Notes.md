@@ -2723,7 +2723,7 @@ Hierarchical Clustering:
 - in dendogram, y-axis is ED between points and x-axis is points.
 - This is agglomerative clustering.
 - Now any cut on Y axis gives us the clusters.
-![Hierarchical Clustering](../images/hierarchical_clustering.png "Hierarchical Clustering")
+![Hierarchical Clustering](/assets/images/hierarchical_clustering.png "Hierarchical Clustering")
 
 Uber Case Study:
 

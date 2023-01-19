@@ -1,0 +1,31 @@
+.md-nav--secondary .md-nav__item {
+    padding: 2px 10px;
+    font-size: 12px;
+}
+
+.md-nav--primary .md-nav__item {
+    padding: 1px 0.6rem;
+    font-size: 12px;
+}
+
+/* Code-Block highlighter */
+.md-typeset pre{
+    border-radius: 4px;
+    border: 1px solid #cccccc;
+    line-height: 18px;
+    font-size: 90%;
+}
+
+/* Inline highligter */
+.md-typeset p code, .md-typeset li code{
+    background-color: rgba(27,31,35,.05);
+    color: #b50000;
+    border-radius: 6px;
+    font-size: 80%;
+    padding: 0.1em 0.4em 0.2em 0.4em;
+}
+
+nav[data-toggle=toc] .nav-link+ul {
+    display: none;
+    padding-bottom: 10px;
+}
