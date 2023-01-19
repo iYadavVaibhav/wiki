@@ -5,7 +5,9 @@ title: Home
 
 # Vaibhav's Wiki
 
-Hi..! Welcome to Vaibhav's personal Wiki. I am passionate **Data Engineer** having more than a decade of experience in building modern, scalable and durable data solutions on distributed systems.
+Hi..! Welcome to Vaibhav's personal Wiki. Built with Material for MkDocs served with GitHub Actions.
+
+I am passionate **Data Engineer** having more than a decade of experience in building modern, scalable and durable data solutions on distributed systems.
 
 My Blog - Some of the very basic how to guides as I learn through
 
