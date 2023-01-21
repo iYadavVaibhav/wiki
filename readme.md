@@ -2,55 +2,27 @@
 
 *everything about this repo*
 
-Vist at: <https://iYadavVaibhav.github.io>
+Visit at: <https://iYadavVaibhav.github.io/wiki>
 
-## MKDocs notes
+## ToDo
 
-MKDocs is static site generator, more like `Pelican`. From markdown files, it can build static site.
-
-Static site can be deployed on Github Pages and builds can be automated using Github Actions.
-
-So one repo has your source markdown files and another repo has static site which is build and deployed using github actions.
-
-## Basics
-
-- `mkdocks.yml`
-  - `site_name` and `site_url` are bare minimum to specify.
-  - new docs are auto picked and added to navs. If you specify pages in nav, you will have to do for all the pages you add, any new ones too..
-
-- `mkdocs serve` live preview server on dev+
-- `mkdocs build` to create `site` folder
-
-## Deployment
-
-- `mkdocs gh-deploy` to deploy to github
-  - creates `gh-pages` branch on local and adds site to it.
-  - pushes this branch to remote as default.
-
-- Issues
-  - pushes static site, needs build. Can be resolved with GitHub actions.
-
-
-## Github Actions
-
-- GitHub Actions is yet another free option from GitHub, which is basically a build server in the cloud
-- have a build server automatically pick up changes in Markdown source files and build the static website directly on the build server.
-- More on git page
-
-- Links
-  - <https://blog.elmah.io/deploying-a-mkdocs-documentation-site-with-github-actions/>
-
-## Material Theme for MKDocs
-
-- add following to config file
-  
-  ```yaml
-  theme:
-    name: material
-  ```
-
-Decisions
-
-- Dont need tabs
-- need sidebar sections
-- need blog
+- [x] - clean these notes to come nicely
+  - [x] remove dates from file name
+  - [x] shorten titles
+- [ ] merge office notes
+- [ ] merge notepad.md notes
+- [ ] collect commits to other browser and old repo
+- [ ] update old repo's landing page to be your resume and a link to this wiki.
+- [ ] test if comments giscus are working as expected
+- [ ] add yaml dev prod evn flag for date plugin
+- [ ] `move to top` to down
+- [x] move mkdocs to some other note - moved to separate note.
+- [x] Last updated and created use icons
+- [x] add apple icon on add to home screen
+  - added using JS, `base.html` override messes up css and js path. Might work!
+- [x] add list of articles to home page
+  - added new template`articles_list.html` and pulled it in `main.html`
+- `last_modified_at` in jekyll is now `revision_date`
+- [x] update time updated and created plugin
+  - added `source-file.html` and modified the code use `date` in meta as created and show revision from file git history.
+- [ ] suggest to use branch option in view and edit
