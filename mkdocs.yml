@@ -1,7 +1,7 @@
 site_name: Vaibhav Yadav's Wiki
-site_description: Data Engineering, Analytics and Visualization
+site_description: Data Engineering, Data Science, Business Analytics, Data Visualization, Business Intelligence
 site_url: https://iYadavVaibhav.github.io/wiki/
-site_author: Vaibhav Yadav
+site_author: Vaibhav Yadav - Data Engineer, Scientist and Analyst
 
 repo_url: https://github.com/iYadavVaibhav/wiki
 repo_name: iyadavvaibhav/wiki
@@ -14,7 +14,7 @@ theme:
   
   features:
     # - navigation.sections
-    - navigation.expand
+    # - navigation.expand
     # - navigation.path
     - toc.follow
     - navigation.top
@@ -64,6 +64,7 @@ plugins:
       enable_creation_date: true
       fallback_to_build_date: true
       type: timeago
+      enabled: !ENV [CI, false]
 
 
 markdown_extensions:

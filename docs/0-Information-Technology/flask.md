@@ -414,3 +414,10 @@ In each Blueprint package we make \_\_initII.py that has name information and im
 - Or, if you don't want/need a background service you can just run: `elasticsearch`
 
 Todo: Search not working, fix it.
+
+## Links
+
+- [ ] - Flaskr - Blogging Template - <https://flask.palletsprojects.com/en/0.12.x/tutorial/introduction/>
+
+- Generate SQLAlchemy class model from database table - `sqlacodegen mssql+pyodbc://GBRDSM050000617\GMI_SQLVIRT_TEST/TC09_Dev_Db/historic_responses?driver=SQL+Server --outfile db.py`
+

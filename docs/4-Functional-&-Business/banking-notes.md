@@ -37,3 +37,8 @@ Banks makes money by following methods:
 ## Income TAX
 
 - Form 26as has information on FD interest
+
+
+## Credit Risk Management
+
+Credit risk management is the practice of mitigating losses by understanding the adequacy of a bank's capital and loan loss reserves at any given time – a process that has long been a challenge for financial institutions.

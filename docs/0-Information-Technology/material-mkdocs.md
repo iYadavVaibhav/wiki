@@ -188,3 +188,37 @@ view all page items
     {{ key,value }}
 {% endfor %}
 ```
+
+## Markdown 101 - Rules
+
+Based on a year of work, following structure has emerged and has worked in arranging notes all around, for work logs, meetings and knowledge base. make a `~/notes` folder, which should be a GIT repo and can have following files:
+
+- Project Specific - markdown file `project_name.md` - H1s
+  - `# Understanding` - add notes as you gain understanding of process etc. Can have all sort of h2, h3 etc.
+  - `# Work Log` - add dated work that you do, or steps you follow, kind of rough log. `## 22-11 - tu - adding exception handling`
+  - `# Meeting Log` - add dated meeting rough notes. `## 23-04 - mo - Show and tell with James`
+- Meetings markdown - `meetings.md` -  a file to have all meeting that you do - H1s
+  - `# People Log` - this can have `## John Doe` which can have log of conversation, facts, or actions with a person.
+    - `## Others` - log of people you interact less.
+  - `Meeting Log` - logs of meeting, can have actions [ ] with date to be completed on. `## 12-03 - tu - Sales Pitch Overview`
+- Daily Logs markdown - `daily_log.md` - H1s
+  - `# ToDo - Backlog - Minddump` has any thing that comes to ming, todos, actions to be taken, read later etc.
+  - `# Daily Log - 2022` - followed by week numbers - latest at top
+    - `## Week 48` -  followed by daily log of work.
+      - `28-11 - mo` probably add hourly burns
+      - `week review` - reflect how your week went, goods and bads, what can be improved, what gave you appreciation. Are you aligning to a wider goal?
+- Notepad - `notepad.md` the huge notepad where you build your knowledge base, H1s
+  - `# Team DNA - Business & Vision` - knowlege base specific to your team, unit. Add business understanding, projects, team hierarchy, team's vision.
+  - `# ABC Inc - Business & Vision` - build knowledge base aroung your company, what it does, entities, relations, public info, customers, products, business processes.
+  - `# Tools/Links/Processes` - this has info of all tools, portals, how tos, third parties, databases. All specific to your company.
+  - Notes in general - add H1s to have generic notes that are around a technology, but not specific to company. These can later go to your personal knowlege base e.g.
+    - `# Python` - all things you learn in python
+    - `# Git` - all knowlege you gain in git
+
+- Writing Rules and basics
+  - Add date where possible.
+  - [ ] to have todo actions. can be searched.
+  - [x] to have action done. - resolution.
+    - or resolution in next line, tabbed like this.
+  - avoid adding h3, h4 to rough notes.
+

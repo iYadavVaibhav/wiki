@@ -112,6 +112,51 @@ Number standardize between 0 and 1 per category for trend line colors
 )
 ```
 
+
+## Tableau JS Embedd API
+
+- Everything starts by loading a `viz`, this can be a dashboard or a sheet. Viz gives you `workbook` and Async callback function.
+- `workbook` has `sheets`, but can have only one `activeSheet`, like active Tab. You can only do operations on activeSheet.
+- Operations are `Async` and return a promise, so they can be chained.
+  - Change Param  - `changeParameterValueAsync("param_name", value)`
+  - Change Filter - `applyFilterAsync("filter_name", values, tableau.FilterUpdateType.REPLACE)`
+  - Change ActiveSheet - `activateSheetAsync("sheet_name")` this can be dashboard or sheet
+  - Get Data - `getSummaryDataAsync(data_options)` - returns table object with data and columns
+
+Network calls are made when you call Async funcitons, else it is a JS execution only.
+
+Read Data:
+
+- create sheet with all columns added to row pill.
+- activate this sheet,
+- then do `getData`,
+- to skip chache, increment counter.
+
+Writeback:
+
+- Add a proc as data source. Proc to have at least three inputs, Switch, Value and Counter.
+- Create these params in workbook
+  - `switch`
+    - 0 - no action
+    - 1 - CREATE/insert
+    - 2 - UPDATE
+    - 3 - DELETE
+  - `psv` - pipe separated values
+  - `counter` - increment it whenever you want tableu to skip cache and call database server.
+- Create sheet `exec_proc`, whenever this sheet is activated, it will execute proc depending on the three params above.
+
+```js
+async function execProcTabeauAsync(switch,psv) {
+    await workbook.changeParameterValueAsync("psv", psv);
+    await workbook.changeParameterValueAsync("counter", ++counter);
+    await workbook.changeParameterValueAsync("switch", switch);
+    await workbook.activateSheetAsync("exec_proc");
+    console.log('Action: ' + switch + '; Completed at: ' + new Date($.now()).toISOString());
+    return await workbook.changeParameterValueAsync("switch", 0);
+}
+```
+
+
 ## Links
 
 - Data Structuring for Analysis - <https://help.tableau.com/current/pro/desktop/en-us/data_structure_for_analysis.htm>

@@ -2,9 +2,11 @@
 description: Notepad Public
 ---
 
-Staging area - Start with H1, later move to `term-notes.md`
+# Notepad
 
-# Android Notes
+*Staging area - Start with H1, later move to `term-notes.md`*
+
+## Android Notes
 
 ADB is utility to interact with android phone. It can install/uninstall apks. change connections etc.
  All commands here, [adb shell](https://adbshell.com/).
@@ -495,32 +497,3 @@ Python has packages for most database engines like MySQL, Postgres, SQLite, Mong
     - `flask --app hello.py db migrate -m "initial migration"` to generate script
     - review for accurate changes. add to source control
     - `flask--app hello.py db upgrade` to do migration in database
-
-## GIT
-
-If you want to create a new branch to retain commits you create, you may
-do so (now or later) by using -c with the switch command. Example:
-
-- `git switch -c <new-branch-name>`
-
-## Python
-
-`Decorators` are a standard feature of the Python language. A com‐
-mon use of decorators is to register functions as handler functions
-to be invoked when certain events occur.
-
-[ ] what is context in python
-
-## Computer Science
-
-A thread is the smallest sequence of instructions that can be man‐
-aged independently. It is common for a process to have multiple
-active threads, sometimes sharing resources such as memory or file
-handles. Multithreaded web servers start a pool of threads and
-select a thread from the pool to handle each incoming request.
-
-### OOPS
-
-- Object is a Class and has
-  - `attributes` - variables
-  - `methods()` - functions

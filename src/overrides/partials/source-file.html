@@ -22,7 +22,7 @@ https://github.com/squidfunk/mkdocs-material/blob/master/src/partials/source-fil
             <span class="md-icon" title="Written On">
                 {% include ".icons/material/clock-plus-outline.svg" %}
             </span>
-            <span> {{ page.meta.date.strftime("%B %e, %Y") }} </span>
+            <span> {{ page.meta.date.strftime("%b %Y") }} </span>
         {% elif page.meta.git_revision_date_localized %}
             <span class="md-icon" title="Written On">
                 {% include ".icons/material/clock-plus-outline.svg" %}

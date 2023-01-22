@@ -1,11 +1,11 @@
 ---
-description: MySQL, SQLite and SQLAlchemy Notes
+description: MySQL, SQLite, Database, SQL
 date: 2019-05-06
 ---
 
-# Databases & ORMs
+# Databases & SQL
 
-*all about databases, SQL, ORMs*
+*all about databases, SQL*
 
 ## SQLite
 
@@ -17,17 +17,11 @@ date: 2019-05-06
 - `.mode csv` and then `.import data.csv orders` loads csv to db, creates if not exists.
 - `.schema orders` to check.
 
-
-## SQLAlchemy
-
-- It is ORM for Python, has two parts
-  - CORE - can be used to manage SQL from python,
-  - ORM - can be used in Object oriented way to access SQL from python.
-- FlaskSQL_Alchemy is extenstion to SQLAlchemy.
-- **ORMs** allow applications to manage a database using high-level entities such as classes, objects and methods instead of tables and SQL. The job of the ORM is to translate the high-level operations into database commands.
-- It is an ORM not for one, but for many relational databases. SQLAlchemy supports a long list of database engines, including the popular MySQL, PostgreSQL and SQLite.
-- The ORM translates Python classes to tables for relational databases and automatically converts Pythonic SQLAlchemy Expression Language to SQL statements
-
+- It can be used in many ways, some are:
+  - Python Program and DB Engine In memory
+  - Python Program and DB Engine as File
+  - SQLite installed as utility and access via shell, this is `sqlite3.exe` program.
+  - SQLite ODBC driver.
 
 ## MySQL
 
@@ -80,7 +74,23 @@ Trouble Shooting:
 - do `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newrootpassword';` then try loggin in.
 
 
-## Mongo DB
+## Microsoft SQL Server
+
+### MSSQL Snippets
+
+```sql
+-- Create and Insert
+SELECT FirstName, LastName
+INTO TestTable
+FROM Person.Contact
+WHERE EmailPromotion = 2
+
+-- Existing Table Append
+INSERT INTO TestTable
+SELECT FirstName, LastName
+FROM Person.Contact
+WHERE EmailPromotion = 2
+```
 
 
 ## Redis
