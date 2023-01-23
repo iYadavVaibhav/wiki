@@ -1,14 +1,21 @@
+
+{% set ns = namespace(index=0) %}
+<!-- to skip first nav link -->
+
 {% for nav_item in nav %} 
-    {% if nav_item.children and nav_item.title != "Home" %}
-        <h3>{{ nav_item.title }}</h3>
-        <ul>
-        {% for nav_item in nav_item.children %}
-            {% if not nav_item.children %}
-                <li class=""><a href="{{ nav_item.url | url }}" class="md-nav__link">{{ nav_item.title }}</a></li>
-            {% endif %}
-        {% endfor %}
-        </ul>
-    {% elif nav_item.title != "Home"  %}
-        <li class=""><a href="{{ nav_item.url | url }}" class="md-nav__link">{{ nav_item.title }}</a></li>
+    {% if ns.index !=0 %}
+        {% if nav_item.children %}
+            <h3>{{ nav_item.title }}</h3>
+            <ul>
+            {% for nav_item in nav_item.children %}
+                {% if not nav_item.children %}
+                    <li class=""><a href="{{ nav_item.url | url }}" class="md-nav__link">{{ nav_item.title }}</a></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% elif nav_item.title != "Home"  %}
+            <li class=""><a href="{{ nav_item.url | url }}" class="md-nav__link">{{ nav_item.title }}</a></li>
+        {% endif %}
     {% endif %}
+    {% set ns.index = ns.index + 1 %}
 {% endfor %}

@@ -1,3 +1,7 @@
+---
+title: CSE Basics
+---
+
 # Software Engineering
 
 *all about standards, conventions, ethics, practices*
