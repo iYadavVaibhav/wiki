@@ -1,6 +1,8 @@
 <!-- taken from 
 https://github.com/squidfunk/mkdocs-material/blob/master/src/partials/source-file.html -->
 
+{% if not page.is_homepage %}
+
 <hr />
 <div class="md-source-file">
     <small>
@@ -32,3 +34,5 @@ https://github.com/squidfunk/mkdocs-material/blob/master/src/partials/source-fil
         
     </small>
 </div>
+
+{% endif %}
