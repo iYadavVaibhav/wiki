@@ -263,7 +263,32 @@ Follow:
 
 # Python web app development
 
-# Notes - 20221224
+# Notes - 20230126
+
+## JWT DB App
+
+- JWT Authenticaton
+  - `jwt` python library is used to make a `token` that can be send in every request instead of sending username and password.
+  - Token is encoded string which has a valid time and it expires after that time.
+  - `ExpiredSignatureError` is raised if you `decode` and expired token string.
+  - [ ] how to add remember me.
+
+- how to register?
+  - comment `token_authentication` for `create_user`
+  - `curl -i -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"admin"}' http://127.0.0.1:5000/admin`
+
+- CURL Requests
+  - Send Username and password to get token
+    - `curl -u username:password -i -X GET http://127.0.0.1:5000/login` returns token and duration
+  - Send token in header to access protected resources
+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/users`
+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/users/9d8c738b-3a39-482d-8a17-0c1b755f9a23`
+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/api/v1.0/tasks`
+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/api/v1.0/tasks/19`
+  - [ ] will this be more secure and beneficial?
+    - `curl -u username_or_token:password_or_unused -i -X GET http://127.0.0.1:5000/users`
+
+
 
 ## Flask
 
@@ -277,6 +302,15 @@ Web Browser --request--> web server --> Flask app instance --route--> function t
 
 **Request** from client has lot of information in it, like header, user-agent, data etc. This information is available in `request object` and is made available to a `view-route function` to handle it. This object is not passed as an argument to function, rather it is made available using `contexts`. **Contexts** let certain objects to globally accessible, but are not global variable. They are globally accessible to only one thread. There can be multiple threads serving multiple requests from multiple client.
 
+- Context is simply data that is specific to something. Eg
+  - App-context is specific to app, like its mail server, its database location, or other configurations
+  - Request-context is specific to request, like its browser, its client, its form data, its headers
+- this data is stored in object, in attribute such as `config`
+- this data is used by extensions in flask, hence they do not run if context is not available.
+- context is automatically made available once app is initialized.
+- context can be made explicitly avilable by calling `with app.app_context():`
+- when there is request, web server activates a thread that initializes app and this app context is pushed with data that is available globally, similarly request context is alos pushed.
+
 There are two contexts in Flask
 
 - `current_app` variable in Application context, has info of active application.
@@ -285,6 +319,8 @@ There are two contexts in Flask
 - `session`, in request context, a dictionary to store values that can be accessed in different requests from same session.
 
 Flask, in backend, makes these availabe to thread before dispaching a request and removes after request is handled. Explicitly, `current_app` can be made availabe by invoking `app.app_context()`
+
+![img](http://speakerdeck.com/patkennedy79/demystifying-flasks-application-and-request-contexts-with-pytest?slide=8)
 
 [ ] How does flask differente requests and clients?
 
@@ -497,3 +533,292 @@ Python has packages for most database engines like MySQL, Postgres, SQLite, Mong
     - `flask --app hello.py db migrate -m "initial migration"` to generate script
     - review for accurate changes. add to source control
     - `flask--app hello.py db upgrade` to do migration in database
+
+### Emails
+
+Emails can be sent using `smtplib` package from Python standard library. Email is sent by connecting to SMTP Server which takes request to send email to recipient. Localhost on port 25 is local server that can send email. External SMTP server like `mail.googlemail.com` on `587` port can be used to send emails through Google Gmail account.
+
+- **Flask-Mail** is a extension that wraps `smtplib`
+  - Installation `pip install flask-mail`
+  - import `from flask_mail import Mail, Message`
+  - instantiate and initialize `mail = Mail(app)`
+  - build obj `msg_obj = Message('sub','sender','to')`
+    - add body and html to obj, may use template for it `msg.body = render_template(template + '.txt', **kwargs)`
+  - mail.send(msg_obj)
+  - Sending Asynchronout Email
+    - Message() object can be build in mail python file but Mail() object, which sends the email using msg_obj, should run in separate thread to avoid lags.
+    - use python Thread() class from threading package to make new thread that runs the send_async_email(app,msg) functions. this functions has
+      - app object of FLask() for context
+      - msg object of Message() for content
+      - uses mail object of Mail() to send.
+    - `from threading import Thread`
+    - The function which build Message(), add line
+      - `thr = Thread(target=send_async_email, args=[app, msg])` - build thread obj
+      - `thr.start()` execute thread separately
+      - `return thr` [ ] why this is added
+
+## Blueprint - Large App Structure
+
+- **Application Factory** is way of initializing app
+  - to serve a request, when single file app in invoked, app gets initialized with configs to serve the request. You do not have flexibility to make changes to config dynamically
+  - app initialization can be delayed (or controlled) by making a function to do it, called `factory function`. This can be explicitly controlled.
+
+- **Single py file** overall flow
+  - import flask modules and extentions
+  - instantiate flask app `app = Flask(__name__)`
+  - configure app with all configs, eg, `app.config['MAIL_PORT'] = 587`
+  - initialize extentions, eg, `mail = Mail(app)`. Not all extensions are initialized, eg, FlaskForm
+  - DB ORM Classes
+  - Email functions - may use templates
+  - Form Classes
+  - error handlers functions - may use templates
+  - routes, they may use use
+    - above extensions, eg - checks Form, sends email, writes to db, or returns an error
+    - native - session, flash, g
+    - templates.
+
+- **templates** and **static** Resources flow
+  - base template is HTML, it has blocks. Block-content can be replaced or appended
+  - base-template is used to build different pages which put dynamic content in blocks.
+  - static files can be used from static folder.
+  - example flow
+    - `base.html` has blocks, title, nav, page_content
+    - index or profile have `{% extends "base.html" %}`, it tells Jinja to use base.
+    - block-content can be replaced or appended using `{{ super() }}`
+    - files from `static` folder using `{{ url_for('static', 'favicon.ico') }}`
+    - external packages can be imported as py_var to build content as py_var and use in content. eg - wtf tempate can be imported from bootstrap to build content from form_object using `{{ wtf.quick_form(form) }}`.
+
+- restructuring - multiple files basic structure
+  
+  ```python
+  |-app_name      # 0 top level dir - any name
+    |-app/          # 2 package having flask application
+      |-templates/
+      |-static/
+      |-main/         # 5 BP sub pkg
+        |-__init__.py   # 5.1 pkg const defines BP
+        |-errors.py     # 5.2 err handlers
+        |-forms.py      # 5.3 form classes
+        |-views.py      # 5.4 routes functions
+      |-__init__.py   # 2.1 app pkg constructor, factory
+      |-models.py     # 2.2 db models
+      |-email.py      # 2.3 email 
+    |-config.py     # 3 configuration variables as OOPs
+    |-flasky.py     # 4 factory is invoked
+  ```
+
+- 3 - `config.py` config as OOPs
+  - the config variables like secret-key and mail-server, are now attributes of `Config` class.
+  - `Config` class has `@staticmethod` as `init_app(app)` which can be used to initialize app and more.
+  - This Config base class has common vars but can be extended to build different environment classes like dev, test, prod. that can have env specific vars like dev db-location.
+  - add a dictionary `conf_env` to pick the correct env class.
+- 2 - `app/` App Package
+  - dir having code, template and static files.
+  - 2.1 - `app/__init__.py` App Pkg Constructor
+    - this is where we build the `factory function` to initalize app explicitly and controlled.
+    - import Flask modules (only Flask)
+    - import Flask-Extensions (only those that need app init)
+    - instantiate extensions without `app`
+    - factory function `def create_app(conf_env):` function to have
+      - arg `conf_env` is dictionary key name (str) to pick required Env_Config_Class from `config.py` so that we have correct config vars.
+      - instantiate app
+      - add configs from object `app.config.from_object()`
+      - add configs to extensions using `ext_obj.init_app(app)`
+      - return app
+    - while this makes config available in controlled way, however, it missing `@app.routes()` and other decorators associated to `@app` like error handles. This is handled using `Blueprint`.
+    - import BP file and register it with app using `register_blueprint()` method.
+
+    ```python
+    from flask import Flask
+    from flask_bootstrap import Bootstrap
+    from flask_sqlalchemy import SQLAlchemy
+    from config import config
+
+    bootstrap = Bootstrap()
+    db = SQLAlchemy()
+
+    def create_app(config_name):
+        app = Flask(__name__)
+        app.config.from_object(config[config_name])
+        config[config_name].init_app(app)
+
+        bootstrap.init_app(app)
+        db.init_app(app)
+
+        # Routes or blueprints
+        from .main import main as main_blueprint
+        app.register_blueprint(main_blueprint)
+
+        return app
+    ```
+
+- 5 Blueprint - sub pkg
+  - Blueprint is like app having routes but in dormant state until registered with an application which gives it a context.
+  - Blueprint can be a single file, or structured as a sub-package having multiple modules and the package constructor creates blueprint.
+  - 5.1 `app/main/__init__.py` main bp creation
+    - Blueprint is native flask module
+    - create object of `Blueprint()` class and pass it a name and location.
+    - import associated modules
+
+    ```python
+    from flask import Blueprint
+    main = Blueprint('main', __name__)
+
+    from . import views, errors 
+    # last line to avoid circular dependency
+    ```
+
+  - 5.4 `app/main/views.py` view routes
+    - route function name now has namespace with BP name as prefix, so `url_for('main.index')` should be used so that 'index' of any other BP is not picked.
+  - 5.2 `app/main/errors.py` error handlers  
+    - they respond to only BP route error, for app wide use `app_errorhandler` decorator instead of `errorhandler`.
+  - 5.3 `app/main/forms.py` has form objects.
+
+- 4 `flasky.py` module where app instance is deined
+  - `create_app()` function is called.
+
+
+
+## Social Blogging App
+
+- User Authenticaton
+  - Password hashing
+    - extensions - `from werkzeug.security import generate_password_hash, check_password_hash` this is tried and tested lib that is safe to use.
+    - model - implement `password` as write-only property of `User` class to set `password_hash`
+  - Blueprint - structure it as sub-module `auth` Blueprint. It has view having login-route
+  - Flask-login is ext having functions and decorators that make authentication easy.
+    - model - few required class members can either be declared in `User` class or can be importe from `UserMixin` class of Flask-login.
+    - initialize and instantiate extension with required conf
+
+      ```python
+      from flask_login import LoginManager
+      
+      login_manager = LoginManager()
+      login_manager.login_view = 'auth.login'
+      
+      def create_app(config_name):
+        # ...
+        login_manager.init_app(app)
+        # ...
+      ```
+
+    - model implement user_loader in `User` class
+
+      ```python
+      from . import login_manager
+      
+      @login_manager.user_loader
+      def load_user(user_id):
+        return User.query.get(int(user_id))
+      ```
+
+    - `login_required` decorator lets protect route.
+    - Flask-Login’s `login_user()` logs user in once verified. It setts user session.
+    - `logout_user()` logs user out.
+  - Register User
+    - build a form class in new `auth/forms.py`, add unique email and username validator using `validate_` function
+    - build a template that uses form `templates/auth/register.html`
+    - build a register route in `auth/views.py`
+      - get - render form
+      - post - validate and add user to db
+  - account confirmations
+    - use expiry token to validate email url.
+    - model - add token generation and validation function.
+    - view - send email on registration
+    - view - `@auth.route('/confirm/<token>')`
+- Roles and Permissions
+  - database implementation
+    - add `role` table
+    - add `permission` column to role table as integer
+      - multiple permission can be binary numbers, 1,2,4,8,16
+      - add them and subtract them to get unique number as total permission of user. 2+4=6
+      - do bit wise and operation to match permission. 6&2=2, 6&4=4
+  - add decorator function to make it easy to protect route to access only if permission is checked.
+- User Profiles
+
+## Flask Testing
+
+- Testing can be done using flask shell and executing functions `flask --app flasky.py shell`
+- What you test in shell should be automated by making test cases.
+- Unit Tests - test small units
+  - use py native `import unittest`
+  - in `tests/test_basics.py`
+    - import modules you need for test, `create_app`, `db`
+    - import modules you need to test, `User`, `current_app`
+    - define class `class BasicsTestCase(unittest.TestCase):`
+      - build functions
+        - `setUp()` runs before each test, builds env for testing
+        - `tearDown()` runs after each test, removes things from env
+        - `test_somecase()` these functions run as test.
+          - `assertTrue` Ok if True
+          - `assertFalse` Ok if False
+          - `with self.assertRaises(AttributeError):` statement that raise error.
+  - tests can be written in separate py files (modules) and the folder `tests` can have `__init__.py` as blank to make it a pkg
+  - in `flasky.py` you can add code to run tests automatically by adding a cli command.
+  - do `flask --app flasky.py test` to run all test cases
+
+  ```python
+  @app.cli.command()
+  def test():
+    """Run the unit tests.""" # help msg on cli
+    import unittest
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
+  ```
+
+## GIT
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+- `git switch -c <new-branch-name>`
+
+## Python
+
+`Decorators` are a standard feature of the Python language. A com‐
+mon use of decorators is to register functions as handler functions
+to be invoked when certain events occur.
+
+`Package` is usually a folder with `__init__.py` in it. Other python files are `modules`.
+
+- Public, Private, Protected in python
+  - public - every member of class in python is public by defaut, can be accessed outside class using object.
+  - protected attribute needs to be prefixed with underscore, `_name`. It can be accessed, just a convension.
+  - private members can be `__name` prefixed with double underscore, this makes them non accessible outside "directly". though can be accessed using `_Classname__attrname`
+  - Python provides conceptual implementation but not exactly like java or C++. As the underscores tell what is protected and private but does not make them non accessible.
+  - To implement a "write-only" attribute use "propertly"
+    - getter - use `@property` decorator with function, `def pvt_prop_name(self):` raise err in this func so no one can get this property.
+    - setter - use `@pvt_prop_name.setter` with function `def pvt_prop_name(self, value):` to implement setting some values. You can set value to another public property. Thus this makes `pvt_prop_name` as write-only.
+
+  ```python
+  class Book():
+      scrambled = None # public, can be get or set
+      __safe = None    # pvt, can't be directly get or set
+
+      @property
+      def secret(self):
+          raise AttributeError()
+      
+      @secret.setter
+      def secret(self,value):
+          self.scrambled = value[::-1]
+
+      # `secret` is write_only member
+  ```
+
+
+[ ] what is context in python
+
+## Computer Science
+
+A thread is the smallest sequence of instructions that can be man‐
+aged independently. It is common for a process to have multiple
+active threads, sometimes sharing resources such as memory or file
+handles. Multithreaded web servers start a pool of threads and
+select a thread from the pool to handle each incoming request.
+
+### OOPS
+
+- Object is a Class and has
+  - `attributes` - variables
+  - `methods()` - functions
