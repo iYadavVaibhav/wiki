@@ -57,6 +57,21 @@ Flask wrapper for sqlalchemy
 
   ```
 
+### Flask SQLite SQLAlchemy
+
+```python
+import os, sqlite3
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+conn_str = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'some string'
+app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+```
+
+- Execution - from flask shell do `db.create_all()` - creates table with schema.
+
 ### Pandas
 
 - needs a connector to database like sqlalchemy or pyodbc
@@ -100,6 +115,12 @@ The ORM provided by SQLAlchemy sits between the SQLite database and your Python 
 - **ORMs** allow applications to manage a database using high-level entities such as classes, objects and methods instead of tables and SQL. The job of the ORM is to translate the high-level operations into database commands.
 - It is an ORM not for one, but for many relational databases. SQLAlchemy supports a long list of database engines, including the popular MySQL, PostgreSQL and SQLite.
 - The ORM translates Python classes to tables for relational databases and automatically converts Pythonic SQLAlchemy Expression Language to SQL statements
+
+Mappings
+
+- There are two types of mapping
+  - Declarative - new - more like oops
+  - Imperative - old - less like oops
 
 ```python
 from sqlalchemy import Column, Integer, String, ForeignKey, Table

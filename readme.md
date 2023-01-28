@@ -27,6 +27,11 @@ Visit at: <https://iYadavVaibhav.github.io/wiki>
 - [x] update time updated and created plugin
   - added `source-file.html` and modified the code use `date` in meta as created and show revision from file git history.
 - [ ] suggest to use branch option in view and edit
+- [ ] Explore for blogging <https://gist.github.com/>
+- [ ] Other wikis for inspiration
+  - <https://developers.google.com/style>
+- [ ] Follow for self contribution <https://github.com/github/docs/blob/main/CONTRIBUTING.md>
+- [ ] separate title, h1 and sidebar title?
 
 ## Hierarchy
 

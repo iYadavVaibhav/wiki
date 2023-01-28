@@ -29,11 +29,11 @@ title: CSE Basics
 - 1 edx Algorithms and Data Structures MM - <https://www.edx.org/micromasters/ucsandiegox-algorithms-and-data-structures>
 - g4g DSA - <https://www.geeksforgeeks.org/complete-roadmap-to-learn-dsa-from-scratch/>
 
-## Coding Conventions
+## Coding Naming Conventions
 
 - Python - Use underscores
 - Javascript - Camel Case
-- Git files - use hyphen
+- files and folders - use hyphen. Link [google style guide](https://developers.google.com/style/filenames#naming-guidelines)
 
 ## Computer Science
 

@@ -167,6 +167,58 @@ do so (now or later) by using -c with the switch command. Example:
 - This will bring all the files from remote to local directory with git repository on local folder.
 - Now if you have permission to commit to this repo then you can **authenticate to push**, else **change the remote** to another repo that you can push to.
 
+## Guide - How to sync when you can't push or pull
+
+- Idea is to use following branches on local:
+  - `master` - this will have files from remote and updated to last merged activity. Download and extract here.
+  - `ofc` - branch moves ahead with updates in local environment
+  - `ofc_masked` branch having only files that can go remote
+  - `zip` - download and extract zip from remote when you have to merge
+
+- Merge process
+
+```sh
+# in local on branch ofc, commited
+git checkout -b ofc_masked # create branch
+# delete internal files, commit
+git add .
+git commit -m 'ofc_masked for diff'
+
+git checkout -b zip
+rm -rf . # delete all 
+# then extract zip downloaded from remote
+git add .
+git commit -m "remote for diff"
+
+git diff ofc_masked zip > diff.patch
+
+
+# on remote
+
+
+# create new branch in remote and apply patch
+git checkout -b master_patched
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < diff.patch
+# check manually for `*.orig` files
+# merge to master
+
+# download and extract in master on local
+
+
+# git diff --no-prefix ofc_masked zip > diff.patch # for this
+# "C:\Program Files\Git\usr\bin\patch.exe" -p0 < diff.patch # use this
+
+  
+  - Init or after merge, on local
+    - download and unzip to master
+    - backup internal folder from `ofc`
+    - create `ofc` branch from master and add internal folder
+    - delete all from `zip` and `ofc_masked`
+
+```
+
+Link - <https://gist.github.com/nepsilon/22bc62a23f785716705c>
+
 ## Guide - Git Local to Remote Basics
 
 ### Setup Git
