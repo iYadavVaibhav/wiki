@@ -6,17 +6,17 @@ Visit at: <https://iYadavVaibhav.github.io/wiki>
 
 ## ToDo
 
+- [ ] update old repo's landing page to be your resume and a link to this wiki.
+- [ ] test if comments giscus are working as expected
+- [ ] move date created updated to top?
+- [ ] `move to top` to down
 - [x] - clean these notes to come nicely
   - [x] remove dates from file name
   - [x] shorten titles
 - [x] merge office notes - clone in office and merge manually
 - [x] merge notepad.md notes - flask from repo
 - [x] collect commits to other browser and old repo
-- [ ] update old repo's landing page to be your resume and a link to this wiki.
-- [ ] test if comments giscus are working as expected
 - [x] add yaml dev prod evn flag for date plugin, nav expand
-- [ ] move date created updated to top?
-- [ ] `move to top` to down
 - [x] move mkdocs to some other note - moved to separate note.
 - [x] Last updated and created use icons
 - [x] add apple icon on add to home screen

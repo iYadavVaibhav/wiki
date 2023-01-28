@@ -231,6 +231,8 @@ Virtual box add on:
 
 ## Linux Ways
 
+- `alias vynote="subl ~/path/to/file/notepad.txt"` add to `.bash_profile` to make shortcut
+
 ENVs:
 
 - `source activate [path to env]` activates env
@@ -286,5 +288,7 @@ apk add py3-pip
 pip install youtube-dl
 ```
 
+## Links
 
+- cheat book - <https://github.com/0nn0/terminal-mac-cheatsheet#english-version>
 

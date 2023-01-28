@@ -8,6 +8,103 @@ date: 2021-05-05
 
 *all learnings here, keep one file for easier updates*
 
+## Python Interpreters
+
+- there may be many python version and interpreter installed on your machine. eg, `/bin/python3` or `~/anaconda/bin/python`
+- **identify current** the default, `which python`
+- **find all** installed binaries, `locate "bin/python"` - this lists all the binaries including venvs.
+- to **set** anaconda python as default python, add following to `~/.bashrc`
+  - `export PATH="/home/username/anaconda3/bin:$PATH"`
+  - then restart terminal or do `source ~/.bashrc`
+  - check with `which python`, should be using anaconda.
+
+## Virtual Environments
+
+- **Why** use virtual environment - It gives different apps isolation and personal environment so that modules don't interfere and it is easy when we have to productionize the app.
+
+- **What** is Python Virtual Environment  
+  - Basically a folder having python core binaries and use this new installation to install libraries that will be specific to this installation (or environment).
+  - It is an isolated environment
+  - When you activate a virtual environment, your PATH variable is changed. The Scripts directory of `venv_app` is put in front of everything else, effectively overriding all the system-wide Python software.
+
+- **Create**
+  - `python -m venv venv_app` - creates folder venv_app
+  
+- **Usage**
+  - `source venv_app/bin/activate` - activates this environment
+  - `>venv_app\Scripts\activate` in Windows
+  - check using `python -V` or `which python`
+  - now do `python -m pip install <package-name>` - this installs the package only in this environment.
+  - add `#!venv_app/bin/python` on top of main.py file to make it use this python.
+  - python or python3 depends on your installation.
+
+- **Deactivate**
+  - `deactivate` to deactivate the current env.
+
+- **View & Share**
+  - `python -m pip list` to see installed libs.
+  - `python3 -m pip freeze` to share libs.
+    - `python3 -m pip freeze > requiremeents.txt` to make a file.
+    - `python3 -m pip install -r requirements.txt` to install all libs from file
+
+- **Delete**
+  - `rm -r venv_app` delete
+
+## Conda Miniconda Anaconda
+
+
+**Conda** is package and virtual environment manager, like pip, for any language—Python, R, Ruby and more. It is a CLI and can
+
+- install packages like flask, jupyter, pandas etc.
+- can manage envs, virtual environment is separate python and its packages. This means each project you work on can have its own set of packages.
+
+**Anaconda** is toolkit for Data Science. Along with conda it includes ds and ml libraries (500Mb) installed.
+
+**Anaconda Navigator** is GUI to use conda.
+
+**Miniconda** includes conda and python but not much libraries.
+
+So we can use conda alone to create a development virtual environment for new data science project or use miniconda.
+
+**Installing Conda** on Linux
+
+- `wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh`
+- `bash Miniconda3-latest-Linux-x86_64.sh` this installs python, conda, vevn and others, all in virtual environment.
+- After installation, restart terminal, and it will load new environmnet called 'base'. Now python is not the default system python.
+  - If you'd prefer that conda's base environment not be activated on startup, set the auto_activate_base parameter to false: `conda config --set auto_activate_base false`
+  - more: <https://www.projectdatascience.com/step-by-step-guide-to-setting-up-a-professional-data-science-environment-on-a-linux/>
+
+**Quick Start using Conda** for a new project
+
+```sh
+conda deactivate
+mkdir prj1
+cd prj1
+conda create -n prj1env pandas numpy jupyter scikit-learn matplotlib seaborn
+conda activate prj1env
+touch README.md
+code .
+```
+
+Run `conda activate prj1env` in code shell.
+
+Undo `conda deactivate && conda remove --name prj1env --all` and remove files if any.
+
+**Conda Basic Commands**
+
+- `conda update conda` updates conda
+- `conda install PACKAGENAME` installs pkg to default/active env
+- `conda update PACKAGENAME` updated pkg
+- `pip install pkg` aslo intalls to active env
+
+**Conda Env Commands**
+
+- `conda create --name py35 python=3.5` created new env called 'py35' and installs py 3.5
+- `conda activate py35` activates
+- `conda list` lists all packages installed in active env.
+- `conda remove --name my-env --all` deletes the env.
+
+
 ## Python Programming
 
 `Decorators` are a standard feature of the Python language. A com‐
@@ -15,6 +112,35 @@ mon use of decorators is to register functions as handler functions
 to be invoked when certain events occur.
 
 [ ] what is context in python
+
+`Package` is usually a folder with `__init__.py` in it. Other python files are `modules`.
+
+- Public, Private, Protected in python
+  - public - every member of class in python is public by defaut, can be accessed outside class using object.
+  - protected attribute needs to be prefixed with underscore, `_name`. It can be accessed, just a convension.
+  - private members can be `__name` prefixed with double underscore, this makes them non accessible outside "directly". though can be accessed using `_Classname__attrname`
+  - Python provides conceptual implementation but not exactly like java or C++. As the underscores tell what is protected and private but does not make them non accessible.
+  - To implement a "write-only" attribute use "property"
+    - getter - use `@property` decorator with function, `def pvt_prop_name(self):` raise err in this func so no one can get this property.
+    - setter - use `@pvt_prop_name.setter` with function `def pvt_prop_name(self, value):` to implement setting some values. You can set value to another public property. Thus this makes `pvt_prop_name` as write-only.
+
+    ```python
+    class Book():
+        scrambled = None # public, can be get or set
+        __safe = None    # pvt, can't be directly get or set
+
+        @property
+        def secret(self):
+            raise AttributeError()
+        
+        @secret.setter
+        def secret(self,value):
+            self.scrambled = value[::-1]
+
+        # `secret` is write_only member
+    ```
+
+
 
 
 ## Files in python
@@ -57,7 +183,7 @@ for subdir, dirs, files in os.walk(directory):
 
 
 
-### Logging in Python
+## Logging in Python
 
 ```python
 
@@ -222,69 +348,11 @@ source env/bin/activate
 
 This will create a dir `env` and will have its own python, python3, pip and pip3. Now you can install any packages and this will not interfere with system.
 
-
-
-**Conda** is package and virtual environment manager, like pip, for any language—Python, R, Ruby and more. It is a CLI and can
-
-- install packages like flask, jupyter, pandas etc.
-- can manage envs, virtual environment is separate python and its packages. This means each project you work on can have its own set of packages.
-
-**Anaconda** is toolkit for Data Science. Along with conda it includes ds and ml libraries (500Mb) installed.
-
-**Anaconda Navigator** is GUI to use conda.
-
-**Miniconda** includes conda and python but not much libraries.
-
-So we can use conda alone to create a development virtual environment for new data science project or use miniconda.
-
-**Installing Conda** on Linux
-
-- `wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh`
-- `bash Miniconda3-latest-Linux-x86_64.sh` this installs python, conda, vevn and others, all in virtual environment.
-- After installation, restart terminal, and it will load new environmnet called 'base'. Now python is not the default system python.
-  - If you'd prefer that conda's base environment not be activated on startup, set the auto_activate_base parameter to false: `conda config --set auto_activate_base false`
-  - more: <https://www.projectdatascience.com/step-by-step-guide-to-setting-up-a-professional-data-science-environment-on-a-linux/>
-
-**Quick Start using Conda** for a new project
-
-```sh
-conda deactivate
-mkdir prj1
-cd prj1
-conda create -n prj1env pandas numpy jupyter scikit-learn matplotlib seaborn
-conda activate prj1env
-touch README.md
-code .
-```
-
-Run `conda activate prj1env` in code shell.
-
-Undo `conda deactivate && conda remove --name prj1env --all` and remove files if any.
-
 **Install Jupyter** in the venv. Now that we have an environment (base) you can use it, or create a new. Then
 
 - `pip install jupyter`
 - `which jupyter` shows `/home/vaibhav/code/miniconda3/bin/jupyter` it does not effect the system python.
-
-**Conda Basic Commands**
-
-- `conda update conda` updates conda
-- `conda install PACKAGENAME` installs pkg to default/active env
-- `conda update PACKAGENAME` updated pkg
-- `pip install pkg` aslo intalls to active env
-
-**Conda Env Commands**
-
-- `conda create --name py35 python=3.5` created new env called 'py35' and installs py 3.5
-- `conda activate py35` activates
-- `conda list` lists all packages installed in active env.
-- `conda remove --name my-env --all` deletes the env.
-
-**Jupyter** name comes from Julia, Python and R,
-
-- formerly known as *IPython Notebook*
 - it is pkg, same as flask
-- `pip install jupyter` or it comes installed in Anaconda dist.
 - `jupyter notebook` runs a server to server jupyter notebooks at <http://localhost:8888/tree>
 
 
@@ -328,5 +396,4 @@ EdX
 
 - [Python Coding Kaggle](https://www.kaggle.com/iyadavvaibhav/python-notes)
 - [Pandas Kaggle](https://www.kaggle.com/iyadavvaibhav/pandas-notes)
-- [Flask](../flask-notes) - back end web framework micro
-- [Pelican](../pelican-python-notes/) - Static Site Generator
+- [Flask](flask.md) - back end web framework micro
