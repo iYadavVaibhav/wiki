@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     //alert('Hi')
 
-    var link = document.createElement('link');
-    link.rel = "apple-touch-icon";
-    link.sizes = "180x180";
-    link.href = "assets/images/apple-touch-icon.png";
-    document.getElementsByTagName('head')[0].appendChild(link);
+
 });
+
+
+// remove number from section titles
+let titles = document.querySelectorAll("body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div > div > nav > ul > li > label")
+for (title of titles) {
+    title.innerHTML = "\n      "+title.innerHTML.slice(12,)
+}
 
 var link = document.createElement('link');
 link.rel = "apple-touch-icon";

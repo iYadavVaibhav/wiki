@@ -267,7 +267,7 @@ Follow:
 
 ## JWT DB App
 
-- JWT Authenticaton
+- JWT Authentication
   - `jwt` python library is used to make a `token` that can be send in every request instead of sending username and password.
   - Token is encoded string which has a valid time and it expires after that time.
   - `ExpiredSignatureError` is raised if you `decode` and expired token string.
@@ -681,7 +681,7 @@ Emails can be sent using `smtplib` package from Python standard library. Email i
 
 ## Social Blogging App
 
-- User Authenticaton
+- User Authentication
   - Password hashing
     - extensions - `from werkzeug.security import generate_password_hash, check_password_hash` this is tried and tested lib that is safe to use.
     - model - implement `password` as write-only property of `User` class to set `password_hash`
@@ -706,7 +706,7 @@ Emails can be sent using `smtplib` package from Python standard library. Email i
 
       ```python
       from . import login_manager
-      
+
       @login_manager.user_loader
       def load_user(user_id):
         return User.query.get(int(user_id))

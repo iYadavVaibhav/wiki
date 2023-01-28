@@ -64,7 +64,13 @@ So one repo has your source markdown files and another repo has static site whic
 
 ## MarkDown Extensions
 
-Extend markdown and do configurations
+[Markdown](https://daringfireball.net/projects/markdown/) is rendered in MkDocs using [Python-Markdown](https://python-markdown.github.io/). This supports basic markdown with some strict formats. It can be extended using [Python Markdown Extensions](https://python-markdown.github.io/extensions/) and [PyMdown Extensions](https://facelessuser.github.io/pymdown-extensions/).
+
+Extensions might need to be installed and added to configuration file.
+
+### List Intent
+
+Default is to keep 4 spaces for list intent. Extension `mdx_truly_sane_lists` allows to use 2 spaces.
 
 ### Admonitions
 

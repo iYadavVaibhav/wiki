@@ -10,12 +10,12 @@ Visit at: <https://iYadavVaibhav.github.io/wiki>
   - [x] remove dates from file name
   - [x] shorten titles
 - [x] merge office notes - clone in office and merge manually
-- [ ] merge notepad.md notes - flask from repo
-- [ ] collect commits to other browser and old repo
+- [x] merge notepad.md notes - flask from repo
+- [x] collect commits to other browser and old repo
 - [ ] update old repo's landing page to be your resume and a link to this wiki.
 - [ ] test if comments giscus are working as expected
-- [ ] add yaml dev prod evn flag for date plugin, nav expand
-- [ ] move date created updated to top
+- [x] add yaml dev prod evn flag for date plugin, nav expand
+- [ ] move date created updated to top?
 - [ ] `move to top` to down
 - [x] move mkdocs to some other note - moved to separate note.
 - [x] Last updated and created use icons
@@ -28,8 +28,7 @@ Visit at: <https://iYadavVaibhav.github.io/wiki>
   - added `source-file.html` and modified the code use `date` in meta as created and show revision from file git history.
 - [ ] suggest to use branch option in view and edit
 - [ ] Explore for blogging <https://gist.github.com/>
-- [ ] Other wikis for inspiration
-  - <https://developers.google.com/style>
+- [ ] Other wikis for inspiration - <https://developers.google.com/style>
 - [ ] Follow for self contribution <https://github.com/github/docs/blob/main/CONTRIBUTING.md>
 - [ ] separate title, h1 and sidebar title?
 
@@ -40,10 +39,10 @@ Picked from Coursera, PluralSite, LinkedIn Learning and **Udemy**
 - 0 Information Technology - Cloud, Terminal, DevOps, WebD, Governance Risk and Compliance, Android
 - 1 Software Engineering - Data Structure, Algorithms, OOPs, Python, Java, Testing, Software Architecture, conventions
 - 2 Data Engineering - Big Data, Kafka, Spark, Science, Analytics, Visualization, DBA
-- 3 Management & Strategy - Project Management, Data Visualizaiton Questionnaire, Data Architecture Questionnaire, Project Questionnaire, Jira Conf CRM SalesForce, Ajile, Scrum, PMP, TOGAF
+- 3 Management & Strategy - Project Management, Data Visualization Questionnaire, Data Architecture Questionnaire, Project Questionnaire, Jira Conf CRM SalesForce, Agile, Scrum, PMP, TOGAF
 - 4 Functional & Business - Banking, BlockChain
 - 5 Personal Development - Time Management, Communication, Leadership
 - 6 Math & Logic - Maths, Statistics
 - 7 Other - Electronics & IoT
 - 8 Blog & Articles - How to, Ref Guides
-- 9 Draft - unfinished but publised
+- 9 Draft - unfinished but published

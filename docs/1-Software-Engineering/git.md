@@ -67,14 +67,14 @@ Git is version control software to track changes in source code. GitHub is cloud
 - `git branch -a` - all, local and remote branches
   - output
 
-    ```bash
-    * PRJ-454
-    develop
-    remotes/origin/PRJ-454
-    remotes/origin/PRJ-508
-    remotes/origin/HEAD -> origin/develop
-    remotes/origin/origin/develop
-    ```
+	```bash
+	* PRJ-454
+	develop
+	remotes/origin/PRJ-454
+	remotes/origin/PRJ-508
+	remotes/origin/HEAD -> origin/develop
+	remotes/origin/origin/develop
+	```
 
   - first two are local and then remotes, see `HEAD` points to one of the remote branch, this is checkout and acts as default.
 
@@ -100,7 +100,7 @@ Git is version control software to track changes in source code. GitHub is cloud
   - `git pull origin remote_branch_name` - pulls an existing remote branch to local repository, local branch with same name should exist, else do `git checkout -b <new-branch>`
   - If you want to create a new branch to retain commits you create, you may
 do so (now or later) by using -c with the switch command. Example:
-    - `git switch -c <new-branch-name>`
+	- `git switch -c <new-branch-name>`
 - merge - changes from one branch to another, say from `hotfix` to `master`
   - `git checkout branch-merge-into` - master if you have to merge changes into master
   - `git merge branch-merge-from` - say hotfix
@@ -124,22 +124,22 @@ do so (now or later) by using -c with the switch command. Example:
   - who pulls from whom
   - who pushes to whom
 
-  ```bash
-  * remote origin
-    Fetch URL: URL/user/repo.git
-    Push  URL: URL/user/repo.git
-    HEAD branch: master
-    Remote branches:
-      PRJ-001 tracked
-      PRJ-000 stale (use 'git remote prune' to remove)
-      master  tracked
-    Local branches configured for 'git pull':
-      PRJ-001 merges with remote PRJ-001
-      master  merges with remote master
-    Local refs configured for 'git push':
-      PRJ-001 pushes to PRJ-001 (up to date)
-      master  pushes to master  (up to date)
-  ```
+      ```bash
+      * remote origin
+      Fetch URL: URL/user/repo.git
+      Push  URL: URL/user/repo.git
+      HEAD branch: master
+      Remote branches:
+        PRJ-001 tracked
+        PRJ-000 stale (use 'git remote prune' to remove)
+        master  tracked
+      Local branches configured for 'git pull':
+        PRJ-001 merges with remote PRJ-001
+        master  merges with remote master
+      Local refs configured for 'git push':
+        PRJ-001 pushes to PRJ-001 (up to date)
+        master  pushes to master  (up to date)
+      ```
 
 - `git fetch` - reads from remote if changes are available to pull, **does not pull**
 
@@ -149,7 +149,7 @@ do so (now or later) by using -c with the switch command. Example:
 - `git push` writes current-local-branch to remote
   - `git push -u origin <local-branch-name>` - sets upstream as origin/local-branch-name and pushes current-local-branch to remote git. New remote-branch "local-branch-name" is created, if not exists.
   - `git push -u origin local-branch:remote-branch` - uses different branch names. Creates new on remote if does not exist.
-    - Output `Branch 'local-branch' set up to track remote branch 'remote-branch' from 'origin'.`
+	- Output `Branch 'local-branch' set up to track remote branch 'remote-branch' from 'origin'.`
   - `git push -u origin HEAD` need not write
   - `git push -u origin` - sets upstream as origin and pushes current-local-branch to remote.
 - `git push origin` pushes **all** branches to remote
@@ -213,10 +213,10 @@ git push
 
   
   - Init or after merge, on local
-    - download and unzip to master
-    - backup internal folder from `ofc`
-    - create `ofc` branch from master and add internal folder
-    - delete all from `zip` and `ofc_masked`
+	- download and unzip to master
+	- backup internal folder from `ofc`
+	- create `ofc` branch from master and add internal folder
+	- delete all from `zip` and `ofc_masked`
 
 ```
 

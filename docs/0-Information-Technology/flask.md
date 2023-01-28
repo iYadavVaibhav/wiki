@@ -1,13 +1,12 @@
 ---
 date: 2019-05-03
-title: Python Flask
 ---
 
 # Flask
 
 Flask is a microframework in Python. It is used to create a webapp. It can start a python web server. It can handle HTTP requests. It can also be used to make a webapp API.
 
-## Python Interpretors and Environments
+## Python Interpreters and Environments
 
 ### Why setup a Virtual Environment
 
@@ -19,7 +18,7 @@ Why? - It gives different apps isolation and personal environment so that module
 - It is an isolated environment
 - When you activate a virtual environment, your PATH variable is changed. The Scripts directory of `venv_app` is put in front of everything else, effectively overriding all the system-wide Python software.
 
-### Set correct Python Interpretor
+### Set correct Python Interpreter
 
 - there may be many python version and interpreter installed on your machine. eg, `/bin/python3` or `~/anaconda/bin/python`
 - identify the default, `which python`
@@ -93,7 +92,7 @@ Why? - It gives different apps isolation and personal environment so that module
   - `redirect(url_for("profile"))`
 - `session` - can be used to store values, specific to current session, it is server side. Helps to pass values from one function to another.
   - `session["username"] = username`
-  - permanent sessions store session data for a timeperiod
+  - permanent sessions store session data for a time period
 - `flash` - lets send extra messages to frontend
   - `flash("The message", "info")` message and level.
   - `get_flashed_messages()` to get messages
@@ -101,7 +100,7 @@ Why? - It gives different apps isolation and personal environment so that module
 ### Flask Blueprints
 
 - Blueprint lets us divide app into mini apps. It is a collection of views, templates, static files that can be applied to an application. Blueprints are a great way to organize your application.
-- you can have a sub-folder for mini app, having its own static and templtes folder, just app `__init__` to the sub-folder and import it to main app
+- you can have a sub-folder for mini app, having its own static and templates folder, just app `__init__` to the sub-folder and import it to main app
 - In a functional structure, each blueprint is just a collection of views. The templates are all kept together, as are the static files.
 
 ```python
@@ -181,7 +180,7 @@ You can use Flask it with Pandas, Matplot and other ML libraries to make it easi
 
 - Import all your libs in flask app that you have used in Jupyter NB.
 - Add code and functions to read data and perform tasks.
-- Flask routes are executed for each request, so keep data reads outsite to read them once.
+- Flask routes are executed for each request, so keep data reads outside to read them once.
 - `return render_template( 'search.html', data=df_result.to_html(classes='table table-striped table-hover')` - to_html makes html table that can be passed to html page.
 - `{{ data|safe }}` - safe makes it as markup and browser renders it.
 
@@ -195,7 +194,7 @@ Reference:
 
 It is an extension of `SQLAlchemy` which is ORM for major databases.
 
-- It is an designe for Flask that adds support for SQLAlchemy to your application.
+- It is an design for Flask that adds support for SQLAlchemy to your application.
 - You can define table as a class, called model, with member variables as column names.
 - Create an object to make new instance.
 - Example
@@ -223,7 +222,7 @@ users = User.query.all()
 
 ### Creating Tables
 
-Once you have created a db model in flask app, you can create db and tables using follwing steps:
+Once you have created a db model in flask app, you can create db and tables using following steps:
 
 - `python`
 - `from main import db` main is filename of flask app
@@ -291,7 +290,7 @@ Data of a task can be, JSON blob, as:
 ```
 
 - This API can be consumed by client side app which can be single page HTML.
-- Note, JSON obect is defined in python as dict, `jonify` converts and send as JSON Object.
+- Note, JSON object is defined in python as dict, `jonify` converts and send as JSON Object.
 
 ## Serving over HTTPS
 
