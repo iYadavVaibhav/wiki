@@ -201,6 +201,9 @@ git checkout -b master_patched
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < diff.patch
 # check manually for `*.orig` files
 # merge to master
+git checkout master
+git merge master_patched
+git push
 
 # download and extract in master on local
 
