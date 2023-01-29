@@ -29,14 +29,16 @@ Flask is a microframework in Python. It is used to create a webapp. It can start
 
 ## Run a Flask App - Ways
 
-- Use Python
-  - using `path_to_python3 path_to_main.py`
+- python
+  - `python main.py`
 
-- Make the file executable using
+- executable
   - `chmod a+x main.py` to make app executable.
-  - `./main.py` runs app on localhost in debug mode using `#!venv_app/bin/python3`.
+  - `./main.py` runs app.
 
-- Using Flask CLI
+- Flask CLI
+  - `flask --app main.py run`
+    or
   - `export FLASK_APP=main.py` will make an variable that tells python which app to run.
   - `flask run` executes the app or if flask is not in path then do `python -m flask run`
 
@@ -44,103 +46,173 @@ Flask is a microframework in Python. It is used to create a webapp. It can start
 
 ## Flask native modules
 
-- `Flask` - is a class of which instance `app` is created using `app = Flask(__name__)`
-- `redirect` - takes URL to redirect to.
-- `url_for` - takes function name as str and gives its URL.
-  - `redirect(url_for("profile"))`
-- `session` - can be used to store values, specific to current session, it is server side. Helps to pass values from one function to another.
-  - `session["username"] = username`
-  - permanent sessions store session data for a time period
-- `flash` - lets send extra messages to frontend
-  - `flash("The message", "info")` message and level.
-  - `get_flashed_messages()` to get messages
+_flask basics, request-response handling, contexts_
+
+- **Application Instance**
+  - `Flask()` - is a class.
+  - All Flask applications must create an **application instance** (object of class `Flask`). The web server passes all requests it receives from clients to this object for handling, using a protocol called Web Server Gateway Interface (WSGI).
+  - `app = Flask(__name__)` name is passed to `Flask` class constructor so it knows the location of app and hence can locate static and template.
+
+- **Requests**
+  - Request from client has lot of information in it, like header, user-agent, data etc. This information is available in `request object` and is made available to a `view-route function` to handle it. This object is not passed as an argument to function, rather it is made available using `contexts`.
+  - `request` Object has methods and attributes having info on method, form, args, cookies, files, remote_addr, get_data().
+
+- **Contexts**
+  - It let certain objects to be globally accessible, but are not global variable. They are globally accessible to only one thread. There can be multiple threads serving multiple requests from multiple client.
+  - Context is simply data that is specific to something. Eg
+    - **App-context** is specific to app, like its mail server, its database location, or other configurations
+    - **Request-context** is specific to request, like its browser, its client, its form data, its headers
+  - this data is stored in object, in attribute such as `config`
+  - this data is used by extensions in flask, hence they do not run if context is not available.
+  - context is automatically made available once app is initialized.
+  - context can be made explicitly available by calling `with app.app_context():`
+  
+- **Request Handling**
+  - when there is request, web server activates a thread that initializes app and this app context is pushed with data that is available globally, similarly request context is also pushed.
+
+    ```mermaid
+    graph LR;
+    Web_Browser --> request --> web_server --> Flask_app_instance --> route --> function_to_execute
+    ```
+
+- **Flask variables for Request Handling**
+  - `current_app` variable in Application context, has info of active application.
+  - `g` variable in Application context, temp access **during** handling of a request. It is reset once request is served. Holds app info hence app context.
+  - `request`, in request context, obj having client req data.
+  - `session`, in request context, a dictionary to store values that can be accessed in different requests from same session.
+  - Flask, in backend, makes these available to thread before dispatching a request and removes after request is handled. Explicitly, `current_app` can be made available by invoking `app.app_context()`
+  - [ ] How does flask differentiate requests and clients?
+
+- **Request Hooks**
+  - They are functions that can execute code before or after each request is processed. They are implemented as decorators  (functions that execute on event). These are the four hooks supported by Flask:
+  - `before_request` - like authenticate
+  - `before_first_request` - only before the first request is handled. Eg, to add server initialization tasks.
+  - `after_request` - after each request, but only if no unhandled exceptions occurred.
+  - `teardown_request` - after each request, even if unhandled exceptions occurred.
+  - `g` context global storage can be used to share data between hook and view functions.
+
+- **Routes or View Functions**
+  - They handle application URLs.
+  - URL-maps can be seen using `app.url_map`
+  - redirect to url
+    - `redirect` - takes URL to redirect to.
+    - `redirect(url_for("profile"))`
+    - `url_for()` utility builds URL for view-function giving route from app-url-map. takes function name as str and gives its URL. Eg:
+      - `url_for('user', name='john', page=2, version=1)` would return `/user/john?page=2&version=1`, they are good to build dynamic URLs that can be used in templates.
+      - `url_for('user', name='john', _external=True)` would return `http://localhost:5000/user/john`.
+      - `url_for('static', filename='css/styles.css', _external=True)` would return `http://localhost:5000/static/css/styles.css`.
+      - `/static/<filename>` is special route added by Flask to serve static files.
+
+- **Response Object**
+  - Response is returned by view-function as a string (usually HTML) along with **status code** but can also contain **headers**. So rather than sending comma separated tuple values, flask lets create response object using `make_response()`.
+
+    ```python
+    from flask import make_response
+
+    @app.route('/')
+    def index():
+        response = make_response('<h1>Some response with a cookie!</h1>')
+        response.set_cookie('message', '51')
+    return response
+    ```
+
+  - `return redirect('http://www.example.com')` is a response with URL and status code 302, however Flask lets it do easily using `redirect()` method. Another such is `abort(404)` which is treated as exception.
 
 
-## Request Response Context
+  - **session** - can be used to store values, specific to current session, it is server side. Helps to pass values from one function to another.
+    - `session["username"] = username`
+    - permanent sessions store session data for a time period
 
-All Flask applications must create an `application instance` (object of class Flask). The web server passes all requests it receives from clients to this object for handling, using a protocol called Web Server Gateway Interface (WSGI).
-
-`app = Flask(__name__)` name is passed to Flask class constructor so it knows the location of app and hence can locate static and template.
-
-Web Browser --request--> web server --> Flask app instance --route--> function to execute
-
-`View Functions` handle application URL.
-
-**Request** from client has lot of information in it, like header, user-agent, data etc. This information is available in `request object` and is made available to a `view-route function` to handle it. This object is not passed as an argument to function, rather it is made available using `contexts`. **Contexts** let certain objects to globally accessible, but are not global variable. They are globally accessible to only one thread. There can be multiple threads serving multiple requests from multiple client.
-
-- Context is simply data that is specific to something. Eg
-  - App-context is specific to app, like its mail server, its database location, or other configurations
-  - Request-context is specific to request, like its browser, its client, its form data, its headers
-- this data is stored in object, in attribute such as `config`
-- this data is used by extensions in flask, hence they do not run if context is not available.
-- context is automatically made available once app is initialized.
-- context can be made explicitly available by calling `with app.app_context():`
-- when there is request, web server activates a thread that initializes app and this app context is pushed with data that is available globally, similarly request context is also pushed.
-
-There are two contexts in Flask
-
-- `current_app` variable in Application context, has info of active application.
-- `g` variable in Application context, temp access **during** handling of a request. It is reset once request is served. Holds app info hence app context.
-- `request`, in request context, obj having client req data.
-- `session`, in request context, a dictionary to store values that can be accessed in different requests from same session.
-
-Flask, in backend, makes these available to thread before dispatching a request and removes after request is handled. Explicitly, `current_app` can be made available by invoking `app.app_context()`
-
-![img](http://speakerdeck.com/patkennedy79/demystifying-flasks-application-and-request-contexts-with-pytest?slide=8)
-
-[ ] How does flask differentiate requests and clients?
-
-URL-maps can be seen using `app.url_map`
-
-`/static/<filename>` is special route added by Flask to serve static files.
-
-`Requst Object` has methods and attributes having info on method, form, args, cookies, files, remote_addr, get_data().
-
-**Request Hooks** are functions that can execute code before or after each request is processed. They are implemented as decorators  (functions that execute on event). These are the four hooks supported by Flask:
-
-- `before_request` - like authenticate
-- `before_first_request` - only before the first request is handled. Eg, to add server initialization tasks.
-- `after_request` - after each request, but only if no unhandled exceptions occurred.
-- `teardown_request` - after each request, even if unhandled exceptions occurred.
-
-`g` context global storage can be used to share data between hook and view functons.
-
-**Response Object** - Response is returned by view-funciton as a string (usually HTML) along with `status code` but can alos contain headers. So rather than sending comma separated tuple values, flask lets create response onject using `make_response()`.
-
-```python
-from flask import make_response
-
-@app.route('/')
-def index():
-    response = make_response('<h1>Some response with a cookie!</h1>')
-    response.set_cookie('message', '51')
-return response
-```
-
-`return redirect('http://www.example.com')` is a response with URL and status code 302, however Flask lets it do easily using `redirect()` method. Another such is `abort(404)` which is treted as exception.
+  - **flash** - lets send extra messages to frontend
+    - `flash("The message", "info")` message and level.
+    - `get_flashed_messages()` to get messages
+    - it lets record a message at the end of a request and access it next request and only next request.
 
 ## Templates in Flask
 
-**Templates** `return render_template('user.html', name=name)` is another return helper function that can make use of template, which is HTML code where dynamic content can be filled on execution.
+Templates can be used to build responses.
 
-{{ super() }}, includes code from parent block, uif overriding a block.
+- **render_template()**
+  - it makes use of template
+  - `return render_template('user.html', name=name)`
 
-`@app.errorhandler` is decorator that lets return a view from template for error responses like 404 and 500.
+- **Jinja Templates**
+  - Templates are HTML file having additional Python like code in **placeholders**.
+  - Placeholders can have **variables** and **expressions**.
+  - They get replaced with value when template is rendered by **JinJa2**, the template engine.
+  - This lets build dynamic content on execution.
+  - It lets **inherit**, **extend** and **import** templates.
+  - More documentation on [template design](https://jinja.palletsprojects.com/en/latest/templates/) and [tips and tricks](https://jinja.palletsprojects.com/en/latest/tricks/)
+  - Example template is below.
 
-```python
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>My Webpage</title>
+    </head>
+    <body>
+        <ul id="navigation">
+        {% for item in navigation %}
+            <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+        {% endfor %}
+        </ul>
 
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
-```
+        {% if kenny.sick %}
+          Kenny is sick.
+        {% elif kenny.dead %}
+          You killed Kenny!  You bastard!!!
+        {% else %}
+          Kenny looks okay --- so far
+        {% endif %}
 
-- `url_for()` utility builds URL for view-function giving route from app-url-map. Eg:
-  - `url_for('user', name='john', page=2, version=1)` would return `/user/john?page=2&version=1`, they are good to build dynamic URLs that can be used in templates.
-  - `url_for('user', name='john', _external=True)` would return `http://localhost:5000/user/john`.
-  - `url_for('static', filename='css/styles.css', _external=True)` would return `http://localhost:5000/static/css/styles.css`.
+        <h1>My Webpage</h1>
+        {{ a_variable }}
+
+        {# a comment #}
+    </body>
+    </html>
+    ```
+
+  - **Filters**
+    - pass value over pipe to filter functions like upper, lower, title, trim, safe.
+    - eg, `Hello, {{ name|capitalize }}`
+    - Full list of filters [here](https://jinja.palletsprojects.com/en/latest/templates/#list-of-builtin-filters)
+  
+  - **Delimiters**
+    - {% ... %} for Statements
+    - {{ ... }} for Expressions to print
+    - {# ... #} for Comments, not included in the template output.
+
+  - **Assignments**
+    - lets set a value to var and use it for logic building. We have to use namespace.
+
+      ```html
+      {% set ns = namespace(index=0) %}
+      {% for nav_item in nav %} 
+        {% if ns.index !=0 %}
+          --- some stuff ---
+        {% endif %}
+        {% set ns.index = ns.index + 1 %}
+      {% endfor %}
+      ```
+
+  - {{ super() }}, includes code from parent block, if overriding a block.
+
+
+- **Error Handlers**
+  - `@app.errorhandler` is decorator that lets return a view from template for error responses like 404 and 500.
+
+    ```python
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('500.html'), 500
+    ```
+
 
 ## Flask Extensions
 
@@ -175,8 +247,8 @@ bootstrap = Bootstrap(app)
 
     ```html
     {% block scripts %}
-    {{ super() }}
-    {{ moment.include_moment() }}
+      {{ super() }}
+      {{ moment.include_moment() }}
     {% endblock %}
     ```
 
@@ -209,9 +281,9 @@ bootstrap = Bootstrap(app)
     ```
 
 - **Flask-WTF** integration of Flask and WTForms
-  - Includes CSRF, file upload, and reCAPTCHA. You mostly have to use formats of WTForms but write less as few things are done automatically that are realted to Flask patter.
+  - Includes CSRF, file upload, and reCAPTCHA. You mostly have to use formats of WTForms but write less as few things are done automatically that are realated to Flask patter.
   - Form fields are Class variables with different field type
-  - validator functions can help validate, liek `Email()`.
+  - validator functions can help validate, like `Email()`.
   - Link to [Flask-WTF](http://pythonhosted.org/Flask-WTF/)
   - Building
 
@@ -264,10 +336,10 @@ Python has packages for most database engines like MySQL, Postgres, SQLite, Mong
     - `__tablename__ = 'users'`
     - It has attributes that represent column name. `name = db.Column(db.String(64), unique=True)`
     - **Relationships** To create ER in OOPs way `users = db.relationship('User', backref='role')`
-      - `backref` adds a backreference to other models
+      - `backref` adds a back-reference to other models
       - `lazy` does not execute until you add executor.
         - add `lazy='dynamic'` to prevent query execution.
-    - `db.create_all()` creates all tables if they dont exist
+    - `db.create_all()` creates all tables if they don't exist
 
   - **Create** a new row
     - Create an Object of Class to build a new row. `user_john = User(username='john', role=admin_role)`
@@ -275,7 +347,7 @@ Python has packages for most database engines like MySQL, Postgres, SQLite, Mong
     - `id` is added to object after `db.session.commit()commit()`
   - **Update** - `db.session.add()` also edits.
   - **Delete** - `db.session.delete(obj_name)`
-  - **Read** - `query` object is avilable to all model class. It has filter-options and executors that build a SQL Query statement.
+  - **Read** - `query` object is available to all model class. It has filter-options and executors that build a SQL Query statement.
     - Filter-Options - `filter()`, `filter_by()`, `limit()`, `offset()`, `order_by()`, `group_by()`
     - Executors - `all()`, `first()`, `first_or_404()`, `get()`, `get_or_404()`, `count()`, `paginate()`
     - Examples
@@ -765,7 +837,7 @@ to be added
 
 ## App - Mega Tutorial by MG
 
-*This is understanding of a tutorial by Miguel Grinberg, we are learning to create a micro-blogging site using flask and other dependencies.*
+_This is understanding of a tutorial by Miguel Grinberg, we are learning to create a micro-blogging site using flask and other dependencies._
 
 - request
   - `from flask import Flask, render_template, request, url_for, flash, redirect` libraries
