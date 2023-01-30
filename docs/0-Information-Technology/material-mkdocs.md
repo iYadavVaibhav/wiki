@@ -174,7 +174,7 @@ Link <https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/howto/
 
 Decisions
 
-- Dont need tabs
+- Don't need tabs
 - need sidebar sections
 - need blog
 
@@ -227,4 +227,10 @@ Based on a year of work, following structure has emerged and has worked in arran
   - [x] to have action done. - resolution.
     - or resolution in next line, tabbed like this.
   - avoid adding h3, h4 to rough notes.
+
+- How to arrange notes for easy add on and updates and follow ups
+  - Notes should have **section of action** 'what you want to do'. Eg, create, install, read, write etc.
+  - So when you learn something new about an action, **you know** the section to add to. Similarly, when you have to do an action, you know what to refer to.
+  - Keep knowledge at one place, like sqlite to be on its page and other pages can refer to it. **Do not repeat** on separate pages.
+
 

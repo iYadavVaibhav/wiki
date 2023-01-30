@@ -8,22 +8,25 @@
 
 ### PyODBC
 
-Works with most databased but not well with MSSQL+Pandas
+Works with most databases but not well with MSSQL+Pandas
 
 ```python
 
 import pyodbc
-conn_str = f"driver=SQL Server;server=<name>database=<name>;Trusted_Connection=yes"
-connection = pyodbc.connect(conn_str)
+
+# MS SQL Server
+connection_url = f"driver=SQL Server;server=<name>database=<name>;Trusted_Connection=yes"
+
+## Teradata
+connection_url = "DRIVER={DRIVERNAME};DBCNAME={hostname};;UID={uid};PWD={pwd}"
+
+connection = pyodbc.connect(connection_url)
 cursor = connection.cursor()
 sql = "select top 10 * from [db].[schema].[table]"
 cursor.execute(sql)
 res = cursor.fetchall()    # list of rows    
 connection.close()
 
-## Teradata
-conn_str = "DRIVER={DRIVERNAME};DBCNAME={hostname};;UID={uid};PWD={pwd}"
-connection = pyodbc.connect(conn_str)
 fx_df = pd.read_sql(query, connection)
 
 ```
@@ -33,14 +36,30 @@ fx_df = pd.read_sql(query, connection)
 Works as connection engine as well as ORM
 
   ```python
+
   import sqlalchemy
-  conn_str = "mssql+pyodbc://server_name\schema_name/database_name?driver=SQL+Server"
-  engine = sqlalchemy.create_engine(conn_str, echo=False)
+
+  connection_url = "mssql+pyodbc://server_name\schema_name/database_name?driver=SQL+Server"
+  
+  ## MS SQL
+  connection_url = "mssql+pyodbc:///?odbc_connect="+urllib.parse.quote('driver={%s};server=%s;database=%s;Trusted_Connection=yes')
+  
+  ## Postgres
+  connection_url = "postgresql://user:pass@server:port/database"
+
+  engine = sqlalchemy.create_engine(connection_url, echo=False)
   connection = engine.connect()
   sql = "select top 10 * from [db].[schema].[table]"
   cursor = connection.execute(sql)
   res = cursor.fetchall()    # list of rows 
   connection.close()
+
+  # OR -- 
+
+  with engine.connect() as connection:
+    connection.execute("UPDATE emp set flag=1")
+
+  df.to_sql('table_name', con=engine, schema='dbo', if_exists='append', index=False)
   ```
 
 ### Flask_sqlalchemy
@@ -50,8 +69,10 @@ Flask wrapper for sqlalchemy
   ```python
   from flask_sqlalchemy import SQLAlchemy
 
-  conn_str = "mssql+pyodbc://server_name\schema_name/database_name?driver=SQL+Server"
-  app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+  connection_url = "mssql+pyodbc://server_name\schema_name/database_name?driver=SQL+Server"
+
+  app.config['SQLALCHEMY_DATABASE_URI'] = connection_url
+  
   db = SQLAlchemy(app)
   db.session.execute(sql).all() # list of rows
 
@@ -63,11 +84,9 @@ Flask wrapper for sqlalchemy
 import os, sqlite3
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-conn_str = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+connection_url = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'some string'
-app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+# then same as SQLAlchemy
 ```
 
 - Execution - from flask shell do `db.create_all()` - creates table with schema.
@@ -83,12 +102,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 ```python
 
 import sqlite3
-conn = sqlite3.connect('database_name')
-c = conn.cursor()
-c.execute(query)
-rows = c.fetchall()
-conn.commit() # for non read tasks
-conn.close()
+connection = sqlite3.connect('database_name')
+cursor = connection.cursor()
+cursor.execute(query)
+rows = cursor.fetchall()
+connection.commit() # for non read tasks
+connection.close()
 
 ```
 
@@ -96,29 +115,27 @@ conn.close()
 
 ```python
 import mysql.connector
-conn = mysql.connector.connect(host=host_name,user=user_name,passwd=user_password)
-cursor = conn.cursor()
+connection = mysql.connector.connect(host=host_name,user=user_name,passwd=user_password)
+cursor = connection.cursor()
 cursor.execute(query)
-conn.commit() # for non read tasks
+connection.commit() # for non read tasks
 ```
 
 ## SQLAlchemy ORM
 
-When you’re working in an **object-oriented** language like Python, it’s often useful to think in terms of objects. It’s possible to map the results returned by SQL queries to objects, but doing so works against the grain of how the database works. Sticking with the scalar results provided by SQL works against the grain of how Python developers work. This problem is known as **object-relational impedance mismatch**.
+- **Why?** - When you’re working in an **object-oriented** language like Python, it’s often useful to think in terms of objects. It’s possible to map the results returned by SQL queries to objects, but doing so works against the grain of how the database works. Sticking with the scalar results provided by SQL works against the grain of how Python developers work. This problem is known as **object-relational impedance mismatch**.
 
-The ORM provided by SQLAlchemy sits between the SQLite database and your Python program and transforms the data flow between the database engine and Python objects. SQLAlchemy allows you to think in terms of objects and still retain the powerful features of a database engine.
+- **What?**
+  - The ORM provided by SQLAlchemy sits between the database and Python program and transforms the data flow between the database engine and Python objects. SQLAlchemy allows you to think in terms of objects and still retain the powerful features of a database engine.
+  - It is ORM for Python, has two parts
+    - CORE - can be used to manage SQL from python,
+    - ORM - can be used in Object oriented way to access SQL from python.
 
-- It is ORM for Python, has two parts
-  - CORE - can be used to manage SQL from python,
-  - ORM - can be used in Object oriented way to access SQL from python.
-- FlaskSQL_Alchemy is extenstion to SQLAlchemy.
 - **ORMs** allow applications to manage a database using high-level entities such as classes, objects and methods instead of tables and SQL. The job of the ORM is to translate the high-level operations into database commands.
-- It is an ORM not for one, but for many relational databases. SQLAlchemy supports a long list of database engines, including the popular MySQL, PostgreSQL and SQLite.
-- The ORM translates Python classes to tables for relational databases and automatically converts Pythonic SQLAlchemy Expression Language to SQL statements
+  - It is an ORM not for one, but for many relational databases. SQLAlchemy supports a long list of database engines, including the popular MySQL, PostgreSQL and SQLite.
+  - The ORM translates Python classes to tables for relational databases and automatically converts Pythonic SQLAlchemy Expression Language to SQL statements
 
-Mappings
-
-- There are two types of mapping
+- **Mappings** - There are two types of mapping
   - Declarative - new - more like oops
   - Imperative - old - less like oops
 
@@ -149,29 +166,12 @@ class Author(Base):
   )
 ```
 
-Steps:
+- **Steps**
+  - create the **association table model**, `author_publisher`
+  - define the **class model**, `Author` for `author` database table
+  - This uses SQLAlchemy ORM features, including `Table`, `ForeignKey`, `relationship`, and `backref`.
 
-- create the `author_publisher` **association table model**
-- define the `Author` **class model** to the `author` database table
-- This uses SQLAlchemy ORM features, including `Table`, `ForeignKey`, `relationship`, and `backref`.
+- **Links**
+  - <https://realpython.com/python-sqlite-sqlalchemy/#working-with-sqlalchemy-and-python-objects>
+  - Flask SQLAlchemy in Flask Notes
 
-<https://realpython.com/python-sqlite-sqlalchemy/#working-with-sqlalchemy-and-python-objects>
-
-```python
-
-## MS SQL
-conn_str = "mssql+pyodbc:///?odbc_connect="+urllib.parse.quote('driver={%s};server=%s;database=%s;Trusted_Connection=yes')
-## Postgres
-conn_str = "postgresql://user:pass@server:port/database"
-
-engine = sqlalchemy.create_engine(conn_str)
-
-conn = engine.connect()
-conn.execute(f'INSERT INTO ..')
-
-with engine.connect() as conn:
-  conn.execute("UPDATE emp set flag=1")
-
-df.to_sql('table_name', con=engine, schema='dbo', if_exists='append', index=False)
-
-```

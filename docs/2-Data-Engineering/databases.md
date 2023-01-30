@@ -5,7 +5,7 @@ date: 2019-05-06
 
 # Databases & SQL
 
-*all about databases, SQL*
+*all about databases, SQL only*
 
 ## SQLite
 
@@ -108,10 +108,3 @@ WHERE EmailPromotion = 2
 
 - `redis-server` to start the server.
 
-
-
----
-
-More on:
-
-- [Flask SQL Alchemy](../flask-notes/#flask-sqlalchemy)
