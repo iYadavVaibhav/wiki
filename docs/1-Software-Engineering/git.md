@@ -67,14 +67,14 @@ Git is version control software to track changes in source code. GitHub is cloud
 - `git branch -a` - all, local and remote branches
   - output
 
-	```bash
-	* PRJ-454
-	develop
-	remotes/origin/PRJ-454
-	remotes/origin/PRJ-508
-	remotes/origin/HEAD -> origin/develop
-	remotes/origin/origin/develop
-	```
+    ```bash
+    * PRJ-454
+    develop
+    remotes/origin/PRJ-454
+    remotes/origin/PRJ-508
+    remotes/origin/HEAD -> origin/develop
+    remotes/origin/origin/develop
+    ```
 
   - first two are local and then remotes, see `HEAD` points to one of the remote branch, this is checkout and acts as default.
 
@@ -83,12 +83,15 @@ Git is version control software to track changes in source code. GitHub is cloud
 - create repo
   - `git clone https://...git` - **clone remote** repository
   - `git init` - start repository local
+
 - commits
   - `git add --all`
   - `git commit -m "Initial Commit"`
+
 - remotes add/set
   - `git remote add origin https://...git` **add a remote** to existing local repo
   - `git remote set-url origin https://...git` **update remote**, change to new
+
 - branch/pull
   - `git checkout -b <new-branch>` - **creates** new-local-branch and **checksout**. It has **no upstream** to track.
   - `git checkout <branch-name>` - **checksout** existing-local-branch
@@ -100,12 +103,15 @@ Git is version control software to track changes in source code. GitHub is cloud
   - `git pull origin remote_branch_name` - pulls an existing remote branch to local repository, local branch with same name should exist, else do `git checkout -b <new-branch>`
   - If you want to create a new branch to retain commits you create, you may
 do so (now or later) by using -c with the switch command. Example:
-	- `git switch -c <new-branch-name>`
+    - `git switch -c <new-branch-name>`
+
 - merge - changes from one branch to another, say from `hotfix` to `master`
   - `git checkout branch-merge-into` - master if you have to merge changes into master
   - `git merge branch-merge-from` - say hotfix
+  - `git rebase master` - if you have new changes in master that you want in your branch. more [here](https://stackoverflow.com/questions/5340724/get-changes-from-master-into-branch-in-git).
   - it can go smooth or can have conflicts, then resolve conflicts
   - more details [here](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
+
 - stash
   - stash means keep safely. When you have to switch from branch A to B but not commit changes in branch A, then stash changes in A, switch to B, do work, back to A, then stash pop to return to your uncommited changes.
   - `git stash` on branch A, to not commit but keep changes safely
@@ -113,8 +119,10 @@ do so (now or later) by using -c with the switch command. Example:
   - `git checkout A`
   - `git stash pop` - to return your uncommited changes in A.
   - more [here](https://opensource.com/article/21/4/git-stash)
+
 - delete
   - `git branch -d my-branch-name` - use `-D` to force delete
+
 
 ### Read Remote Repo
 
@@ -149,15 +157,19 @@ do so (now or later) by using -c with the switch command. Example:
 - `git push` writes current-local-branch to remote
   - `git push -u origin <local-branch-name>` - sets upstream as origin/local-branch-name and pushes current-local-branch to remote git. New remote-branch "local-branch-name" is created, if not exists.
   - `git push -u origin local-branch:remote-branch` - uses different branch names. Creates new on remote if does not exist.
-	- Output `Branch 'local-branch' set up to track remote branch 'remote-branch' from 'origin'.`
+    - Output `Branch 'local-branch' set up to track remote branch 'remote-branch' from 'origin'.`
   - `git push -u origin HEAD` need not write
   - `git push -u origin` - sets upstream as origin and pushes current-local-branch to remote.
 - `git push origin` pushes **all** branches to remote
 
 
-### Approve a Pull Request
+### Pull Requests
 
-- `git checkout remote_branch_name` - this creates a new local branch and links remote with it.
+- approvals
+  - `git checkout remote_branch_name` - this creates a new local branch and links remote with it.
+
+- create
+  - you can create pull request when your branch (source) is ahead of the destination branch, else pull and merge destination.
 
 
 ## How to clone a repository from GitHub.com
@@ -167,7 +179,7 @@ do so (now or later) by using -c with the switch command. Example:
 - This will bring all the files from remote to local directory with git repository on local folder.
 - Now if you have permission to commit to this repo then you can **authenticate to push**, else **change the remote** to another repo that you can push to.
 
-## Guide - How to sync when you can't push or pull
+## Guide - How to sync when network is restricted
 
 - Idea is to use following branches on local:
   - `master` - this will have files from remote and updated to last merged activity. Download and extract here.
@@ -195,7 +207,6 @@ git diff ofc_masked zip > diff.patch
 
 # on remote
 
-
 # create new branch in remote and apply patch
 git checkout -b master_patched
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < diff.patch
@@ -211,14 +222,20 @@ git push
 # git diff --no-prefix ofc_masked zip > diff.patch # for this
 # "C:\Program Files\Git\usr\bin\patch.exe" -p0 < diff.patch # use this
 
-  
-  - Init or after merge, on local
-	- download and unzip to master
-	- backup internal folder from `ofc`
-	- create `ofc` branch from master and add internal folder
-	- delete all from `zip` and `ofc_masked`
-
 ```
+  
+- Init or after merge, on local - **auto**
+  - checkout master, delete all, download and extract remote
+  - checkout ofc, `git rebase master`
+  - do manual merge conflicts, `git add .`
+  - `git rebase --continue`
+
+- Init or after merge, on local - **manual**
+  - download and unzip to master
+  - backup internal folder from `ofc`
+  - create `ofc` branch from master and add internal folder
+  - delete all from `zip` and `ofc_masked`
+
 
 Link - <https://gist.github.com/nepsilon/22bc62a23f785716705c>
 

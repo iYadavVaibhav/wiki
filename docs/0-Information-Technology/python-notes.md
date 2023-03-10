@@ -50,6 +50,23 @@ date: 2021-05-05
 - **Delete**
   - `rm -r venv_app` delete
 
+## Offline Virtual Environment Setup
+
+- On machine with internet
+  - `pip download -r requirements.txt -d path/pip-packages` downloads requirements and its dependencies to a folder `path/pip-packages`
+
+- On machine without internet
+- `python -m venv venv` create virtual environment
+- `venv\Scripts\activate` activate environment
+- `pip install -r requirements.txt --find-links=pip-packages --no-index` install requirements
+  - `--no-index` tells to not use any repository like pypi
+  - `--find-links` tells a path to find all packages
+- `flask --app app:create_app('testing') run`
+
+- Links
+  - [Stackoverflow answer](https://stackoverflow.com/a/70373570/1055028)
+  - [PIP Docs - pip install](https://pip.pypa.io/en/stable/cli/pip_install/#pip-install)
+
 ## Conda Miniconda Anaconda
 
 
@@ -107,15 +124,21 @@ Undo `conda deactivate && conda remove --name prj1env --all` and remove files if
 
 ## Python Programming
 
-`Decorators` are a standard feature of the Python language. A com‐
-mon use of decorators is to register functions as handler functions
-to be invoked when certain events occur.
+**Decorators** are a standard feature of the Python language. A common use of decorators is to register functions as handler functions to be invoked when certain events occur.
 
-[ ] what is context in python
+- **Global Local Variables** and its scope
+  - If you use a var with same name in function (local) and module (global) then you need to take caution
+  - when you assign a var in function, python create that local var irrespective of it being present in global context. To use the global var in function:
+  - either pass as param, or
+  - you can use `global` keyword before var to let python interpreter know to use global var and not redeclare it.
+  - more on this on [StackOverflow - UnboundLocalError: local variable referenced before assignment](https://stackoverflow.com/a/10852003/1055028)
 
-`Package` is usually a folder with `__init__.py` in it. Other python files are `modules`.
 
-- Public, Private, Protected in python
+- **Packages & Modules**
+  - `Package` is usually a folder with `__init__.py` in it.
+  - Other python files are `modules`.
+
+- **Public, Private, Protected** in python
   - public - every member of class in python is public by defaut, can be accessed outside class using object.
   - protected attribute needs to be prefixed with underscore, `_name`. It can be accessed, just a convension.
   - private members can be `__name` prefixed with double underscore, this makes them non accessible outside "directly". though can be accessed using `_Classname__attrname`
@@ -141,9 +164,14 @@ to be invoked when certain events occur.
     ```
 
 
+## Exception handling with try, except, else, and finally
 
+Try: This block will test the excepted error to occur
+Except:  Here you can handle the error
+Else: If there is no exception then this block will be executed
+Finally: Finally block always gets executed either exception is generated or not
 
-## Files in python
+## Files Handling in python
 
 `f  = open(filename, mode)` Where the following mode is supported:
 
@@ -185,48 +213,80 @@ for subdir, dirs, files in os.walk(directory):
 
 ## Logging in Python
 
+- Logging is done to keep record of events of software. They can be logged to console or a file or emailed.
+- `level` is set to filter logs, default is `warning` so anything below it is not logged.
+- `basicConfig()` set in one module works for all modules used in a session. You can pass
+  - `level` to filter
+  - `filename` to save logs
+  - `format` - what to log, it can have, log level, message, time, location etc.
+    - all format strings [here](https://docs.python.org/2/library/logging.html#logrecord-attributes)
+  - `datefmt` to set date format of `asctime`
+
+
+- **When to use What**
+  - `print()` is good for small script to display on console. Else use logging.
+  - `raise exception` when run time error occurs, that need to stop software.
+  - `logging.exception() or logging.error() or logging.critical()` when error is to be logged and application can continue
+  - Following table show when to use which level of logging
+
+    Level     | When it is used
+    ----------|----------------
+    DEBUG     | detailed info, typically for problem analysis
+    INFO      | confirmation that event is working as expected
+    WARNING   | default. unexpected behaviour, but system will work. Eg, low space
+    ERROR     | serious problem, that software has not performed an action
+    CRITICAL  | serious error that may bring system down
+
+- **Advanced**
+  - loggers, handlers, filters, and formatters are components that can be used to have control on the functionality.
+  - more here on [PythonDocs - Advanced Logging](https://docs.python.org/3.11/howto/logging.html#advanced-logging-tutorial)
+  - Configuring Logging - configs can be in code, in file or in dictionary.
+
+
 ```python
 
-#----------set up logging configuration
+import logging
+
+## Very Basic
+logging.warning('Watch out!')  # will print a message to the console
+logging.info('I told you so')  # will not print anything as it is below default level
+
+## To a file
+logging.basicConfig(filename='example.log',level=logging.DEBUG)
+logging.debug('This message should go to the log file')
+# DEBUG:root:This message should go to the log file
+
+## Formatting
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.debug('Something is happenning')
+# 02/16/2023 01:50:17 PM - root - DEBUG - Something is happenning
+
+
+
+## New filename for each run
+import os, time
+from time import localtime
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+ 
+log_dir = os.path.join(basedir, 'logs')
+parent_process_id=os.getppid()
+process_id=os.getpid()
 log_time=time.strftime('%Y%m%d_%H%M', localtime())
-logfilepath=_enviroment_variable.log_path
-log_filename=str(logfilepath)+str(log_time)+'_app_'+str(parent_process_id)+'_'+str(process_id)+'.log'
-logging.basicConfig(level=logging.DEBUG,
-format='%(asctime)s - %(levelname)s - %(message)s',
-datefmt='%Y/%m/%d %H:%M:%S %p',
-filename=log_filename,
-filemode='w')
+log_filename=str(log_time)+'_app_'+str(parent_process_id)+'_'+str(process_id)+'.log'
+LOG_FILE_PATH = os.path.join(log_dir, log_filename)
+
+logging.basicConfig(level=logging.DEBUG, \
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', \
+                    datefmt='%Y/%m/%d %H:%M:%S %p', \
+                    filename=LOG_FILE_PATH, \
+                    filemode='w')
 
 logging.info("New Working directory is: " + str(os.getcwd()))
 
-## Other Way
-import logging
-logger = logging.getLogger(__name__)
-logger.info('df.shape post cleanup: ' + str(result.shape))
 
 
-## ---------------------------------------------------------------------
-
-## Other PDF pipeline
-import logging
-from datetime import datetime
-my_logger = logging.getLogger(cg.sql_query_prefix + " Log")
-my_logger.setLevel(logging.INFO)
-my_logger_filehandler = logging.FileHandler(cg.data_path + 'logs/' + cg.sql_query_prefix + "_" + datetime.today().strftime('%d-%m-%Y') +  '.log')
-my_logger_filehandler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-my_logger_filehandler.setFormatter(my_logger_filehandler_format)
-my_logger.addHandler(my_logger_filehandler)
-my_logger.info('New Run of Prospect Intelligence')
-
-## ---------------------------------------------------------------------
-
-import logging
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logging.debug("test")
-
-## ---------------------------------------------------------------------
-
+## Using Components
 import logging
 logger = logging.getLogger()
 fhandler = logging.FileHandler(filename='mylog.log', mode='a')
@@ -248,7 +308,9 @@ logging.warning('tbllalfhldfhd, warning.')
 
 Links
 
-- [ ] <https://realpython.com/python-logging/>
+- [ ] [RealPython - Logging in Python](https://realpython.com/python-logging/)
+- [PythonDocs - When to use what level](https://docs.python.org/2/howto/logging.html#when-to-use-logging)
+- [TD.io - logging in python](https://www.patricksoftwareblog.com/python-logging-tutorial/)
 
 
 ## Datetime and Time in Python
@@ -304,6 +366,69 @@ def test_sum():
 
 - You put your tests into classes as methods
 - :TODO <https://realpython.com/python-testing/>
+
+## Documenting Code in Python
+
+- **Why** - when you revisit after months, it _saves time_ to pick back
+  - when it is public or team work, it helps _others contribute_
+
+- Documenting is making it understandable to users, like react-docs
+- Commenting is for developers, to understand why code is written. It can be to understand, reasons, description or
+  - Tagging, `# todo: some work`, `# bug: fix the bug`, `# FIXME: some fix`.
+
+- **Docstrings** - these are structured string format. They can be parsed by parser like Sphinx, and can autogenerate documentation from code.
+  - everything in Python is an object. And that object has a property `__doc__` that stores the docstring that can be printed when using help.
+  - you can set this as `my_func.__doc__ = "Some string"`
+  - or the next line after function in `"""Some string"""` automatically sets the docstring for the function.
+  - docstring structures are of three types
+    - Google - google's way (_mostly used_)
+    - reStructured - python style
+    - em - same as done in java
+
+- **Sphinx** lets you write documentation using markdown and can auto-generate documentation from docstrings.
+  - Installation - `pip install sphinx`
+  - Initialization
+    - In the project root folder, `my_project/`
+    - `sphinx-quickstart docs`, creates docs dir `my_project/docs`
+  - Configuration
+  - Build - `sphinx-build -b html docs/source/ docs/build/html`
+
+- Links
+  - [TD.io using Sphinx](https://www.patricksoftwareblog.com/python-documentation-using-sphinx/)
+  - [PythonHosted.ORG - Examples](https://pythonhosted.org/an_example_pypi_project/sphinx.html)
+  - [RealPython - Doc Guide](https://realpython.com/documenting-python-code/)
+  - [Sphinx Google Example](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html)
+  - [Shinx Autogen from docstring](https://stackoverflow.com/a/62613202/1055028)
+
+## Concurrency and Parallelism in Python
+
+- **wait** is when you have I/O or N/W or processing operation.
+- you can at same time do other things while you wait, **concurrency**
+- you can also do things simultaneously, **parallelism**
+- **Thread** lets break a program into small pieces that execute separately. You can create multiple threads in a program, they all start one after other (not in parallel). This can be faster compared non-thread execution because when a thread waits another starts execution. Hence, it enables **continuous execution**.
+- Python has slightly different approach for parallelism, because `threading` module lets create thread but can't execute in parallel, `multiprocessing` module is similar and enables **parallel execution**.
+
+- **Asyncio** is another better way to do tasks **concurrently**. It lets you perform tasks in non-blocking way using `async` / `await` syntax.
+  - **Non-blocking** means other tasks can exucute while a task is waiting. Synchronous operations suffer to wait and execute in sync.
+  - `aiohttp` for non-blocking requests, `aiofiles` for non- blocking file operations. `asyncio` is python standard library.
+
+- **Parallelism**
+  - it can be done using `multiprocessing` or `concurrent.futures` library.
+  - it lets distribute compute over multiple processors.
+
+- CRUX
+  - Threading enable concurrency, execute tasks independently without wait
+  - Multiprocessing enables parallelism, execute with more compute power
+  - Asyncio enables asynchronous execution, let long running task be handled in a nice way.
+
+- **When to use Multiprocessing or AsyncIO or Threading**
+  - When doing compute heavy task use multiprocessing. Eg, heavy math operation, string comparision.
+  - Use asyncio or threading when using network, like request response read write.
+  - Use both multiprocessing and asyncio tohether when using doing both high compute and n/w task. But, good rule of thumb is to fork a process before you thread(use) asyncio.
+  - threads are cheap compared to processes.
+
+- Link
+  - [Tstdriven.io - Concurrency  Parallelism AsyncIO](https://testdriven.io/blog/concurrency-parallelism-asyncio/)
 
 
 ## Snippets Python
@@ -392,8 +517,10 @@ EdX
 
 
 
-## Other iYV Python Notes
+## Links
 
 - [Python Coding Kaggle](https://www.kaggle.com/iyadavvaibhav/python-notes)
 - [Pandas Kaggle](https://www.kaggle.com/iyadavvaibhav/pandas-notes)
 - [Flask](flask.md) - back end web framework micro
+- [Python Official Tutorial](https://docs.python.org/3.11/tutorial/index.html)
+- [pythonbasics.org](https://pythonbasics.org/)

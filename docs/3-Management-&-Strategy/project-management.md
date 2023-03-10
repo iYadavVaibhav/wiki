@@ -11,9 +11,9 @@ Project Management is balancing between **"the project scope"** and **"the time,
 
 ### 1 Initiation and Ideation
 
-- Business Requirement Gathering
-- What are you solving and how will you solve it? The business use case.
-- Define use case, scope and expectations. This is very high level and covers the business problem.
+- Business **Requirement Gathering**
+- What are you solving and how will you solve it? The business **use case**.
+- Define use case, scope and expectations. This is very high level and covers the **business problem**.
 - Project **should have a definite end** - a product or a service. It should have **definition of done**.
 - Above can result in `Business Requirements Document`
 
@@ -99,8 +99,9 @@ Project Management is balancing between **"the project scope"** and **"the time,
 - Prod Env is secured and hence may require many **access permissions**. Please see this in advance.
 - **Change Management** may be required here.
 - Once deployed, do a **Prod Testing**.
+- Finally **release** the product
 
-### 11 Handover - User Training
+### 11 Handover - User Training Socialisation
 
 - Prepare a `Training Guide` - for end users. This can be video as well.
 - Make a `Handover Document` - if this need to be handed over to maintenance team to work on manual tasks.
@@ -140,6 +141,14 @@ Great user documentation should include:
 Step 3: Test the document
 
 Step 4: Keep it upated.
+
+### Spinx
+
+- Sphinx is the de-facto documentation tool for Python.
+- version controlled, sourced from repo
+- read everywhere, confluence, wiki, PDF
+- Also lets document functions and classes
+
 
 ## Talk - Product Strategy, Systems, and Frameworks with Sachin Rekhi
 

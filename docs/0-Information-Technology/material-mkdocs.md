@@ -139,7 +139,9 @@ graph LR
   B ---->|No| E[Yay!];
 ```
 
-more: <https://squidfunk.github.io/mkdocs-material/reference/diagrams/>
+- Links
+  - [Mermaid JS - Flowchart 101](https://mermaid.js.org/syntax/flowchart.html)
+  - [MKDocs Diagrams](https://squidfunk.github.io/mkdocs-material/reference/diagrams/)
 
 ### MathJax
 
@@ -233,4 +235,6 @@ Based on a year of work, following structure has emerged and has worked in arran
   - So when you learn something new about an action, **you know** the section to add to. Similarly, when you have to do an action, you know what to refer to.
   - Keep knowledge at one place, like sqlite to be on its page and other pages can refer to it. **Do not repeat** on separate pages.
 
+## Links
 
+- [Furo - theme](https://github.com/pradyunsg/furo)

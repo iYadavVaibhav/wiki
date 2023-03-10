@@ -156,7 +156,27 @@ async function execProcTabeauAsync(switch,psv) {
 }
 ```
 
+## Writeback
+
+Parameters Required
+
+- `w_mega_string`
+- `w_increment`
+- `w_action_switch`
+
+- For each field to write
+  - `reset_field1`
+
+Create New
+
+- Add sheet `add_button`, use `blank_db` having text "+ Add new record"
+- Add sheet to dashboard
+- Add actions
+  - go to `create_record` sheet
+  - reset `field`
+  - set param `action_switch` to 0
 
 ## Links
 
 - Data Structuring for Analysis - <https://help.tableau.com/current/pro/desktop/en-us/data_structure_for_analysis.htm>
+- [Linkedin - Writeback to MS SQL using Proc](https://www.linkedin.com/pulse/how-tableau-writeback-microsoft-sql-server-withtout-using-daugaard/)

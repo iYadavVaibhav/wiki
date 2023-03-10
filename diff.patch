@@ -1,161 +1,1504 @@
+diff --git a/.gitignore b/.gitignore
+index e37b95c..74b0014 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,4 +1,3 @@
+ venv
+ site
+-history.txt
+-.vscode
+\ No newline at end of file
++history.txt
+\ No newline at end of file
+diff --git a/.vscode/settings.json b/.vscode/settings.json
+deleted file mode 100644
+index de1fac1..0000000
+--- a/.vscode/settings.json
++++ /dev/null
+@@ -1,3 +0,0 @@
+-{
+-    "python.pythonPath": "C:\\Program Files\\Anaconda3\\python.exe"
+-}
+\ No newline at end of file
+diff --git a/docs/0-Information-Technology/flask.md b/docs/0-Information-Technology/flask.md
+index 9948c94..c8f6b60 100644
+--- a/docs/0-Information-Technology/flask.md
++++ b/docs/0-Information-Technology/flask.md
+@@ -58,11 +58,10 @@ _flask basics, request-response handling, contexts_
+   - `request` Object has methods and attributes having info on method, form, args, cookies, files, remote_addr, get_data().
+ 
+ - **Contexts**
+-  - Code needs data to be processed, that data can be configurations, input data or data from file/database. Context is used to keep track of this data.
+   - It let certain objects to be globally accessible, but are not global variable. They are globally accessible to only one thread. There can be multiple threads serving multiple requests from multiple client.
+   - Context is simply data that is specific to something. Eg
+-    - **App-context** is specific to app, like its mail server, its database location, or other configurations. Keeps track of application-level data. Objects: `current_app`, `g`.
+-    - **Request-context** is specific to request, like its browser, its client, its form data, its headers, all that is request-level. Objects: `request`, `session`.
++    - **App-context** is specific to app, like its mail server, its database location, or other configurations
++    - **Request-context** is specific to request, like its browser, its client, its form data, its headers
+   - this data is stored in object, in attribute such as `config`
+   - this data is used by extensions in flask, hence they do not run if context is not available.
+   - context is automatically made available once app is initialized.
+@@ -78,14 +77,14 @@ _flask basics, request-response handling, contexts_
+ 
+ - **Flask variables for Request Handling**
+   - `current_app` variable in Application context, has info of active application.
+-  - `g` variable in Application context, it is object that is unique for each request, temp access **during** handling of a request. It resets once request is served. Holds app info hence app context. Can be used to load user on each request. show logged in user on templates.
++  - `g` variable in Application context, temp access **during** handling of a request. It is reset once request is served. Holds app info hence app context.
+   - `request`, in request context, obj having client req data.
+-  - `session`, in request context, stores data across requests, i.e., a dictionary to store values that can be accessed in different requests from same session.
++  - `session`, in request context, a dictionary to store values that can be accessed in different requests from same session.
+   - Flask, in backend, makes these available to thread before dispatching a request and removes after request is handled. Explicitly, `current_app` can be made available by invoking `app.app_context()`
+   - [ ] How does flask differentiate requests and clients?
+ 
+ - **Request Hooks**
+-  - They are deocrators that register functions that can execute code before or after each request is processed. They are implemented as decorators  (functions that execute on event). These are the four hooks supported by Flask:
++  - They are functions that can execute code before or after each request is processed. They are implemented as decorators  (functions that execute on event). These are the four hooks supported by Flask:
+   - `before_request` - like authenticate
+   - `before_first_request` - only before the first request is handled. Eg, to add server initialization tasks.
+   - `after_request` - after each request, but only if no unhandled exceptions occurred.
+@@ -129,12 +128,6 @@ _flask basics, request-response handling, contexts_
+     - `get_flashed_messages()` to get messages
+     - it lets record a message at the end of a request and access it next request and only next request.
+ 
+-        ```html
+-        {% for message in get_flashed_messages() %}
+-            <div class="flash">{{ message }}</div>
+-        {% endfor %}
+-        ```
+-
+ ## Templates in Flask
+ 
+ Templates can be used to build responses.
+@@ -489,179 +482,10 @@ DB_package or ORM - Python has packages for most database engines like MySQL, Po
+   export MAIL_PASSWORD="password"
+   ```
+ 
+-- **Sending errors via Email**
+-  - Errors can be sent via email using Logs.
+-
+-  - Links
+-    - [Flask docs - Email errors to admin](https://flask.palletsprojects.com/en/2.2.x/logging/#email-errors-to-admins)
+-    - [MG's microblog - email errors](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing-legacy#:~:text=of%20the%20application.-,Sending%20errors%20via%20email,-To%20address%20our)
+-
+-
+ ## Blueprint - Large App Structure in Flask
+ 
+ _needs improvements after hands-on_
+ 
+-- simply, module is file, package is folder. Blueprint can be implemented in both.
+-
+-- **single module** - [link](https://github.com/mjhea0/flask-tracking/tree/part-0)
+-  - here, one file has everything defined
+-  
+-    ```sh
+-    /prj
+-        my-app.py # imports, app, db, orm_class, form_class, route_view_functions, run
+-        /static
+-        /templates
+-    ```
+-
+-- [ ] no package, Blueprints as modules?
+-
+-- **single package**, Blueprints as modules - [link](https://github.com/mjhea0/flask-tracking/tree/part-1)
+-  - here all ORM & FORM classes are in one module
+-  - more complex, app-factory, no ORM, installable example with same structure, [here](https://github.com/pallets/flask/tree/main/examples/tutorial)
+-
+-    ```sh
+-    /prj
+-        run.py          # import app, db. then run. What parts to run?
+-        config.py       # module. config vars. With which configurations?
+-        
+-        /my-app         # package
+-            __init__.py # app, register BP
+-            forms.py    # module. has form classes
+-            models.py   # module. DB setup. has ORM classes.
+-
+-            auth.py     # module BP. import db, form, model. route-view-functions. login, register, logout. @login_required.
+-            blog.py     # module BP. import db, form, model. route-view-functions. CRUD.
+-
+-            /template
+-            /static
+-    ```
+-
+-- **multi-packages**, Blueprints as sub-packages - [link](https://github.com/mjhea0/flask-tracking/tree/part-2)
+-  - here ORM & FORM classes are in separate module for each Blueprint.
+-  - DB is top-level as it is shared by all sub-packages
+-  - auth is top-level to avoid circular dependencies.
+-
+-    ```sh
+-    /prj
+-        run.py              # same. import app, db. then run
+-        config.py           # same. module. config vars
+-        /my-app             # package
+-            __init__.py     # app, register BP
+-            auth.py         # login init. login_manager
+-            data.py         # db setup, init, open, close. crud helpers
+-
+-            /users
+-                __init__.py # blank
+-                forms.py    # module. has form classes. LoginForm, RegisterForm
+-                models.py   # module. has ORM classes. User.
+-                views.py    # BP Module. imports form, model. defines route-view-functions
+-
+-            /blog
+-                __init__.py # blank
+-                forms.py    # module. has form classes. CreateBlogForm, EditBlogForm
+-                models.py   # module. has ORM classes. Post, Follower.
+-                views.py    # BP Module. imports form, model. defines route-view-functions
+-                geodata.py  # module. helper functions.
+-
+-            /template
+-            /static
+-    ```
+-
+-- Example - [Miguel Grinbers's Flasky](https://github.com/miguelgrinberg/flasky)
+-  - app-factory using `create_app()` in init.
+-  - models are all in one module, not in blueprint package. [ ] why? probably all BP use models
+-  - blueprint as sub-package's `__init__.py`, not views. [ ] why?
+-  - api package has multiple modules, all have route-view-functions.
+-
+-    ```sh
+-    prj/
+-        run.py      # imports create_app, db, ORM-models. app init. flasky.py
+-        config.py   # module. config class with vars. EnvDict
+-        /app
+-            __init__.py # import config, extensions. add extensions. def create_app.
+-            models.py   # import db, login_manager. def all ORM and Mixin classes
+-
+-            /auth
+-                __init.py # define BP. import views
+-                forms.py  # import ORM. Form classes
+-                views.py  # import db, Forms, ORMs. def route-view-functions login, logout, register, reset
+-            /main
+-                __init.py # define BP. import routes
+-                forms.py  # import ORM. Form classes
+-                views.py  # import db, Forms, ORMs. def route-view-functions
+-            /api
+-                __init.py         # define BP. import each routes
+-                authentication.py # import ORM, api. def route-view-functions tokens
+-                comments.py       # import db, ORM, api. def route-view-functions tokens
+-                posts.py          # import db, ORM, api. def route-view-functions tokens
+-                users.py          # import ORMs, api. def route-view-functions users, follower
+-            /static
+-            /templates
+-    ```
+-
+-- Example - [Miguel Grinbers's microblog](https://github.com/miguelgrinberg/microblog)
+-  - same as above, flasky
+-  - in sub-packages, views.py is routes.py
+-
+-    ```sh
+-    prj/
+-        run.py      # imports create_app, db, ORM-models. app init.
+-        config.py   # module. config class with vars
+-        /app
+-            __init__.py # import config. add extensions. def create_app. import models.
+-            models.py   # all ORM and Mixin classes
+-
+-            /auth
+-                __init.py # define BP. import routes
+-                forms.py  # import ORM. Form classes
+-                routes.py # import db, bp, Forms, ORMs. def route-view-functions login, logout, register, reset
+-            /main
+-                __init.py # define BP. import routes
+-                forms.py  # import ORM. Form classes
+-                routes.py # import db, bp, Forms, ORMs. def route-view-functions
+-            /api
+-                __init.py # define BP. import routes
+-                tokens.py # import db, bp. def route-view-functions tokens
+-                users.py  # import db, bp, ORMs. def route-view-functions users, follower
+-            /static
+-            /templates
+-    ```
+-
+-- Example - [Miguel Grinbers's microblog-api](https://github.com/miguelgrinberg/microblog-api)
+-  - app-factory using create_app in app.py
+-  - Blueprints as modules
+-  - single package
+-
+-    ```sh
+-    /prj
+-        run.py
+-        config.py
+-        api/
+-            __init__.py # imports create_app, db
+-            app.py      # create_app, db init, registers BP
+-            auth.py     # import db, model. login functions
+-            models.py   # import db. ORM classes
+-
+-            posts.py    # BP. imports db, ORM. route-view-functions posts, feed
+-            tokens.py   # BP. imports db, ORM. route-view-functions tokens, reset_token
+-            users.py    # BP. imports db, ORM. route-view-functions users, me, followers
+-            templates/  # only email reset html
+-    ```
+-
+-- Example - [Miguel Grinbers's microblog-2012](https://github.com/miguelgrinberg/microblog-2012)
+-  - separate module for model, form, email and view.
+-  - no blueprint, no app-factory, no sub-package
+-
+-- what looks good - why?
+-  - app-factory - gives flexibility
+-  - config - for env separation
+-    - use config class for defaults and different envs
+-    - use YAML file to read secrets and keep it out of git
+-    - [more on config best practice](https://flask.palletsprojects.com/en/2.2.x/config/#configuration-best-practices)
+-  - blueprints as modules.
+-  - links
+-    - [Another good tutorial](https://hackersandslackers.com/configure-flask-applications/)
+-
+ - **Why?** - App needs to be structured into modules as it starts growing. It also helps reuse modules.
+ 
+ - **Without Blueprint**
+@@ -764,7 +588,7 @@ _needs improvements after hands-on_
+ 
+   - 3 - `config.py` config as OOPs
+     - the config variables like secret-key and mail-server, are now attributes of `Config` class.
+-    - `Config` class has `@staticmethod` as `init_app(app)` which can be used to do things once app is available, i.e. initialize app and more.
++    - `Config` class has `@staticmethod` as `init_app(app)` which can be used to initialize app and more.
+     - This Config base class has common vars but can be extended to build different environment classes like dev, test, prod. that can have env specific vars like dev db-location.
+     - add a dictionary `conf_env` to pick the correct env class.
+   - 2 - `app/` App Package
+@@ -837,91 +661,15 @@ _needs improvements after hands-on_
+ 
+ 
+ 
+-## Testing in Flask
+-
+-- **Why**
+-  - function code only runs when it is called.
+-  - if else code is only called when condition is met.
+-  - ensure code for all branch and function is run by changing scenarios.
+-  - 100% coverage is when you run all functions and code in all if else try catch is tested.
+-  - do test as you develop.
+-  - `pytest` to test
+-  - `coverage` to measure
+-
+-- **PyTest**
+-  - modules and functions both start with `test_`
+-  - Fixtures are setup functions, that setup how app should behave
+-    - You can build different fixtures to have different app instances or to test different interactions like client requests or CLI commands.
+-    - fixtures call app-factory with test configs to make app separate from dev config.
+-    - `conftest.py` - sample below.
+-      - here fixure creates app, which is then passed to other fixture for specific testing.
+-      - `app.test_client()` lets make request to app without server. Available in `client` fixture.
+-      - `app.test_cli_runner()` lets test CLI commands registered with app. Available in `runner` fixture.
+-      - these fixture names (client or runner) are passed in test_functions to use them.
+-    - You can keep building fixture on top of other fixture to add predefined functionalities. Eg, on top of client add another class that can help login and logout.
+-
+-      ```python
+-      @pytest.fixture
+-      def app():
+-          app = create_app(...)
+-          with app.app_context():
+-              init_db()
+-          yield app
+-      
+-      @pytest.fixture
+-      def client(app):
+-          return app.test_client()
+-
+-      @pytest.fixture
+-      def runner(app):
+-          return app.test_cli_runner()
+-      ```
+-
+-
+-  - Test Cases
+-    - start with `test_` in both module and function name.
+-    - use `assert`
+-
+-      ```python
+-      from app import create_app
+-
+-      def test_hello(client):
+-          response = client.get('/hello')   # sends this URL request
+-          assert response.data == b'Hello, World!'
+-      ```
++## Flask Testing
+ 
+-  - `pytest.mark.parametrize` lets run the test with different params
+-  - to test context variables like `session` or `g` use `with client:` Otherwise it raises an error.
+-  - `setup.cfg` can have extra configs (not mandatory).
+-  
+-  - **Run - Pytest**
+-    - `pytest` runs test
+-    - `pytest -v` runs and shows all files
+-  
+-- **Report - Coverage**
+-  - `coverage run -m pytest` runs tests and measures coverage
+-  - `coverage run -m unittest` runs tests using unittest and measures coverage
+-  - `coverage report` shows coverage report on CLI
+-  - `coverage html` builds dir for detailed report
+-    - `htmlcov/index.html` has detailed report.
+-    - shows code covered and not covered.
+-  - To exempt a code block from coverage, add `# pragma: no cover` after code block. Make this a tough decision to skip code from testing.
+-
+-
+-  - more [here](https://flask.palletsprojects.com/en/2.2.x/tutorial/tests/)
+-
+-- **Manual Testing**
+-  - Basic testing can be done using flask shell and executing functions `flask --app flasky.py shell`
+-  - do things similar to as you do in wrinting code, like import module, create objects, call functions etc.
+-  - use `current_app` to use `app_context`, or
+-  - `with app.app_context():` when using factory
+-  - What you test in shell should be automated by making test cases.
+-
+-- **UnitTest** - test small units
++- Testing can be done using flask shell and executing functions `flask --app flasky.py shell`
++- What you test in shell should be automated by making test cases.
++- Unit Tests - test small units
+   - use py native `import unittest`
+   - in `tests/test_basics.py`
+     - import modules you need for test, `create_app`, `db`
+-    - import modules you want to test, `User`, `current_app`
++    - import modules you need to test, `User`, `current_app`
+     - define class `class BasicsTestCase(unittest.TestCase):`
+       - build functions
+         - `setUp()` runs before each test, builds env for testing
+@@ -934,250 +682,27 @@ _needs improvements after hands-on_
+   - in `flasky.py` you can add code to run tests automatically by adding a cli command.
+   - do `flask --app flasky.py test` to run all test cases
+ 
+-      ```python
+-      @app.cli.command()
+-      def test():
+-        """Run the unit tests.""" # help msg on cli
+-        import unittest
+-        tests = unittest.TestLoader().discover('tests')
+-        unittest.TextTestRunner(verbosity=2).run(tests)
+-      ```
+-
+-  - `python -m unittest` discovers and runs all tests.
+-
+-- **Unittest vs PyTest**
+-  - Unittest is universally accepted and is built in Python standard library
+-  - PyTest has lot of features and we need to write less
+-  - Unitest needs classes & methods. Pytest only needs methods.
+-  - Pytest runner has **full support** for test cases written in UnitTest clasees.
+-  - **Use both**, OOPs of Unittest and better assert of Pytest with and its better error reporting.
+-
+-
+-- **Unittest and PyTest**
+-  - You can use Unittest and Pytest togehter to make use of best of both.
+-
+-  - **Test Parametrization**
+-    - when you have same test-code but have to run with different input parameters.
+-    - Pytest uses non OOPs params, to make Unittest OOPs model work with PyTest add `pip install parameterized`.
+-    - then use its decorator and pass params as list of tuples to argument.
+-    - list is input scenarios
+-    - tuple is variables in each scenario. One value tuple is `('name1',)`
+-    - Eg, `[('name1',32), ('name2',24)]`, `@parameterized.expand([(n,) for n in range(9)])`, `@parameterized.expand(itertools.product([True, False], range(9)))`
+-
+-      ```python
+-      class TestLife(unittest.TestCase):
+-          # ...
+-
+-          @parameterized.expand([('name1',32), ('name2',24)])
+-          def test_load(self, name, age): # this method runs the number of items in list.
+-              u = User(name, age)
+-              assert u.name = name
+-      ```
+-
+-  - **Test Exceptions**
+-    - `pytest.raises()` can be used to test if a certain error is raised on run time.
+-
+-      ```python
+-      with pytest.raises(RuntimeError):
+-          data.load('corrupt_data.txt')
+-      ```
+-
+-  - **Mocking**
+-    - When you have to change return value of a pre defined function. You can mock a function to return a specific value irrespective of what is passed to it without modifying its code.
+-    - More here on [MG's Unit Testing - Mocking](https://blog.miguelgrinberg.com/post/how-to-write-unit-tests-in-python-part-2-game-of-life#:~:text=72%20different%20tests!-,Mocking,-We%20are%20now)
+-
+-
+-- **Test Code Structure**
+-  - create a test module (file) of same name as test subject with test_ prefixed. Eg, `test_foo.py`
+-  - import `unittest` and other required packages
+-  - create classes and methods for testing.
+-  - in test_method
+-    - call code from your app, set varibles or directly put code in assert
+-    - `assert some-code` some-code can be anything that evaluates to True.
+-
+-    ```python
+-    import unittest
+-    from app import User, Engine
+-
+-    class TestUserAdd(unittest.TestCase):
+-        def test_works(self):
+-            u = User()
+-            assert u.exists() # anything that evalueates to True
+-
+-    class TestEngineWork(unittest.TestCase):
+-        pass
+-    ```
+-
+-  - For a **Flask App**
+-    - `setUp` and `tearDown` methods are special that automatically invoked before and after each test case. This makes every test case run on clean slate. You can have different one in each class, or make a base class and import it in other classes.
+-    - request functions
+-      - `response = app.client.get('/', follow_redirects=True)` - use response same as you do in flask app
+-      - `response = self.client.post('/auth/register', data={some_json}, follow_redirects=True)` - submit a form this way
+-
+-    - response methods
+-      - `html = response.get_data(as_text=True)`
+-      - `assert response.status_code == 200`
+-      - `assert response.request.path == '/auth/login' # redirected to login`
+-      - `response.json['token']`
+-
+-    ```python
+-    # tests/test_base.py
++  ```python
++  @app.cli.command()
++  def test():
++    """Run the unit tests.""" # help msg on cli
+     import unittest
+-    from flask import current_app
+-    from app import create_app, db
+-
+-    class TestWebApp(unittest.TestCase):
+-        def setUp(self):
+-            self.app = create_app()
+-            self.appctx = self.app.app_context()
+-            self.appctx.push()
+-            db.do_something() # you can call any method as well here
+-            self.do_something() # method in this class that has code to be executed before each test, like register
+-            self.client = self.app.test_client()
+-
+-        def tearDown(self):
+-            db.drop_something() # again execute anything at end of test case
+-            self.appctx.pop()
+-            self.app = None
+-            self.appctx = None
+-            self.client = None
+-
+-        def test_app(self):
+-            assert self.app is not None
+-            assert current_app == self.app
+-
+-        def test_home_page_redirect(self):
+-            response = self.client.get('/', follow_redirects=True)
+-            slef.do_login() # funciton in this class that logs in to the app can be reused
+-            assert response.status_code == 200
+-            assert response.request.path == '/auth/login'
+-        ```
+-
+-- **Do s**
+-  - If a piece of code is difficult to test with test case, consider refactoring it. Eg, some code that is not in funciton and just prints as part of execution can't be called from test case, so make a function for it. Alos, you can wrap any global code in a function and call it. This also makes code **only direct** executable when file is ran, **import doesn't** execute it.
+-
+-    ```python
+-    def main():
+-        all_your_global_code()
+-
+-    if __name__ == '__main__':
+-        main()
+-    ```
+-
+-- Links
+-  - [MG' Flask Web App Testing](https://blog.miguelgrinberg.com/post/how-to-write-unit-tests-in-python-part-3-web-applications)
+-  - [MS's Testing code for Life Game](https://github.com/miguelgrinberg/python-testing/blob/main/life/test_life.py)
+-  - [Stackoverflow why to use PyTest](https://stackoverflow.com/questions/27954702/unittest-vs-pytest)
+-  - [Flask Docs - Pure Pytest](https://flask.palletsprojects.com/en/2.2.x/tutorial/tests/)
+-  - [RealPython - Flask testing](https://realpython.com/python-web-applications-with-flask-part-iii/) has a different package, so differs
+-
+-## Error Handling
+-
+-- We can have templates for exceptions and errors so they don't go out to end users.
+-- Link [RealPython Flask App Part III](https://realpython.com/python-web-applications-with-flask-part-iii/#error-handling)
+-
+-
+-
+-## Log in Flask
++    tests = unittest.TestLoader().discover('tests')
++    unittest.TextTestRunner(verbosity=2).run(tests)
++  ```
+ 
+-- A standard Python logging component `logger` is available on the Flask object at `app.logger`.
+-- 404 is autologged by server, so skip.
+-- request logs are autologged by proxy server, so skip.
+-- Exceptions, 400 and 500 can be logged to look back in time.
+ 
+-- Setup
+-  - configure logger as early as possible
+-  - add path and log configs in `config.py` even before app is created. You can add logging config to any env config class. They are all called before app is created.
++## Logging in Flask
+ 
+ ```python
+ import logging
+-logging.basicConfig(level=logging.DEBUG)
+ 
+ app = Flask(__name__)
+-app.logger.info('some log')
+-
+-# prj/config.py
+-import logging
+-
+-class Config:
+-    logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] - %(name)s - %(levelname)s - %(module)s -: %(message)s')
++logging.basicConfig(level=logging.DEBUG)
+ 
+-# prj/app/models.py
+-from flask import current_app
+-current_app.logger.debug('Some message')
++app.logger.info('some log')
+ ```
+ 
+-- Explore [here](https://memgraph.com/blog/graph-web-application#:~:text=Docker%20fanboy%20alert-,1.%20Create%20a%20Flask%20server,-I%20included%20comments)
+-
+-  ```py
+-  log = logging.getLogger(__name__)
+- 
+-  def init_log():
+-      logging.basicConfig(level=logging.DEBUG)
+-      log.info("Logging enabled")
+-      # Set the log level for werkzeug to WARNING because it will print out too much info otherwise
+-      logging.getLogger("werkzeug").setLevel(logging.WARNING)
+-    ```
+-
+-- Links
+-  - [FlaskDocs - Config Logger](https://flask.palletsprojects.com/en/2.2.x/logging/#basic-configuration)
+-  - [MG - Logging to a File Legacy](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing-legacy#:~:text=the%20console%20window.-,Logging%20to%20a%20file,-Receiving%20errors%20via)
+-  - [RealPython - Flask Part III - Logging](https://realpython.com/python-web-applications-with-flask-part-iii/#logging). Eg, shows to Log Errors, keep 7 days history.
+-
+-
+-
+-
+-## Make the Project Installable
+-
+-- Makes the project distributable like a library, so people can do `pip install` and use it.
+-- Deploying is same as installing any other library. like you deploy `mkdocs` by installing it.
+-- `setup.py` outside `app` is where we can define this.
+-
+-  ```python
+-  from setuptools import find_packages, setup
+-
+-  setup(
+-      name='your-project-name',
+-      version='1.0.0',
+-      packages=find_packages(),
+-      include_package_data=True,
+-      install_requires=[
+-          'flask',
+-      ],
+-  )
+-  ```
+-
+-- also add `MAINFEST.in` to tell what other files to include in package. Eg, `some.sql` `static` or any other.
+-- more [here](https://flask.palletsprojects.com/en/2.2.x/tutorial/install/#describe-the-project)
+-- [RealPython Flask App part III](https://realpython.com/python-web-applications-with-flask-part-iii/#logging)
+-
+-## Deployment Fundamentals
+-
+-- WSGI or "Web Server Gateway Interface"
+-  - is a protocol (calling convention) to forward requests from a web server (Apache or NGINX) to a backend Python web application or framework. Python then builds response which is passed back to the webserver which shares it to the requestor.
+-  - it sits between Web Server and Python App. `Client -> Webserver -> WSGI -> Python`
+-  - WSGI containers are Gunicorn, uWSGI. They invoke python callable object, such as a route in flask.
+-  - WSGI container is **required** to be **installed** in the **project** so that a web server can communicate to a WSGI container which further **communicates** to the **Python** application and provides the response back accordingly.
+-
+-- Development Web Server
+-  - most frameworks come with development web server which serves requests. but this needs to be replaced on PROD.
+-
+-
+-- Links
+-  - [What is WSGI](https://www.liquidweb.com/kb/what-is-wsgi/)
+-
+-## Deployment - Windows IIS Server
+-
+-- `HTTP -> IIS -> ISAPI -> FastCGI -> WSGI -> (Python Flask Application)`
+-
+-- IIS site will trigger a `wfastcgi.py` script and will use `web.config` file which calls module that has flask app (or creates using app factory).
+-- WFastCGI is a Py package, and `wfastcgi.py` provides a bridge between IIS and Python using WSGI and FastCGI. It is same as mod_python is for Apache.
+-- you can impersonate as a user in appPoolIdentity
+-- you can disable anonymous auth and can keep only windows authenticated access to get remote user in request.
+-
+-- Links
+-  - [Detailed deployment process on Medium](https://medium.com/@dpralay07/deploy-a-python-flask-application-in-iis-server-and-run-on-machine-ip-address-ddb81df8edf3)
+-
+ ## Deployment - PythonAnywhere Flask
+ 
+ - WSGI configuration
+@@ -1195,15 +720,6 @@ current_app.logger.debug('Some message')
+   from flask_app import app as application  # noqa
+   ```
+ 
+-- more [here](https://flask.palletsprojects.com/en/2.2.x/tutorial/deploy/)
+-
+-## Static Site with Flask-Frozen
+-
+-- Static site can be generated and hosted on Netlify or GitHub pages.
+-
+-- link
+-  - [td.io - Frozen](https://testdriven.io/blog/static-site-flask-and-netlify/)
+-
+ ## Access localhost flask app on Network
+ 
+ - Suppose on an Ubuntu VM a flask app is running on localhost and you want to access it from you host machine that is Mac.
+@@ -1230,82 +746,6 @@ Reference:
+ - <https://sarahleejane.github.io/learning/python/2015/08/09/simple-tables-in-webapps-using-flask-and-pandas-with-python.html>
+ 
+ 
+-## Charts Graphs Visualization in Flask
+-
+-- Requirements
+-  - HTML5 instead of PNG
+-  - dynamic, shows info on hover
+-  - interactive, filters modify charts
+-  - dashboard, filters update multiple charts
+-  - streaming dataset
+-  - animation
+-
+-- Plotly
+-  - dynamic & interactive charts
+-  - handle data and build-chart in view function, then send JSON to template, use JSON in JS.
+-
+-- Plotly Express
+-  - `import plotly.express as px`
+-  - `fig = px.bar()` lets build bar
+-  - `fig.show()` makes PNG
+-
+-- Plotly Graph Objects
+-  - `import plotly.graph_objects as go` builds figure objects.
+-  - has class for object like `go.Bar()`
+-  - objects need to be added to figure `fig = px.Figure()`
+-
+-- Bokeh
+-  - beautiful charts, simple plot to complex dashboard with streaming dataset!
+-  - dynamic & interactive
+-  - `bokeh.plotting` has plotting functions
+-  - `bokeh.models` has data handling functions
+-  - `bokeh.embed` has component that return HTML with JS ready to embedd, when python `fig` is passed.
+-
+-- Dash
+-  - React front-end - yes
+-  - dashboard - yes
+-  - HTML in Python - NOooo
+-  - `from dash import Dash, html, dcc`
+-    - Dash is app
+-    - html lets build html components `Div()` H1
+-    - dcc is Dash Core Components - lets build `Graph() Dropdown()`, graph has figues, from px.
+-
+-- Flask, Plotly & AJAX
+-  - Flask app and html template
+-  - use `json.dumps()` to get fig JSON and send to template
+-  - use list of `chartJSON[]` for sending multiple charts
+-  - template can use plotly js to plot chart with the json.
+-  - js `Plotly.plot('chart',graphs,{});` where `chart` is `id` of `div`
+-  - to extend, send graphJSON, header, description
+-  - AJAX
+-    - `onchange=cb(this.value)` to invoke callback function, that passes value to python and python returns updated chartJSON
+-
+-- Data Handling
+-  - mostly libraries use list, which has series from DataFrame
+-  - px takes in dataframe as `data`
+-
+-- Altair
+-  - py library
+-
+-- Chart.js
+-  - No Python wrapper
+-  - is dynamic
+-
+-- Highchart, google charts, d3.js ?
+-
+-- anychart
+-  - can be drawn from JSON, JSON needs to build without python wrapper
+-
+-- Matplot, ggplot
+-  - static chart, save fig as png, return file from view_function
+-
+-- Links
+-  - [TDS - Web Visualization with Plotly and Flask](https://towardsdatascience.com/web-visualization-with-plotly-and-flask-3660abf9c946)
+-  - [TSD - Flask plotly AJAX](https://towardsdatascience.com/an-interactive-web-dashboard-with-plotly-and-flask-c365cdec5e3f)
+-  - [Dash offical](https://dash.plotly.com/layout)
+-
+-
+-
+ ## RestAPI in Flask
+ 
+ What is REST?
+@@ -1382,46 +822,10 @@ to be added
+ ## App - Social Blogging App in Flask
+ 
+ - **User Authentication**
+-  
+   - **Password hashing**
+     - extensions - `from werkzeug.security import generate_password_hash, check_password_hash` this is tried and tested lib that is safe to use.
+     - model - implement `password` as write-only property of `User` class to set `password_hash`
+-  
+   - **Blueprint** - structure it as a sub-module `auth` Blueprint. It has view having login-route
+-
+-  - **Normal auth**
+-    - Login - `session['user_id'] = user['id']` once credentials are verified, save `user_id` in `session` dictionary, it makes it available across requests for the session.
+-      - `g.User` can hold user object. Using Blueprints decorator `@bp.before_app_request` register a function that sets `g.user`. If there is no `user_id` in session, `g.User` will be `None`
+-
+-        ```python
+-        @bp.before_app_request
+-        def load_logged_in_user():
+-            user_id = session.get('user_id')
+-
+-            if user_id is None:
+-                g.user = None
+-            else:
+-                g.user = get_db().execute(
+-                'SELECT * FROM user WHERE id = ?', (user_id,)
+-                ).fetchone()
+-        ```
+-
+-    - Logout - `session.clear()`
+-
+-    - Login Required Decorator - lets you use `@login_required` on view function so the following code is run before view-route code.
+-
+-      ```python
+-      def login_required(view):
+-          @functools.wraps(view)
+-          def wrapped_view(**kwargs):
+-              if g.user is None:
+-                  return redirect(url_for('auth.login'))
+-
+-              return view(**kwargs)
+-
+-          return wrapped_view
+-      ```
+-
+   - **Flask-login** is ext having functions and decorators that make authentication easy.
+     - model - few required class members can either be declared in `User` class or can be importe from `UserMixin` class of Flask-login.
+     - initialize and instantiate extension with required conf
+@@ -1451,22 +855,17 @@ to be added
+     - `login_required` decorator lets protect route.
+     - Flask-LoginÔÇÖs `login_user()` logs user in once verified. It setts user session.
+     - `logout_user()` logs user out.
+-  
+   - **Register User**
+     - build a form class in new `auth/forms.py`, add unique email and username validator using `validate_` function
+     - build a template that uses form `templates/auth/register.html`
+     - build a register route in `auth/views.py`
+       - get - render form
+       - post - validate and add user to db
+-  
+   - **account confirmations**
+     - use expiry token to validate email url.
+     - model - add token generation and validation function.
+     - view - send email on registration
+     - view - `@auth.route('/confirm/<token>')`
+-  
+-  - **Links**
+-    - [RealPython Flask-Login](https://realpython.com/using-flask-login-for-user-management-with-flask/)
+ 
+ - **Roles and Permissions**
+   - database implementation
+@@ -1495,63 +894,9 @@ _This is understanding of a tutorial by Miguel Grinberg, we are learning to crea
+ - To have launched start elasticsearch now and restart at login: `brew services start elasticsearch`
+ - Or, if you don't want/need a background service you can just run: `elasticsearch`
+ 
+-## Advanced Flask
+-
+-- Request Processing
+-  - Following diagram show the cycle of request-response
+-
+-    ```mermaid
+-    graph LR
+-    Request -->|GET\n1| Web_Server
+-    Web_Server --> WSGI_Server
+-    WSGI_Server -->|Spawns\n2| Flask_App
+-    Flask_App -->|Pushes\n3| Application_Context
+-    Flask_App -->|Pushes| Request_Context
+-    Application_Context -->|current_app\n4| View_Function
+-    Request_Context -->|request| View_Function
+-    subgraph Global
+-    Application_Context
+-    Request_Context
+-    end
+-    subgraph Worker
+-    Flask_App --> View_Function
+-    end
+-    View_Function -->|5| Response
+-    ```
+-
+-  - Step 1 - Handle request
+-    - Web_server - Apache & NginX
+-    - WSGI_Server - Gunicorn, uWSGI, mod_wsgi
+-  - Step 2 - Spawn a **Worker**
+-    - it can be a thread, process or coroutine.
+-    - **one worker** handles **one request** at a time.
+-    - hence for multiple concurrent request multiple worker can be spawned.
+-  - Step 3 - pushes context
+-    - worker pushes context to global-stack as `context-local` which uses `thread-local` data, which means, a worker, which is one thread, has data specific to a thread and can be only accessed by worker that created it. So its global-memory but worker-unique data as `global LocalStack()`.
+-  - Step 4 - local context, proxy
+-    - this context data is basically an object, stored as stack data structure. To make it available in view-function it is not passed as a parameter, neither is imported as a global object, rather it is made available using proxy
+-  - Step 5 - Clean Up
+-    - req and app context are removed from stack
+-
+-- Threading
+-
+-
+-- Link
+-  - [td.io - Request processing](https://testdriven.io/blog/flask-contexts-advanced/#:~:text=The%20Flask%20app%20generates%20a,server%2C%20and%20a%20web%20application.)
+-
+-
+-
+-
+ ## Links
+ 
+-- [Official Flask Blogging Tutorial - Flaskr](https://flask.palletsprojects.com/en/latest/tutorial/)
+-  - app factory, blueprint
+-  - Plane DB operations, no ORM SQLAlchemy
+-- [RealPython Flask Tutorial - Part I](https://realpython.com/python-web-applications-with-flask-part-i/)
+-- [Flask Mega Tutorial I - Miguel Grinberg](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+-- [Flask Mega Tutorial I Legacy - Miguel Grinberg](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world-legacy)
+-  - no blueprint.
+-
++- [ ] - Flaskr - Blogging Template - <https://flask.palletsprojects.com/en/0.12.x/tutorial/introduction/>
+ 
+ 
+ 
+diff --git a/docs/0-Information-Technology/material-mkdocs.md b/docs/0-Information-Technology/material-mkdocs.md
+index 621fcc1..25c803b 100644
+--- a/docs/0-Information-Technology/material-mkdocs.md
++++ b/docs/0-Information-Technology/material-mkdocs.md
+@@ -139,9 +139,7 @@ graph LR
+   B ---->|No| E[Yay!];
+ ```
+ 
+-- Links
+-  - [Mermaid JS - Flowchart 101](https://mermaid.js.org/syntax/flowchart.html)
+-  - [MKDocs Diagrams](https://squidfunk.github.io/mkdocs-material/reference/diagrams/)
++more: <https://squidfunk.github.io/mkdocs-material/reference/diagrams/>
+ 
+ ### MathJax
+ 
+@@ -235,6 +233,4 @@ Based on a year of work, following structure has emerged and has worked in arran
+   - So when you learn something new about an action, **you know** the section to add to. Similarly, when you have to do an action, you know what to refer to.
+   - Keep knowledge at one place, like sqlite to be on its page and other pages can refer to it. **Do not repeat** on separate pages.
+ 
+-## Links
+ 
+-- [Furo - theme](https://github.com/pradyunsg/furo)
+diff --git a/docs/0-Information-Technology/python-notes.md b/docs/0-Information-Technology/python-notes.md
+index 176a03e..4809cf2 100644
+--- a/docs/0-Information-Technology/python-notes.md
++++ b/docs/0-Information-Technology/python-notes.md
+@@ -50,23 +50,6 @@ date: 2021-05-05
+ - **Delete**
+   - `rm -r venv_app` delete
+ 
+-## Offline Virtual Environment Setup
+-
+-- On machine with internet
+-  - `pip download -r requirements.txt -d path/pip-packages` downloads requirements and its dependencies to a folder `path/pip-packages`
+-
+-- On machine without internet
+-- `python -m venv venv` create virtual environment
+-- `venv\Scripts\activate` activate environment
+-- `pip install -r requirements.txt --find-links=pip-packages --no-index` install requirements
+-  - `--no-index` tells to not use any repository like pypi
+-  - `--find-links` tells a path to find all packages
+-- `flask --app app:create_app('testing') run`
+-
+-- Links
+-  - [Stackoverflow answer](https://stackoverflow.com/a/70373570/1055028)
+-  - [PIP Docs - pip install](https://pip.pypa.io/en/stable/cli/pip_install/#pip-install)
+-
+ ## Conda Miniconda Anaconda
+ 
+ 
+@@ -124,22 +107,15 @@ Undo `conda deactivate && conda remove --name prj1env --all` and remove files if
+ 
+ ## Python Programming
+ 
+-- **Decorators** are a standard feature of the Python language. A comÔÇÉ
++`Decorators` are a standard feature of the Python language. A comÔÇÉ
+ mon use of decorators is to register functions as handler functions
+ to be invoked when certain events occur.
+ 
+-- **Global Local Variables** and its scope
+-  - If you use a var with same name in function (local) and module (global) then you need to take caution
+-  - when you assign a var in funciton, python create that local var irrespective of it being present in global context. To use the global var in function:
+-  - either pass as param, or
+-  - you can use `global` keyword before var to let python interpreter know to use global var and not redeclare it.
+-  - more on this on [StackOverflow - UnboundLocalError: local variable referenced before assignment](https://stackoverflow.com/a/10852003/1055028)
++[ ] what is context in python
+ 
+-- **Packages & Modules**
+-  - `Package` is usually a folder with `__init__.py` in it.
+-  - Other python files are `modules`.
++`Package` is usually a folder with `__init__.py` in it. Other python files are `modules`.
+ 
+-- **Public, Private, Protected** in python
++- Public, Private, Protected in python
+   - public - every member of class in python is public by defaut, can be accessed outside class using object.
+   - protected attribute needs to be prefixed with underscore, `_name`. It can be accessed, just a convension.
+   - private members can be `__name` prefixed with double underscore, this makes them non accessible outside "directly". though can be accessed using `_Classname__attrname`
+@@ -165,14 +141,9 @@ to be invoked when certain events occur.
+     ```
+ 
+ 
+-## Exception handling with try, except, else, and finally
+ 
+-Try: This block will test the excepted error to occur
+-Except:  Here you can handle the error
+-Else: If there is no exception then this block will be executed
+-Finally: Finally block always gets executed either exception is generated or not
+ 
+-## Files Handling in python
++## Files in python
+ 
+ `f  = open(filename, mode)` Where the following mode is supported:
+ 
+@@ -214,80 +185,48 @@ for subdir, dirs, files in os.walk(directory):
+ 
+ ## Logging in Python
+ 
+-- Logging is done to keep record of events of software. They can be logged to console or a file or emailed.
+-- `level` is set to filter logs, default is `warning` so anything below it is not logged.
+-- `basicConfig()` set in one module works for all modules used in a session. You can pass
+-  - `level` to filter
+-  - `filename` to save logs
+-  - `format` - what to log, it can have, log level, message, time, location etc.
+-    - all format strings [here](https://docs.python.org/2/library/logging.html#logrecord-attributes)
+-  - `datefmt` to set date format of `asctime`
+-
+-
+-- **When to use What**
+-  - `print()` is good for small script to display on console. Else use logging.
+-  - `raise exception` when run time error occurs, that need to stop software.
+-  - `logging.exception() or logging.error() or logging.critical()` when error is to be logged and application can continue
+-  - Following table show when to use which level of logging
+-
+-    Level     | When it is used
+-    ----------|----------------
+-    DEBUG     | detailed info, typically for problem analysis
+-    INFO      | confirmation that event is working as expected
+-    WARNING   | default. unexpected behaviour, but system will work. Eg, low space
+-    ERROR     | serious problem, that software has not performed an action
+-    CRITICAL  | serious error that may bring system down
+-
+-- **Advanced**
+-  - loggers, handlers, filters, and formatters are components that can be used to have control on the functionality.
+-  - more here on [PythonDocs - Advanced Logging](https://docs.python.org/3.11/howto/logging.html#advanced-logging-tutorial)
+-  - Configuring Logging - configs can be in code, in file or in dictionary.
+-
+-
+ ```python
+ 
+-import logging
+-
+-## Very Basic
+-logging.warning('Watch out!')  # will print a message to the console
+-logging.info('I told you so')  # will not print anything as it is below default level
+-
+-## To a file
+-logging.basicConfig(filename='example.log',level=logging.DEBUG)
+-logging.debug('This message should go to the log file')
+-# DEBUG:root:This message should go to the log file
+-
+-## Formatting
+-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S %p')
+-logging.debug('Something is happenning')
+-# 02/16/2023 01:50:17 PM - root - DEBUG - Something is happenning
++#----------set up logging configuration
++log_time=time.strftime('%Y%m%d_%H%M', localtime())
++logfilepath=_enviroment_variable.log_path
++log_filename=str(logfilepath)+str(log_time)+'_app_'+str(parent_process_id)+'_'+str(process_id)+'.log'
++logging.basicConfig(level=logging.DEBUG,
++format='%(asctime)s - %(levelname)s - %(message)s',
++datefmt='%Y/%m/%d %H:%M:%S %p',
++filename=log_filename,
++filemode='w')
+ 
++logging.info("New Working directory is: " + str(os.getcwd()))
+ 
++## Other Way
++import logging
++logger = logging.getLogger(__name__)
++logger.info('df.shape post cleanup: ' + str(result.shape))
+ 
+-## New filename for each run
+-import os, time
+-from time import localtime
+ 
+-basedir = os.path.abspath(os.path.dirname(__file__))
+- 
+-log_dir = os.path.join(basedir, 'logs')
+-parent_process_id=os.getppid()
+-process_id=os.getpid()
+-log_time=time.strftime('%Y%m%d_%H%M', localtime())
+-log_filename=str(log_time)+'_app_'+str(parent_process_id)+'_'+str(process_id)+'.log'
+-LOG_FILE_PATH = os.path.join(log_dir, log_filename)
++## ---------------------------------------------------------------------
+ 
+-logging.basicConfig(level=logging.DEBUG, \
+-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', \
+-                    datefmt='%Y/%m/%d %H:%M:%S %p', \
+-                    filename=LOG_FILE_PATH, \
+-                    filemode='w')
++## Other PDF pipeline
++import logging
++from datetime import datetime
++my_logger = logging.getLogger(cg.sql_query_prefix + " Log")
++my_logger.setLevel(logging.INFO)
++my_logger_filehandler = logging.FileHandler(cg.data_path + 'logs/' + cg.sql_query_prefix + "_" + datetime.today().strftime('%d-%m-%Y') +  '.log')
++my_logger_filehandler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
++my_logger_filehandler.setFormatter(my_logger_filehandler_format)
++my_logger.addHandler(my_logger_filehandler)
++my_logger.info('New Run of Prospect Intelligence')
+ 
+-logging.info("New Working directory is: " + str(os.getcwd()))
++## ---------------------------------------------------------------------
+ 
++import logging
++logger = logging.getLogger()
++logger.setLevel(logging.DEBUG)
++logging.debug("test")
+ 
++## ---------------------------------------------------------------------
+ 
+-## Using Components
+ import logging
+ logger = logging.getLogger()
+ fhandler = logging.FileHandler(filename='mylog.log', mode='a')
+@@ -309,9 +248,7 @@ logging.warning('tbllalfhldfhd, warning.')
+ 
+ Links
+ 
+-- [ ] [RealPython - Logging in Python](https://realpython.com/python-logging/)
+-- [PythonDocs - When to use what level](https://docs.python.org/2/howto/logging.html#when-to-use-logging)
+-- [TD.io - logging in python](https://www.patricksoftwareblog.com/python-logging-tutorial/)
++- [ ] <https://realpython.com/python-logging/>
+ 
+ 
+ ## Datetime and Time in Python
+@@ -368,69 +305,6 @@ def test_sum():
+ - You put your tests into classes as methods
+ - :TODO <https://realpython.com/python-testing/>
+ 
+-## Documenting Code in Python
+-
+-- **Why** - when you revisit after months, it _saves time_ to pick back
+-  - when it is public or team work, it helps _others contribute_
+-
+-- Documenting is making it understandable to users, like react-docs
+-- Commenting is for developers, to understand why code is written. It can be to understand, reasons, description or
+-  - Tagging, `# todo: some work`, `# bug: fix the bug`, `# FIXME: some fix`.
+-
+-- **Docstrings** - these are structured string format. They can be parsed by parser like Sphinx, and can autogenerate documentation from code.
+-  - everything in Python is an object. And that object has a property `__doc__` that stores the docstring that can be printed when using help.
+-  - you can set this as `my_func.__doc__ = "Some string"`
+-  - or the next line after function in `"""Some string"""` automatically sets the docstring for the function.
+-  - docstring structures are of three types
+-    - Google - google's way (_mostly used_)
+-    - reStructured - python style
+-    - em - same as done in java
+-
+-- **Sphinx** lets you write documentation using markdown and can auto-generate documentation from docstrings.
+-  - Installation - `pip install sphinx`
+-  - Initialization
+-    - In the project root folder, `my_project/`
+-    - `sphinx-quickstart docs`, creates docs dir `my_project/docs`
+-  - Configuration
+-  - Build - `sphinx-build -b html docs/source/ docs/build/html`
+-
+-- Links
+-  - [TD.io using Sphinx](https://www.patricksoftwareblog.com/python-documentation-using-sphinx/)
+-  - [PythonHosted.ORG - Examples](https://pythonhosted.org/an_example_pypi_project/sphinx.html)
+-  - [RealPython - Doc Guide](https://realpython.com/documenting-python-code/)
+-  - [Sphinx Google Example](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html)
+-  - [Shinx Autogen from docstring](https://stackoverflow.com/a/62613202/1055028)
+-
+-## Concurrency and Parallelism in Python
+-
+-- **wait** is when you have I/O or N/W or processing operation.
+-- you can at same time do other things while you wait, **concurrency**
+-- you can also do things simultaneously, **parallelism**
+-- **Thread** lets break a program into small pieces that execute separately. You can create multiple threads in a program, they all start one after other (not in parallel). This can be faster compared non-thread execution because when a thread waits another starts execution. Hence, it enables **continuous execution**.
+-- Python has slightly different approach for parallelism, because `threading` module lets create thread but can't execute in parallel, `multiprocessing` module is similar and enables **parallel execution**.
+-
+-- **Asyncio** is another better way to do tasks **concurrently**. It lets you perform tasks in non-blocking way using `async` / `await` syntax.
+-  - **Non-blocking** means other tasks can exucute while a task is waiting. Synchronous operations suffer to wait and execute in sync.
+-  - `aiohttp` for non-blocking requests, `aiofiles` for non- blocking file operations. `asyncio` is python standard library.
+-
+-- **Parallelism**
+-  - it can be done using `multiprocessing` or `concurrent.futures` library.
+-  - it lets distribute compute over multiple processors.
+-
+-- CRUX
+-  - Threading enable concurrency, execute tasks independently without wait
+-  - Multiprocessing enables parallelism, execute with more compute power
+-  - Asyncio enables asynchronous execution, let long running task be handled in a nice way.
+-
+-- **When to use Multiprocessing or AsyncIO or Threading**
+-  - When doing compute heavy task use multiprocessing. Eg, heavy math operation, string comparision.
+-  - Use asyncio or threading when using network, like request response read write.
+-  - Use both multiprocessing and asyncio tohether when using doing both high compute and n/w task. But, good rule of thumb is to fork a process before you thread(use) asyncio.
+-  - threads are cheap compared to processes.
+-
+-- Link
+-  - [Tstdriven.io - Concurrency  Parallelism AsyncIO](https://testdriven.io/blog/concurrency-parallelism-asyncio/)
+-
+ 
+ ## Snippets Python
+ 
+@@ -518,10 +392,8 @@ EdX
+ 
+ 
+ 
+-## Links
++## Other iYV Python Notes
+ 
+ - [Python Coding Kaggle](https://www.kaggle.com/iyadavvaibhav/python-notes)
+ - [Pandas Kaggle](https://www.kaggle.com/iyadavvaibhav/pandas-notes)
+ - [Flask](flask.md) - back end web framework micro
+-- [Python Official Tutorial](https://docs.python.org/3.11/tutorial/index.html)
+-- [pythonbasics.org](https://pythonbasics.org/)
+diff --git a/docs/0-Information-Technology/text-editors.md b/docs/0-Information-Technology/text-editors.md
+index 41edd71..51349e7 100644
+--- a/docs/0-Information-Technology/text-editors.md
++++ b/docs/0-Information-Technology/text-editors.md
+@@ -102,9 +102,3 @@ cSpell disable code check in Markdown code blocks:
+         }
+     ],
+ ```
+-
+-## PyCharm
+-
+-- Keyboard Shortcuts
+-  - Back and forth - `ctrl-alt-left` ro `ctrl-alt-right`
+-
+diff --git a/docs/0-Information-Technology/tools-frameworks.md b/docs/0-Information-Technology/tools-frameworks.md
+deleted file mode 100644
+index db9582b..0000000
+--- a/docs/0-Information-Technology/tools-frameworks.md
++++ /dev/null
+@@ -1,22 +0,0 @@
+-# Tools and Frameworks
+-
+-_tools, framworks, libraries, systems, projects that help do IT Engg work. Landing zone for new topics you learn that have no dedicated file_
+-
+-- **Kubernetes** - is an open-source container orchestration system for automating software deployment, scaling, and management.
+-
+-
+-- IAC - **Infrastructure as a Code**
+-  - **Ansible** - It can provision the underlying infrastructure of your environment, virtualized hosts and hypervisors, network devices, and bare metal servers.
+-  - **Terraform** - It is used to automate various infrastructure tasks.
+-  - **AWS CloudFormation** - lets you create and manage a collection of Amazon Web Services (AWS) resources by provisioning and updating them in a predictable way
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 diff --git a/docs/1-Software-Engineering/cs-se-basics.md b/docs/1-Software-Engineering/cs-se-basics.md
-index f7684e8..4b891e2 100644
+index 57b49dc..f7684e8 100644
 --- a/docs/1-Software-Engineering/cs-se-basics.md
 +++ b/docs/1-Software-Engineering/cs-se-basics.md
-@@ -29,11 +29,11 @@ title: CSE Basics
- - 1 edx Algorithms and Data Structures MM - <https://www.edx.org/micromasters/ucsandiegox-algorithms-and-data-structures>
- - g4g DSA - <https://www.geeksforgeeks.org/complete-roadmap-to-learn-dsa-from-scratch/>
+@@ -6,7 +6,7 @@ title: CSE Basics
  
--## Coding Naming Conventions
-+## Coding Conventions
+ *all about standards, conventions, ethics, practices*
  
- - Python - Use underscores
- - Javascript - Camel Case
--- files and folders - use hyphen. Link [google style guide](https://developers.google.com/style/filenames#naming-guidelines)
-+- Git files - use hyphen
+-## Coding Best Practices - Ways of Working
++## Best Practices
  
- ## Computer Science
+ - Follow coding standards
+ - Use git
+@@ -17,20 +17,10 @@ title: CSE Basics
+ - Work with people smarter than you
+ - do pair programming
+ 
+-- Link
+-  - [td.io - Software Development 101](https://www.patricksoftwareblog.com/software-development-checklist-for-python-applications/)
+-  - [Open Sourcing a Python Project the Right Way](https://jeffknupp.com/blog/2013/08/16/open-sourcing-a-python-project-the-right-way/)
+-
+-## Open Source Contribution
+-
+-- Why? - It is a great way to grow and evovle, learn, build your skill and be part of community, grow your network, showcase your presence.
+-
+-- Links - [OpenSourceGuide](https://opensource.guide/)
+-
+ ## Working on someone else's code
+ 
+ - Start a debugger
+-- Step into and over, understand the variable values, add breakpoints.
++- Step into and over, understand the var values, add breakpoints.
+ 
+ ## Links
  
 diff --git a/docs/1-Software-Engineering/git.md b/docs/1-Software-Engineering/git.md
-index c4b862f..55d50f8 100644
+index a766d4e..c31e42a 100644
 --- a/docs/1-Software-Engineering/git.md
 +++ b/docs/1-Software-Engineering/git.md
-@@ -167,58 +167,6 @@ do so (now or later) by using -c with the switch command. Example:
+@@ -67,14 +67,14 @@ Git is version control software to track changes in source code. GitHub is cloud
+ - `git branch -a` - all, local and remote branches
+   - output
+ 
+-    ```bash
+-    * PRJ-454
+-    develop
+-    remotes/origin/PRJ-454
+-    remotes/origin/PRJ-508
+-    remotes/origin/HEAD -> origin/develop
+-    remotes/origin/origin/develop
+-    ```
++	```bash
++	* PRJ-454
++	develop
++	remotes/origin/PRJ-454
++	remotes/origin/PRJ-508
++	remotes/origin/HEAD -> origin/develop
++	remotes/origin/origin/develop
++	```
+ 
+   - first two are local and then remotes, see `HEAD` points to one of the remote branch, this is checkout and acts as default.
+ 
+@@ -83,15 +83,12 @@ Git is version control software to track changes in source code. GitHub is cloud
+ - create repo
+   - `git clone https://...git` - **clone remote** repository
+   - `git init` - start repository local
+-
+ - commits
+   - `git add --all`
+   - `git commit -m "Initial Commit"`
+-
+ - remotes add/set
+   - `git remote add origin https://...git` **add a remote** to existing local repo
+   - `git remote set-url origin https://...git` **update remote**, change to new
+-
+ - branch/pull
+   - `git checkout -b <new-branch>` - **creates** new-local-branch and **checksout**. It has **no upstream** to track.
+   - `git checkout <branch-name>` - **checksout** existing-local-branch
+@@ -103,15 +100,12 @@ Git is version control software to track changes in source code. GitHub is cloud
+   - `git pull origin remote_branch_name` - pulls an existing remote branch to local repository, local branch with same name should exist, else do `git checkout -b <new-branch>`
+   - If you want to create a new branch to retain commits you create, you may
+ do so (now or later) by using -c with the switch command. Example:
+-    - `git switch -c <new-branch-name>`
+-
++	- `git switch -c <new-branch-name>`
+ - merge - changes from one branch to another, say from `hotfix` to `master`
+   - `git checkout branch-merge-into` - master if you have to merge changes into master
+   - `git merge branch-merge-from` - say hotfix
+-  - `git rebase master` - if you have new changes in master that you want in your branch. more [here](https://stackoverflow.com/questions/5340724/get-changes-from-master-into-branch-in-git).
+   - it can go smooth or can have conflicts, then resolve conflicts
+   - more details [here](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
+-
+ - stash
+   - stash means keep safely. When you have to switch from branch A to B but not commit changes in branch A, then stash changes in A, switch to B, do work, back to A, then stash pop to return to your uncommited changes.
+   - `git stash` on branch A, to not commit but keep changes safely
+@@ -119,11 +113,9 @@ do so (now or later) by using -c with the switch command. Example:
+   - `git checkout A`
+   - `git stash pop` - to return your uncommited changes in A.
+   - more [here](https://opensource.com/article/21/4/git-stash)
+-
+ - delete
+   - `git branch -d my-branch-name` - use `-D` to force delete
+ 
+-
+ ### Read Remote Repo
+ 
+ - `git remote show origin` all the information about a remote called origin. Output:
+@@ -157,19 +149,15 @@ do so (now or later) by using -c with the switch command. Example:
+ - `git push` writes current-local-branch to remote
+   - `git push -u origin <local-branch-name>` - sets upstream as origin/local-branch-name and pushes current-local-branch to remote git. New remote-branch "local-branch-name" is created, if not exists.
+   - `git push -u origin local-branch:remote-branch` - uses different branch names. Creates new on remote if does not exist.
+-    - Output `Branch 'local-branch' set up to track remote branch 'remote-branch' from 'origin'.`
++	- Output `Branch 'local-branch' set up to track remote branch 'remote-branch' from 'origin'.`
+   - `git push -u origin HEAD` need not write
+   - `git push -u origin` - sets upstream as origin and pushes current-local-branch to remote.
+ - `git push origin` pushes **all** branches to remote
+ 
+ 
+-### Pull Requests
+-
+-- approvals
+-  - `git checkout remote_branch_name` - this creates a new local branch and links remote with it.
++### Approve a Pull Request
+ 
+-- create
+-  - you can create pull request when your branch (source) is ahead of the destination branch, else pull and merge destination.
++- `git checkout remote_branch_name` - this creates a new local branch and links remote with it.
+ 
+ 
+ ## How to clone a repository from GitHub.com
+@@ -179,7 +167,7 @@ do so (now or later) by using -c with the switch command. Example:
  - This will bring all the files from remote to local directory with git repository on local folder.
  - Now if you have permission to commit to this repo then you can **authenticate to push**, else **change the remote** to another repo that you can push to.
  
--## Guide - How to sync when you can't push or pull
--
--- Idea is to use following branches on local:
--  - `master` - this will have files from remote and updated to last merged activity. Download and extract here.
--  - `ofc` - branch moves ahead with updates in local environment
--  - `ofc_masked` branch having only files that can go remote
--  - `zip` - download and extract zip from remote when you have to merge
--
--- Merge process
--
--```sh
--# in local on branch ofc, commited
--git checkout -b ofc_masked # create branch
--# delete internal files, commit
--git add .
--git commit -m 'ofc_masked for diff'
--
--git checkout -b zip
--rm -rf . # delete all 
--# then extract zip downloaded from remote
--git add .
--git commit -m "remote for diff"
--
--git diff ofc_masked zip > diff.patch
--
--
--# on remote
--
--
--# create new branch in remote and apply patch
--git checkout -b master_patched
--"C:\Program Files\Git\usr\bin\patch.exe" -p1 < diff.patch
--# check manually for `*.orig` files
--# merge to master
--
--# download and extract in master on local
--
--
--# git diff --no-prefix ofc_masked zip > diff.patch # for this
--# "C:\Program Files\Git\usr\bin\patch.exe" -p0 < diff.patch # use this
--
--  
--  - Init or after merge, on local
--    - download and unzip to master
--    - backup internal folder from `ofc`
--    - create `ofc` branch from master and add internal folder
--    - delete all from `zip` and `ofc_masked`
--
+-## Guide - How to sync when network is restricted
++## Guide - How to sync when you can't push or pull
+ 
+ - Idea is to use following branches on local:
+   - `master` - this will have files from remote and updated to last merged activity. Download and extract here.
+@@ -207,6 +195,7 @@ git diff ofc_masked zip > diff.patch
+ 
+ # on remote
+ 
++
+ # create new branch in remote and apply patch
+ git checkout -b master_patched
+ "C:\Program Files\Git\usr\bin\patch.exe" -p1 < diff.patch
+@@ -222,20 +211,14 @@ git push
+ # git diff --no-prefix ofc_masked zip > diff.patch # for this
+ # "C:\Program Files\Git\usr\bin\patch.exe" -p0 < diff.patch # use this
+ 
 -```
+   
+-- Init or after merge, on local - **auto**
+-  - checkout master, delete all, download and extract remote
+-  - checkout ofc, `git rebase master`
+-  - do manual merge conflicts, `git add .`
+-  - `git rebase --continue`
 -
--Link - <https://gist.github.com/nepsilon/22bc62a23f785716705c>
--
- ## Guide - Git Local to Remote Basics
+-- Init or after merge, on local - **manual**
+-  - download and unzip to master
+-  - backup internal folder from `ofc`
+-  - create `ofc` branch from master and add internal folder
+-  - delete all from `zip` and `ofc_masked`
++  - Init or after merge, on local
++	- download and unzip to master
++	- backup internal folder from `ofc`
++	- create `ofc` branch from master and add internal folder
++	- delete all from `zip` and `ofc_masked`
  
- ### Setup Git
-diff --git a/docs/1-Software-Engineering/regex.md b/docs/1-Software-Engineering/regex.md
-index 2cd415c..a0a98e7 100644
---- a/docs/1-Software-Engineering/regex.md
-+++ b/docs/1-Software-Engineering/regex.md
-@@ -3,11 +3,9 @@
- Regex are in simple terms "a sequence of characters that define a search pattern"
++```
  
- - basic is `*.gif` where * means anything.
--
- - `Position` of search
-   - `^` - starts with - `^Simple` - any line that start with this
-   - `$` - ends with - `park$` - any line that end with this
--
- - `Frequency` of occurrence
-   - `*` - 0 or more - `ab*` a followed by zero or more b's
-   - `+` - 1 or more - `ab+` - the letter a followed by one or more b's
-@@ -15,29 +13,21 @@ Regex are in simple terms "a sequence of characters that define a search pattern
-   - `{n}` - n exactly - ab{2} - the letter a followed by exactly two b's
-   - `{n,}` - n or more - ab{2,} - the letter a followed by at least two b's
-   - `{n,y}` - n to y occurance - ab{1,3} - the letter a followed by between one and three b's
--
- - `Class` of characeters - list or range, and are case-sensitive
-   - Range - `[a-z]` or `[A-Z]` or `[0-9]`
-   - List - `[a,d,p,w]` or `[adpwKRM]` - match any single character
-   - Mix - `[A-Z2-4pw]` - matches range A-Z, 2-4 and literally p, and literally w
-   - Except - `[^abXyP-Q]` and character except what is in
--
- - `Flags` to search for special types of characters without needing to list them in a range
-   - `.` m any character
-   - `\s` - whitespace - `\S` opposite
-   - `\w` - word - `\W` not a word
-   - `\d` - digit (number) - `\D` not a digit
-   - `\b` - word boundary - `ate\b` finds ate at end of word, eg, plate but not gates.- `\B` not boundary
--
- - Other
-   - `\n` `\r` `\t` `\0` - new line, carriage, tab, null
-   - `|` - or - `The (?:cat|dog) jumps` matches cat or dog
--
--- Regex Groups
--  - In Find: you can use regex with "capturing groups," e.g. `I want to find (group1) and (group2)`, using parentheses
--  - In Replace: you can refer to the capturing groups via $1, $2 etc.
--  - Eg, VS Code - to use what you found in replace use `$1`, eg, find `<h1>(.+)</h1>`, replace `<b>$1</b>`. Replaces `<h1>Todo</h1>` with `<b>Todo</b>`
--  - more [here](https://stackoverflow.com/a/61291370/1055028).
-+- VS Code - to use what you found in replace use `$0` or `$1`, eg, find `(^Todo)`, replace `<b>$0</b>`. Replaces `Todo` with `<b>Todo</b>`
+ Link - <https://gist.github.com/nepsilon/22bc62a23f785716705c>
  
- ## Snippets
+diff --git a/docs/1-Software-Engineering/oops-python.md b/docs/1-Software-Engineering/oops-python.md
+index 5de849f..4459233 100644
+--- a/docs/1-Software-Engineering/oops-python.md
++++ b/docs/1-Software-Engineering/oops-python.md
+@@ -4,60 +4,6 @@
+   - `attributes` - variables
+   - `methods()` - functions
  
-diff --git a/docs/2-Data-Engineering/data-python.md b/docs/2-Data-Engineering/data-python.md
-index e4b06a2..ab1a302 100644
---- a/docs/2-Data-Engineering/data-python.md
-+++ b/docs/2-Data-Engineering/data-python.md
-@@ -57,21 +57,6 @@ Flask wrapper for sqlalchemy
- 
-   ```
- 
--### Flask SQLite SQLAlchemy
+-## Instance, Class or Static Methods
+-
+-- Instance - method is specific to instance of class. First argument is `self` (referece to object) and is auto passed.
+-- Class - method can be called without instantiating the class. First argument is `cls` (referece to class itself) and is auto passed.
+-- Static - similar to class but can be called without passing `cls`
 -
 -```python
--import os, sqlite3
+-class Book:
 -
--basedir = os.path.abspath(os.path.dirname(__file__))
--conn_str = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+-    # Class attribute, common for all instances
+-    kind = "Novels"
+-    
+-    def __init__(self, row):
+-        # row is db record
 -
--app = Flask(__name__)
--app.config['SECRET_KEY'] = 'some string'
--app.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+-        # instance attribute
+-        self.title = row.title
+-        self.author = row.author
+-        self.year = getattr(row, 'year', None) # if year is not in row
+-
+-    def age(self):
+-        # return age of book
+-        # this is per instance of book
+-        return (year_today - self.year)
+-
+-    @classmethod
+-    def fetch_book(cls, id):
+-        # fetch the row from db or api
+-        row = fetch_service(id)
+-        obj = cls(row)
+-        return obj
+-
+-    @staticmethod
+-    def fetch_books():
+-        # fetch the row from db or api
+-        objs = []
+-        rows = fetch_service('all')
+-        for row in rows:
+-            # create object and add to objcts list
+-            objs.append(Book(row))
+-        return objs
+-
+-book_obj = Book.fetch_book(21) # class method
+-book_obj.age() # instance method
+-
+-book_objects = Book.fetch_books() # static method, no auto arg passed
+-
 -```
 -
--- Execution - from flask shell do `db.create_all()` - creates table with schema.
+-- More about different class methods [here on stackoverflow](https://stackoverflow.com/a/12179752/1055028)
 -
+-## Inheritance
+-
+-- to be added
+ 
+ ## Links
+ 
+diff --git a/docs/2-Data-Engineering/data-python.md b/docs/2-Data-Engineering/data-python.md
+index c54691f..d58e3ee 100644
+--- a/docs/2-Data-Engineering/data-python.md
++++ b/docs/2-Data-Engineering/data-python.md
+@@ -5,7 +5,6 @@
+ - Connection should **not** be left open, it should be open right after write and disposed once written. It can be open and closed multiple times but never left open
+ - Connection object should be completely **separate** from business logic.
+ - `with` performs the cleanup activity automatically. "Basically, if you have an object that you want to make sure it is cleaned once you are done with it or some kind of errors occur, you can define it as a **context manager** and `with` statement will call its `__enter__()` and `__exit__()` methods on entry to and exit from the with block."
+-- more connections [here  (SQLAlchemy)](https://docs.sqlalchemy.org/en/20/core/engines.html).
+ 
+ ### PyODBC
+ 
+@@ -16,30 +15,16 @@ Works with most databases but not well with MSSQL+Pandas
+ import pyodbc
+ 
+ # MS SQL Server
+-connection_url = "driver={SQL Server};server=000Server.somedomain.com/abcinc;database=SAMPLE_DB;Trusted_Connection=yes"
+-connection_url = "driver={SQL Server};server=000Server.somedomain.com/abcinc;database=SAMPLE_DB;Trusted_Connection=yes"
+-
+-# MYSQL 
+-connection_url = "DRIVER={MySQL ODBC 3.51 Driver};SERVER=localhost;DATABASE=test;USER=venu;PASSWORD=venu;OPTION=3;"
+-
+-# DSN
+-connection_url = "dsn=" + "Your DSN Name"
++connection_url = f"driver=SQL Server;server=<name>database=<name>;Trusted_Connection=yes"
+ 
+ ## Teradata
+ connection_url = "DRIVER={DRIVERNAME};DBCNAME={hostname};;UID={uid};PWD={pwd}"
+ 
+ connection = pyodbc.connect(connection_url)
++cursor = connection.cursor()
+ sql = "select top 10 * from [db].[schema].[table]"
+-
+-cursor = connection.cursor().execute(sql)
+-
+-# list of column names
+-columns = [column[0] for column in cursor.description]
+-
+-for row in cursor.fetchall():
+-    print(row) # row is object of class row
+-    results.append(dict(zip(columns, row))) # builds list of dictionary
+-
++cursor.execute(sql)
++res = cursor.fetchall()    # list of rows    
+ connection.close()
+ 
+ fx_df = pd.read_sql(query, connection)
+@@ -109,12 +94,8 @@ connection_url = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
  ### Pandas
  
  - needs a connector to database like sqlalchemy or pyodbc
-@@ -116,12 +101,6 @@ The ORM provided by SQLAlchemy sits between the SQLite database and your Python
- - It is an ORM not for one, but for many relational databases. SQLAlchemy supports a long list of database engines, including the popular MySQL, PostgreSQL and SQLite.
- - The ORM translates Python classes to tables for relational databases and automatically converts Pythonic SQLAlchemy Expression Language to SQL statements
+-- `df_txns = pd.read_sql(sql=sql, con=conn_dvs)`
+ - `df.to_sql('table_name', con=engine)` - sqlalchemy
  
+-- pd write has issues
+-  - pyodbc lets read but not write, `pyodbc==4.0.35`
+-  - sqlalchemy lets read and write but with version `SQLAlchemy==1.4.46` with `pandas==1.3.5` as on Feb-2023.
+ 
+ ### SQLite
+ 
+@@ -158,18 +139,6 @@ connection.commit() # for non read tasks
+   - Declarative - new - more like oops
+   - Imperative - old - less like oops
+ 
+-Mappings
+-
+-- There are two types of mapping
+-  - Declarative - new - more like oops
+-  - Imperative - old - less like oops
+-
 -Mappings
 -
 -- There are two types of mapping
@@ -165,602 +1508,518 @@ index e4b06a2..ab1a302 100644
  ```python
  from sqlalchemy import Column, Integer, String, ForeignKey, Table
  from sqlalchemy.orm import relationship, backref
-diff --git a/docs/2-Data-Engineering/databases.md b/docs/2-Data-Engineering/databases.md
-index 1b04a14..2b829cf 100644
---- a/docs/2-Data-Engineering/databases.md
-+++ b/docs/2-Data-Engineering/databases.md
-@@ -11,29 +11,18 @@ date: 2019-05-06
+@@ -206,223 +175,3 @@ class Author(Base):
+   - <https://realpython.com/python-sqlite-sqlalchemy/#working-with-sqlalchemy-and-python-objects>
+   - Flask SQLAlchemy in Flask Notes
  
- - It is a micro database that can work in memory or a saved in file, eg, `store.db` .
- - Queries are same as any other SQL.
-+- if `sqlite3` is installed then it opens a shell in command line, just like mysql shell.
-+- to open a file, use `.open FILENAME` to open an existing database.
-+- `sqlite3 my.db` to work on this file
-+- `.mode csv` and then `.import data.csv orders` loads csv to db, creates if not exists.
-+- `.schema orders` to check.
-+
- - It can be used in many ways, some are:
-   - Python Program and DB Engine In memory
-   - Python Program and DB Engine as File
-   - SQLite installed as utility and access via shell, this is `sqlite3.exe` program.
-   - SQLite ODBC driver.
+-## PyODBC Manual ORM
+-
+-```python
+-# Class of table
+-class Book:
+-    
+-    def __init__(self, row):
+-        # row is db record
+-        self.id = row.id
+-        self.title = getattr(row, 'title', None)
+-        self.author = getattr(row, 'author', None)
+-        self.year = getattr(row, 'year', 1880) # default value
+-
+-    # calculated column, instance method
+-    def age(self):
+-        # return age of book
+-        return (2022 - self.year)
+-
+-    @classmethod
+-    def get_book_by_id(cls, id):
+-        sql = f'select * from table_name where id = {str(id)}'
+-        cursor = conn.cursor().execute(sql)
+-
+-        objs = []
+-        for row in cursor.fetchall():
+-            objs.append(Book(row))
+-        
+-        if len(objs) > 0:
+-            return objs[0] # as sending 1
+-        
+-        return None
+-
+-    @classmethod
+-    def get_books(cls):
+-        sql = select_flows_sql + f' where email = "?"'        # optional where clause
+-        cursor = conn.cursor().execute(sql, session['email']) # where clause placeholder
+-        
+-        objs = []
+-        for row in cursor.fetchall():
+-            objs.append(Book(row))      # instantiate obj
+-        
+-        if len(objs) > 0:
+-            return objs                 # list of objects
+-        
+-        return None
+-
+-book_obj = Book.get_book_by_id(21) # class method
+-book_obj.age() # instance method
+-
+-book_objects = Book.get_books() # static method, no auto arg passed
+-
+-# class of table simple code to auto set to dictionary items
+-class Post:
+-
+-    def __init__(self, row):
+-        for k, v in dictionary.items():
+-            setattr(self, k, v)
+-
+-
+-
+-```
+-
+-## PyODBC ETL
+-
+-```python
+-
+-import pandas as pd
+-import sqlite3
+-
+-# sources
+-conn_source = pyodbc.connect('dsn=' + "Your_DSN")
+-conn_target = sqlite3.connect('../app_v2/data-dev.sqlite')
+-
+-# Incremental Load: Find IDs already in target
+-df_target_ids = pd.read_sql(sql='select id from target_table', con=conn_target)
+-ids_before = df_target_ids["id"].values
+-records_before = len(df_target_ids)
+-print(f"Records present: "+str(records_before))
+-
+-# Build where clause tuple, eg, 'not in (a,..)'
+-if len(ids_before) == 0:
+-    ids_before_tuple = '(-1)'
+-elif len(ids_before_tuple) == 1:
+-    ids_before_tuple = "("+ str(df_target_ids["id"].values[0]) + ")"
+-else:
+-    ids_before_tuple = tuple(df_target_ids["id"].values)
+-
+-
+-# Extract new IDs from source
+-sql = f'SELECT distinct id, email FROM source_table where id not in {ids_before_tuple}'
+-df_new_data = pd.read_sql(sql=sql, con=conn_source)
+-print(f"Records to be added: "+str(len(df_new_data)))
+-
+-# Load new Data to target
+-df_new_data.to_sql(name='target_table', con=conn_target, if_exists='append', index=False)
+-
+-final_responses = pd.read_sql(sql='select count(id) from target_table', con=conn_target).iloc[0,0]
+-print(f"Records added: "+str(final_responses-records_before))
+-
+-#assert len(df_new_data) == final_responses-records_before
+-
+-```
+-
+-## Fail proof data read
+-
+-```python
+-import pyodbc
+-import logging
+-import urllib
+-import pandas as pd
+-import time
+-from config import config # has all variables defined
+-
+-def get_connection_string(service):
+-    """
+-    Returns connection string for a service. All variables are picked from environment config file
+-    :param service: [teradata, mssql]
+-    :return: connection string
+-    """
+-
+-    if service == 'teradata':
+-        return f"DRIVER=Teradata;DBCNAME={config['database_host']};;UID={config['database_user']};PWD={urllib.parse.quote(config['database_password'])}"
+-    elif service == 'mssql':
+-        return f"driver={config['driver']};server={config['server']};database={config['database']};Trusted_Connection=yes"
+-    else:
+-        raise Exception('DB: No such connection available')
+-
+-
+-def sql_select_df(query, service):
+-    """
+-    Runs query and returns results as a Pandas DataFrame
+-    :param query: SQL Query
+-    :param service: [teradata, mssql]
+-    :return: DataFrame
+-    """
+-
+-    df = None
+-
+-    try:
+-        connection = pyodbc.connect(get_connection_string(service))
+-        try:
+-            start_time = time.time()
+-            df = pd.read_sql(query, connection)
+-            time_taken = time.time() - start_time
+-            logger.info(f'sql_select_df - Records fetched: {len(df):,} ;  Time taken: {time_taken:,.5f} seconds.')
+-        except Exception as e:
+-            logger.error(f'sql_select_df - Query failed!. Error "{str(e)}".')
+-        finally:
+-            connection.close()
+-    except Exception as e:
+-        logger.error(f'sql_select_df - No connection to "{service}". Message: "{str(e)}"')
+-
+-    return df
+-
+-
+-def sql_run_file(file, service):
+-    """
+-    Runs SQL Script stored in a file and returns the number of rows processed
+-    :param file: file path
+-    :param service: [teradata, mssql]
+-    :return: number of rows processed
+-    """
+-
+-    n_rows = 0
+-
+-    try:
+-        with open(file, 'r') as f:
+-            query = f.read()
+-
+-        n_rows = sql_execute(query, service)
+-    except Exception as e:
+-        logger.error(f'sql_run_file - Cannot read file at "{file}". Error: "{str(e)}"')
+-
+-    return n_rows
+-
+-
+-def sql_execute(query, service, log_info=False, fail=True):
+-    """
+-    Runs SQL Script and returns the number of rows processed
+-    :param service: teradata or mssql
+-    :param query: sql query
+-    :param log_info: log successful execution?
+-    :param fail: exit execution?
+-    :return: number of rows processed
+-    """
+-
+-    n_rows = 0
+-
+-    try:
+-        connection = pyodbc.connect(get_connection_string(service))
+-        cursor = connection.cursor()
+-
+-        try:
+-            start_time = time.time()
+-            cursor.execute(query)
+-            n_rows = cursor.rowcount
+-            time_taken = time.time() - start_time
+-            if log_info:
+-                logger.info(f'sql_execute - Query executed in {time_taken:,.5f} seconds. Records processed: {n_rows:,}')
+-            cursor.commit()
+-            cursor.close()
+-        except Exception as e:
+-            cursor.rollback()
+-            logger.error(f'sql_execute - Query failed!. Error "{str(e)}".')
+-            if fail:
+-                sys.exit(1)
+-        finally:
+-            connection.close()
+-    except pyodbc.OperationalError as e:
+-        logger.error(f'sql_execute - No connection to "{service}". Message: "{str(e)}"')
+-        print(f'sql_execute - Please check if server is running. No connection to "{service}".')
+-        if fail:
+-            sys.exit(1)
+-    except Exception as e:
+-        logger.error(f'sql_execute - No connection to "{service}". Message: "{str(e)}"')
+-
+-    return n_rows
+-
+-
+-```
+diff --git a/docs/2-Data-Engineering/data-science.md b/docs/2-Data-Engineering/data-science.md
+index ab93572..3091eb3 100644
+--- a/docs/2-Data-Engineering/data-science.md
++++ b/docs/2-Data-Engineering/data-science.md
+@@ -5,13 +5,7 @@ date: 2021-05-05
  
--### Interaction
--
--- shell
--  - `sqlite3` opens a shell in command line, just like mysql shell. DB is in memory
--    - to open a file, use `.open FILENAME` to open an existing database.
--  - `sqlite3 data.sqlite` to work on this file
--  - `ctrl + z` enter to exit
--
--- DDL
--  - `.tables` to show all tables
--  - `.schema orders` to check create statement
--
--- load CSV
--  - `.mode csv` and then `.import data.csv orders` loads csv to db, creates if not exists.
--
--- GUI [SQLite Browser](https://sqlitebrowser.org/)
--
- ## MySQL
+ # Data Science
  
- Installation:
-diff --git a/docs/2-Data-Engineering/etl_pipelines.md b/docs/2-Data-Engineering/etl_pipelines.md
+-- **BERT**
+-  - ML Framework for **NLP**. It helps computer to **understand a language** and context of text by using surrounding text.
+-  - Bidirectional Encoder Representations from Transformers
+-
+-- **Generative design** is a technology in which **3D models** are created and optimized by cloud computing and AI. A user sets up requirements for the model, such as manufacturing processes, loads, and constraints, and then the software offers designs that meet those requirements.
+-
+-## Table of Index Kaggle
++Table of Index:
+ 
+ Maths:
+ 
+diff --git a/docs/2-Data-Engineering/data-solutions.md b/docs/2-Data-Engineering/data-solutions.md
+index 2a4b7f5..0c2f7eb 100644
+--- a/docs/2-Data-Engineering/data-solutions.md
++++ b/docs/2-Data-Engineering/data-solutions.md
+@@ -62,12 +62,6 @@ a[Storage / Warehousing] --> b[Movement / ETL] --> c[Analytics / Reporting]
+ - Big part of design of warehouse.
+ - usually a weekly or nightly batch job that updates data warehouse.
+ 
+-### Data Virtualization
+-
+-- It is used to connect and query different data sources, transform it. It **does not store** or move the data. Query goes down to source systems.
+-- Eg, Tibco Data Virtualization.
+-- Link - [Difference in ETL & Virtualization](https://community.denodo.com/kb/en/view/document/Data%20Virtualization%20and%20ETL)
+-
+ ## Data Analytics, Reporting & Visualization
+ 
+ Flat data, denormalized is best to query for visualization.
+diff --git a/docs/2-Data-Engineering/data-tools-frameworks.md b/docs/2-Data-Engineering/data-tools-frameworks.md
 deleted file mode 100644
-index 4416db3..0000000
---- a/docs/2-Data-Engineering/etl_pipelines.md
+index 40415b3..0000000
+--- a/docs/2-Data-Engineering/data-tools-frameworks.md
 +++ /dev/null
-@@ -1,112 +0,0 @@
--# ETL Pipelines
+@@ -1,39 +0,0 @@
+-# Data Tools
 -
--_all about ETL pipeplines scheduling_
+-_data processing tools, libraries and frameworks_
 -
--
--## Parallel Data Processing
--
--- Python multiprocessing Pool - low level native python code, expilictly implement prallel processing
--- Python dask - library having multiprocessing out of box
--- Hive - framework that lets extract data using SQL. Behind it converts to MapReduce job.
--- Spark - InMemory to avoid diskwrites slowness  of mapreduce
+-- **Apache Spark** - large-scale data processing as pandas.
+-  - InMemory to avoid diskwrites slowness  of mapreduce
 -  - Data Structure is RDDs
 -  - Interactive analytics are faster, just like we do in Jupyter where next step is based on prev.
 -  - Transformations - `filter()` map groupByKey union - give RDD
 -  - Actions - count first collect reduce - give single result
 -  - PySpark - Python API for spark, RDD as DataFrame so makes similar to Pandas.
--- Map Reduce - technique/algorithm
--- Hadoop - framework
--- [ ] move to bigData Notes
 -
--## ETL Pipeline
+-- **Apache Beam** - unified programming model to define and execute data processing pipelines, including ETL, batch and _stream-processing_.
 -
--- Simple - Using Pandas to read data, transform it and load is a pipeline. Doing this in distributed environment is big data pipeline.
--- Distributed - Using PySpark read data from DB is extraction. Do transformation like groupBy or mean, join.
+-- **Apache Kafka** - distributed event store and _stream-processing_ platform
 -
--- Code organization - say in `etl_somejob.py`
--  - define extract functions. Eg: `def extract_table1_to_df():` that retrus df.
--  - define transform funcitons. Eg: `def transform_avg_score(df1,df2):` returns df.
--  - define load function. Eg: `def load_df_to_db(df):`
--  - finally to execute them
+-- **Apache Flink** - _stream-processing_ and batch-processing framework
 -
--    ```python
--    if __name__ == "__main__":
--      df_table1 = extract_table1_to_df()
--      df_score = transform_avg_score(df_table1)
--      load_df_to_db(df_score)
--    ```
+-- **Apache Storm** - distributed _stream-processing_
 -
--- Now you can use this file to run or schedule.
+-- **Apache Spark Streaming** - distributed _stream-processing_. Extension of core framework.
 -
--## Automation Scheduling Orchestrate
+-- **Apache Airflow** - workflow management platform for data engineering pipelines
 -
--- DAG - Directed Acyclic Graph is used to represent collection of tasks in organized way to show dependecies and relationships. It has _no cyclic link_.
+-- Links
+-  - [Medium - Stream Processing Framworks and differences](https://medium.com/@chandanbaranwal/spark-streaming-vs-flink-vs-storm-vs-kafka-streams-vs-samza-choose-your-stream-processing-91ea3f04675b)
+-  - [IJB Job - DevOps Engg](https://my.barcapint.com/IJB_S/#/jobDetail/90364211)
 -
--  ```mermaid
--  graph LR;
--  A-->B;
--  B-->D;
--  B-->C;
--  C-->E;
--  ```
 -
--- Cron - Linux in build to schedule a job. Can't manage depndencies.
--- Apache Airflow
--  - Create DAGs in Python
--  - Define tasks of DAGs using Operators. Operators can operate various things like bash code, python code, StartCluster or SparkJob.
--  - Set up dependency of tasks - using `set_downstream()`. This will create relationships in jobs.
 -
--- configuration 
--  - make `mkdir airflow` dir
--  - export its location to variable `AIRFLOW_HOME`
--- installation - `pip install airflow`
--- initiation
--  - `airflow db init` to generate airflow db, config and webserver files.
--  - make an admin user, code from docs.
--- implementation
--  - define ETL tasks functions in `./airflow/dags/etl_tasks.py`
 -
--  - define `./airflow/dags/dags.py`, here
--    - it will have airflow module implementation to schedule and execute tasks via DAG.
--    - import ETL tasks file as module.
--    - define execution function to run ETL tasks
--    - define DAG using DAG class.
--    - add config, like when to run, retries to try, gap in retries, email to send on faliure, and many other configrations as dictionary object and pas that to `default_args` param of `DAG` class.
--    - define ETL Task using `operator`. this executes the execution function.
 -
--- schedule - `airflow scheduler` to add dag to server
--- monitor
--  - `airflow webserver` this starts flask webserver where you can look the jobs.
--  - view dags, srart/stop/pause jobs
 -
--### Code Example Airflow DAG
 -
--Following code shows snippet of basic DAG implementation
 -
--```python title='dags.py'
--# ``
--import airflow
--from airflow.models import DAG # DAG class
--from airflow.operators.python_operator import PythonOperator # as we use Py
--from etl_tasks import *
 -
--def etl():
--df_table1 = extract_table1_to_df()
--df_score = transform_avg_score(df_table1)
--load_df_to_db(df_score)
 -
--# define DAG with configs
--dag = DAG(dag_id="etl_ipeline", 
--        default_args=default_args, 
--        schedule_interval="0 0 * * *")
 -
--# define ETL Task
--etl_tasks = PythonOperator(task_id="etl_task", python_callable=etl, dag=dag)
 -
--etl()
+diff --git a/docs/2-Data-Engineering/etl_pipelines.md b/docs/2-Data-Engineering/etl_pipelines.md
+index 6322842..4416db3 100644
+--- a/docs/2-Data-Engineering/etl_pipelines.md
++++ b/docs/2-Data-Engineering/etl_pipelines.md
+@@ -8,7 +8,12 @@ _all about ETL pipeplines scheduling_
+ - Python multiprocessing Pool - low level native python code, expilictly implement prallel processing
+ - Python dask - library having multiprocessing out of box
+ - Hive - framework that lets extract data using SQL. Behind it converts to MapReduce job.
+-- Spark - Apache Spark is InMemory to avoid diskwrites slowness  of mapreduce
++- Spark - InMemory to avoid diskwrites slowness  of mapreduce
++  - Data Structure is RDDs
++  - Interactive analytics are faster, just like we do in Jupyter where next step is based on prev.
++  - Transformations - `filter()` map groupByKey union - give RDD
++  - Actions - count first collect reduce - give single result
++  - PySpark - Python API for spark, RDD as DataFrame so makes similar to Pandas.
+ - Map Reduce - technique/algorithm
+ - Hadoop - framework
+ - [ ] move to bigData Notes
+@@ -46,35 +51,33 @@ _all about ETL pipeplines scheduling_
+   ```
+ 
+ - Cron - Linux in build to schedule a job. Can't manage depndencies.
 -
--```
 -
--## Links
+-- **Apache Airflow**
++- Apache Airflow
+   - Create DAGs in Python
+   - Define tasks of DAGs using Operators. Operators can operate various things like bash code, python code, StartCluster or SparkJob.
+   - Set up dependency of tasks - using `set_downstream()`. This will create relationships in jobs.
+ 
+-  - configuration
+-    - make `mkdir airflow` dir
+-    - export its location to variable `AIRFLOW_HOME`
+-  - installation - `pip install airflow`
+-  - initiation
+-    - `airflow db init` to generate airflow db, config and webserver files.
+-    - make an admin user, code from docs.
+-  - implementation
+-    - define ETL tasks functions in `./airflow/dags/etl_tasks.py`
 -
--- [LinkedIn Learning - Data Engineering Foundations](https://www.linkedin.com/learning/data-engineering-foundations/)
+-    - define `./airflow/dags/dags.py`, here
+-      - it will have airflow module implementation to schedule and execute tasks via DAG.
+-      - import ETL tasks file as module.
+-      - define execution function to run ETL tasks
+-      - define DAG using DAG class.
+-      - add config, like when to run, retries to try, gap in retries, email to send on faliure, and many other configrations as dictionary object and pas that to `default_args` param of `DAG` class.
+-      - define ETL Task using `operator`. this executes the execution function.
+-
+-  - schedule - `airflow scheduler` to add dag to server
+-  - monitor
+-    - `airflow webserver` this starts flask webserver where you can look the jobs.
+-    - view dags, srart/stop/pause jobs
++- configuration 
++  - make `mkdir airflow` dir
++  - export its location to variable `AIRFLOW_HOME`
++- installation - `pip install airflow`
++- initiation
++  - `airflow db init` to generate airflow db, config and webserver files.
++  - make an admin user, code from docs.
++- implementation
++  - define ETL tasks functions in `./airflow/dags/etl_tasks.py`
++
++  - define `./airflow/dags/dags.py`, here
++    - it will have airflow module implementation to schedule and execute tasks via DAG.
++    - import ETL tasks file as module.
++    - define execution function to run ETL tasks
++    - define DAG using DAG class.
++    - add config, like when to run, retries to try, gap in retries, email to send on faliure, and many other configrations as dictionary object and pas that to `default_args` param of `DAG` class.
++    - define ETL Task using `operator`. this executes the execution function.
++
++- schedule - `airflow scheduler` to add dag to server
++- monitor
++  - `airflow webserver` this starts flask webserver where you can look the jobs.
++  - view dags, srart/stop/pause jobs
+ 
+ ### Code Example Airflow DAG
+ 
+diff --git a/docs/2-Data-Engineering/tableau.md b/docs/2-Data-Engineering/tableau.md
+index 14a891b..4e9e9b8 100644
+--- a/docs/2-Data-Engineering/tableau.md
++++ b/docs/2-Data-Engineering/tableau.md
+@@ -156,27 +156,7 @@ async function execProcTabeauAsync(switch,psv) {
+ }
+ ```
+ 
+-## Writeback
+-
+-Parameters Required
+-
+-- `w_mega_string`
+-- `w_increment`
+-- `w_action_switch`
+-
+-- For each field to write
+-  - `reset_field1`
+-
+-Create New
+-
+-- Add sheet `add_button`, use `blank_db` having text "+ Add new record"
+-- Add sheet to dashboard
+-- Add actions
+-  - go to `create_record` sheet
+-  - reset `field`
+-  - set param `action_switch` to 0
+ 
+ ## Links
+ 
+ - Data Structuring for Analysis - <https://help.tableau.com/current/pro/desktop/en-us/data_structure_for_analysis.htm>
+-- [Linkedin - Writeback to MS SQL using Proc](https://www.linkedin.com/pulse/how-tableau-writeback-microsoft-sql-server-withtout-using-daugaard/)
 diff --git a/docs/3-Management-&-Strategy/ajile-sprint-scrum.md b/docs/3-Management-&-Strategy/ajile-sprint-scrum.md
-deleted file mode 100644
-index ee498db..0000000
+index 6d7b2ca..93184a9 100644
 --- a/docs/3-Management-&-Strategy/ajile-sprint-scrum.md
-+++ /dev/null
-@@ -1,13 +0,0 @@
--# Ajile, Scrum and Sprints
--
--_all about ajile, scrum, sprints_
--
--- Learning from Retrospective
--  - don't under estimate tasks
--  - keep buffer capacity
--
--
--## Links
--
--- [Your step-by-step guide to running a Sprint Planning meeting effectively](https://www.getclockwise.com/blog/effective-sprint-planning-meeting)
--
-diff --git a/docs/8-Blog-&-Articles/fake-data-using-faker.md b/docs/8-Blog-&-Articles/fake-data-using-faker.md
-deleted file mode 100644
-index 6ca1bcb..0000000
---- a/docs/8-Blog-&-Articles/fake-data-using-faker.md
-+++ /dev/null
-@@ -1,44 +0,0 @@
--# How to Create fake data using Faker
--
--Auuming you are using flask in `app.py` and it has `db` and `Employee` as ORM
--
--## Create Fake function
--
--```python
--import random
--import sys
--from faker import Faker
--from app import db, Employee
--from datetime import datetime
--
--def create_fake_employees(n):
--    """Generate fake employees."""
--    faker = Faker()
--    for i in range(n):
--        employee = Employee(
--            created_date = datetime.utcnow(),
--            department_id = faker.bothify(text='Dept_????-########'),
--            manager = faker.name(),
--            team = faker.name(),
--            hr = faker.name(),
--            office_id = 'OFC_'+str(random.randint(20, 80)),
--            type = faker.random_choices(elements=('Perm', 'Contract', 'Temp'), length=1)[0],
--            salary = random.randint(3000000, 20000000))
--        db.session.add(employee)
--    db.session.commit()
--    print(f'Added {n} fake employees to the database.')
--
--
--if __name__ == '__main__':
--    if len(sys.argv) <= 1:
--        print('Pass the number of employees you want to create as an argument.')
--        sys.exit(1)
--    create_fake_employees(int(sys.argv[1]))
--```
--
--## Execution
--
--- `flask --app app.py shell`
--- `from create_fake_employees import create_fake_employees`
--- `create_fake_employees(10)`
--
-diff --git a/docs/9-Drafts/notepad.md b/docs/9-Drafts/notepad.md
-index 49c5b90..2009660 100644
---- a/docs/9-Drafts/notepad.md
-+++ b/docs/9-Drafts/notepad.md
-@@ -263,7 +263,32 @@ Follow:
++++ b/docs/3-Management-&-Strategy/ajile-sprint-scrum.md
+@@ -2,50 +2,12 @@
  
- # Python web app development
+ _all about agile, scrum, sprints_
  
--# Notes - 20221224
-+# Notes - 20230126
-+
-+## JWT DB App
-+
-+- JWT Authenticaton
-+  - `jwt` python library is used to make a `token` that can be send in every request instead of sending username and password.
-+  - Token is encoded string which has a valid time and it expires after that time.
-+  - `ExpiredSignatureError` is raised if you `decode` and expired token string.
-+  - [ ] how to add remember me.
-+
-+- how to register?
-+  - comment `token_authentication` for `create_user`
-+  - `curl -i -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"admin"}' http://127.0.0.1:5000/admin`
-+
-+- CURL Requests
-+  - Send Username and password to get token
-+    - `curl -u username:password -i -X GET http://127.0.0.1:5000/login` returns token and duration
-+  - Send token in header to access protected resources
-+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/users`
-+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/users/9d8c738b-3a39-482d-8a17-0c1b755f9a23`
-+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/api/v1.0/tasks`
-+    - `curl -H "x-access-token: token" -i -X GET http://127.0.0.1:5000/api/v1.0/tasks/19`
-+  - [ ] will this be more secure and beneficial?
-+    - `curl -u username_or_token:password_or_unused -i -X GET http://127.0.0.1:5000/users`
-+
-+
++- Learning from Retrospective
++  - don't under estimate tasks
++  - keep buffer capacity
  
- ## Flask
+-- Retrospective
+-  - What did we do well?
+-  - What should we have done better?
+-  - actions to take based on "What should we have done better"
+-  - actions taken from last retro actions? else carry them
+-  - Learnings
+-    - don't under estimate tasks
+-    - keep buffer capacity for meetings/PR-requests
+-
+-- Backlog Grooming / Refinement
+-  - Break stories into smaller **tasks**
+-  - Tasks have "Definition of Ready" DoR - covers requirements coming into the sprint
+-  - Tasks are **prioritized**, estimated
+-  - Tasks may get assigned
+-  - 1-2 hour productive meeting
+-  - [link](https://www.productplan.com/glossary/backlog-grooming/)
+-
+-- Sprint Planning
+-  - Ahead of our sprint planning:
+-    - Please update your capacity for the next sprint. link
+-    - Please create, estimate and assign tasks with "definition of done" DoD
+-    - Update tasks in current sprint.
+-  - Meeting for 2-4 hours for 2 week sprint
+-  - Know Memebers, their role, capacity and leaves. Ideally tabular.
+-  - In Last Sprint
+-    - Ensure all tasks are updated - in review, done or whatever
+-    - End the sprint and move all unfinished tasks to backlog or new sprint
+-  - Start & End Date - know and update it
+-  - Sprint Goal(s) - have predefined and refine at end
+-  - Tasks to have
+-    - Acceptace Criteria
+-    - Definition of Done - covers product coming out of the sprint
+-    - Estimated and assigned
+-    - Reestimate tasks carried forward
+-
+-Backlog Grooming vs Sprint Planning
+-
+-- Scope - BG looks at entire project for months, SP looks at near future for weeks
+-- Grain - BG breaks into tasks, SP breaks in to sub-tasks
+-- Detail - BG adds DoR, SP adds DoD
  
-@@ -277,6 +302,15 @@ Web Browser --request--> web server --> Flask app instance --route--> function t
+ ## Links
  
- **Request** from client has lot of information in it, like header, user-agent, data etc. This information is available in `request object` and is made available to a `view-route function` to handle it. This object is not passed as an argument to function, rather it is made available using `contexts`. **Contexts** let certain objects to globally accessible, but are not global variable. They are globally accessible to only one thread. There can be multiple threads serving multiple requests from multiple client.
+ - [Your step-by-step guide to running a Sprint Planning meeting effectively](https://www.getclockwise.com/blog/effective-sprint-planning-meeting)
+-- [Gantt Charts in PowerPoint - simple easy](https://www.officetimeline.com/gantt-chart/how-to-make/powerpoint)
  
-+- Context is simply data that is specific to something. Eg
-+  - App-context is specific to app, like its mail server, its database location, or other configurations
-+  - Request-context is specific to request, like its browser, its client, its form data, its headers
-+- this data is stored in object, in attribute such as `config`
-+- this data is used by extensions in flask, hence they do not run if context is not available.
-+- context is automatically made available once app is initialized.
-+- context can be made explicitly avilable by calling `with app.app_context():`
-+- when there is request, web server activates a thread that initializes app and this app context is pushed with data that is available globally, similarly request context is alos pushed.
-+
- There are two contexts in Flask
+diff --git a/docs/3-Management-&-Strategy/project-management.md b/docs/3-Management-&-Strategy/project-management.md
+index c14ffb6..35ded46 100644
+--- a/docs/3-Management-&-Strategy/project-management.md
++++ b/docs/3-Management-&-Strategy/project-management.md
+@@ -11,9 +11,9 @@ Project Management is balancing between **"the project scope"** and **"the time,
  
- - `current_app` variable in Application context, has info of active application.
-@@ -286,6 +320,8 @@ There are two contexts in Flask
+ ### 1 Initiation and Ideation
  
- Flask, in backend, makes these availabe to thread before dispaching a request and removes after request is handled. Explicitly, `current_app` can be made availabe by invoking `app.app_context()`
+-- Business **Requirement Gathering**
+-- What are you solving and how will you solve it? The business **use case**.
+-- Define use case, scope and expectations. This is very high level and covers the **business problem**.
++- Business Requirement Gathering
++- What are you solving and how will you solve it? The business use case.
++- Define use case, scope and expectations. This is very high level and covers the business problem.
+ - Project **should have a definite end** - a product or a service. It should have **definition of done**.
+ - Above can result in `Business Requirements Document`
  
-+![img](http://speakerdeck.com/patkennedy79/demystifying-flasks-application-and-request-contexts-with-pytest?slide=8)
-+
- [ ] How does flask differente requests and clients?
+@@ -99,9 +99,8 @@ Project Management is balancing between **"the project scope"** and **"the time,
+ - Prod Env is secured and hence may require many **access permissions**. Please see this in advance.
+ - **Change Management** may be required here.
+ - Once deployed, do a **Prod Testing**.
+-- Finally **release** the product
  
- URL-maps can be seen using `app.url_map`
-@@ -497,3 +533,292 @@ Python has packages for most database engines like MySQL, Postgres, SQLite, Mong
-     - `flask --app hello.py db migrate -m "initial migration"` to generate script
-     - review for accurate changes. add to source control
-     - `flask--app hello.py db upgrade` to do migration in database
-+
-+### Emails
-+
-+Emails can be sent using `smtplib` package from Python standard library. Email is sent by connecting to SMTP Server which takes request to send email to recipient. Localhost on port 25 is local server that can send email. External SMTP server like `mail.googlemail.com` on `587` port can be used to send emails through Google Gmail account.
-+
-+- **Flask-Mail** is a extension that wraps `smtplib`
-+  - Installation `pip install flask-mail`
-+  - import `from flask_mail import Mail, Message`
-+  - instantiate and initialize `mail = Mail(app)`
-+  - build obj `msg_obj = Message('sub','sender','to')`
-+    - add body and html to obj, may use template for it `msg.body = render_template(template + '.txt', **kwargs)`
-+  - mail.send(msg_obj)
-+  - Sending Asynchronout Email
-+    - Message() object can be build in mail python file but Mail() object, which sends the email using msg_obj, should run in separate thread to avoid lags.
-+    - use python Thread() class from threading package to make new thread that runs the send_async_email(app,msg) functions. this functions has
-+      - app object of FLask() for context
-+      - msg object of Message() for content
-+      - uses mail object of Mail() to send.
-+    - `from threading import Thread`
-+    - The function which build Message(), add line
-+      - `thr = Thread(target=send_async_email, args=[app, msg])` - build thread obj
-+      - `thr.start()` execute thread separately
-+      - `return thr` [ ] why this is added
-+
-+## Blueprint - Large App Structure
-+
-+- **Application Factory** is way of initializing app
-+  - to serve a request, when single file app in invoked, app gets initialized with configs to serve the request. You do not have flexibility to make changes to config dynamically
-+  - app initialization can be delayed (or controlled) by making a function to do it, called `factory function`. This can be explicitly controlled.
-+
-+- **Single py file** overall flow
-+  - import flask modules and extentions
-+  - instantiate flask app `app = Flask(__name__)`
-+  - configure app with all configs, eg, `app.config['MAIL_PORT'] = 587`
-+  - initialize extentions, eg, `mail = Mail(app)`. Not all extensions are initialized, eg, FlaskForm
-+  - DB ORM Classes
-+  - Email functions - may use templates
-+  - Form Classes
-+  - error handlers functions - may use templates
-+  - routes, they may use use
-+    - above extensions, eg - checks Form, sends email, writes to db, or returns an error
-+    - native - session, flash, g
-+    - templates.
-+
-+- **templates** and **static** Resources flow
-+  - base template is HTML, it has blocks. Block-content can be replaced or appended
-+  - base-template is used to build different pages which put dynamic content in blocks.
-+  - static files can be used from static folder.
-+  - example flow
-+    - `base.html` has blocks, title, nav, page_content
-+    - index or profile have `{% extends "base.html" %}`, it tells Jinja to use base.
-+    - block-content can be replaced or appended using `{{ super() }}`
-+    - files from `static` folder using `{{ url_for('static', 'favicon.ico') }}`
-+    - external packages can be imported as py_var to build content as py_var and use in content. eg - wtf tempate can be imported from bootstrap to build content from form_object using `{{ wtf.quick_form(form) }}`.
-+
-+- restructuring - multiple files basic structure
-+  
-+  ```python
-+  |-app_name      # 0 top level dir - any name
-+    |-app/          # 2 package having flask application
-+      |-templates/
-+      |-static/
-+      |-main/         # 5 BP sub pkg
-+        |-__init__.py   # 5.1 pkg const defines BP
-+        |-errors.py     # 5.2 err handlers
-+        |-forms.py      # 5.3 form classes
-+        |-views.py      # 5.4 routes functions
-+      |-__init__.py   # 2.1 app pkg constructor, factory
-+      |-models.py     # 2.2 db models
-+      |-email.py      # 2.3 email 
-+    |-config.py     # 3 configuration variables as OOPs
-+    |-flasky.py     # 4 factory is invoked
-+  ```
-+
-+- 3 - `config.py` config as OOPs
-+  - the config variables like secret-key and mail-server, are now attributes of `Config` class.
-+  - `Config` class has `@staticmethod` as `init_app(app)` which can be used to initialize app and more.
-+  - This Config base class has common vars but can be extended to build different environment classes like dev, test, prod. that can have env specific vars like dev db-location.
-+  - add a dictionary `conf_env` to pick the correct env class.
-+- 2 - `app/` App Package
-+  - dir having code, template and static files.
-+  - 2.1 - `app/__init__.py` App Pkg Constructor
-+    - this is where we build the `factory function` to initalize app explicitly and controlled.
-+    - import Flask modules (only Flask)
-+    - import Flask-Extensions (only those that need app init)
-+    - instantiate extensions without `app`
-+    - factory function `def create_app(conf_env):` function to have
-+      - arg `conf_env` is dictionary key name (str) to pick required Env_Config_Class from `config.py` so that we have correct config vars.
-+      - instantiate app
-+      - add configs from object `app.config.from_object()`
-+      - add configs to extensions using `ext_obj.init_app(app)`
-+      - return app
-+    - while this makes config available in controlled way, however, it missing `@app.routes()` and other decorators associated to `@app` like error handles. This is handled using `Blueprint`.
-+    - import BP file and register it with app using `register_blueprint()` method.
-+
-+    ```python
-+    from flask import Flask
-+    from flask_bootstrap import Bootstrap
-+    from flask_sqlalchemy import SQLAlchemy
-+    from config import config
-+
-+    bootstrap = Bootstrap()
-+    db = SQLAlchemy()
-+
-+    def create_app(config_name):
-+        app = Flask(__name__)
-+        app.config.from_object(config[config_name])
-+        config[config_name].init_app(app)
-+
-+        bootstrap.init_app(app)
-+        db.init_app(app)
-+
-+        # Routes or blueprints
-+        from .main import main as main_blueprint
-+        app.register_blueprint(main_blueprint)
-+
-+        return app
-+    ```
-+
-+- 5 Blueprint - sub pkg
-+  - Blueprint is like app having routes but in dormant state until registered with an application which gives it a context.
-+  - Blueprint can be a single file, or structured as a sub-package having multiple modules and the package constructor creates blueprint.
-+  - 5.1 `app/main/__init__.py` main bp creation
-+    - Blueprint is native flask module
-+    - create object of `Blueprint()` class and pass it a name and location.
-+    - import associated modules
-+
-+    ```python
-+    from flask import Blueprint
-+    main = Blueprint('main', __name__)
-+
-+    from . import views, errors 
-+    # last line to avoid circular dependency
-+    ```
-+
-+  - 5.4 `app/main/views.py` view routes
-+    - route function name now has namespace with BP name as prefix, so `url_for('main.index')` should be used so that 'index' of any other BP is not picked.
-+  - 5.2 `app/main/errors.py` error handlers  
-+    - they respond to only BP route error, for app wide use `app_errorhandler` decorator instead of `errorhandler`.
-+  - 5.3 `app/main/forms.py` has form objects.
-+
-+- 4 `flasky.py` module where app instance is deined
-+  - `create_app()` function is called.
-+
-+
-+
-+## Social Blogging App
-+
-+- User Authenticaton
-+  - Password hashing
-+    - extensions - `from werkzeug.security import generate_password_hash, check_password_hash` this is tried and tested lib that is safe to use.
-+    - model - implement `password` as write-only property of `User` class to set `password_hash`
-+  - Blueprint - structure it as sub-module `auth` Blueprint. It has view having login-route
-+  - Flask-login is ext having functions and decorators that make authentication easy.
-+    - model - few required class members can either be declared in `User` class or can be importe from `UserMixin` class of Flask-login.
-+    - initialize and instantiate extension with required conf
-+
-+      ```python
-+      from flask_login import LoginManager
-+      
-+      login_manager = LoginManager()
-+      login_manager.login_view = 'auth.login'
-+      
-+      def create_app(config_name):
-+        # ...
-+        login_manager.init_app(app)
-+        # ...
-+      ```
-+
-+    - model implement user_loader in `User` class
-+
-+      ```python
-+      from . import login_manager
-+      
-+      @login_manager.user_loader
-+      def load_user(user_id):
-+        return User.query.get(int(user_id))
-+      ```
-+
-+    - `login_required` decorator lets protect route.
-+    - Flask-Login’s `login_user()` logs user in once verified. It setts user session.
-+    - `logout_user()` logs user out.
-+  - Register User
-+    - build a form class in new `auth/forms.py`, add unique email and username validator using `validate_` function
-+    - build a template that uses form `templates/auth/register.html`
-+    - build a register route in `auth/views.py`
-+      - get - render form
-+      - post - validate and add user to db
-+  - account confirmations
-+    - use expiry token to validate email url.
-+    - model - add token generation and validation function.
-+    - view - send email on registration
-+    - view - `@auth.route('/confirm/<token>')`
-+- Roles and Permissions
-+  - database implementation
-+    - add `role` table
-+    - add `permission` column to role table as integer
-+      - multiple permission can be binary numbers, 1,2,4,8,16
-+      - add them and subtract them to get unique number as total permission of user. 2+4=6
-+      - do bit wise and operation to match permission. 6&2=2, 6&4=4
-+  - add decorator function to make it easy to protect route to access only if permission is checked.
-+- User Profiles
-+
-+## Flask Testing
-+
-+- Testing can be done using flask shell and executing functions `flask --app flasky.py shell`
-+- What you test in shell should be automated by making test cases.
-+- Unit Tests - test small units
-+  - use py native `import unittest`
-+  - in `tests/test_basics.py`
-+    - import modules you need for test, `create_app`, `db`
-+    - import modules you need to test, `User`, `current_app`
-+    - define class `class BasicsTestCase(unittest.TestCase):`
-+      - build functions
-+        - `setUp()` runs before each test, builds env for testing
-+        - `tearDown()` runs after each test, removes things from env
-+        - `test_somecase()` these functions run as test.
-+          - `assertTrue` Ok if True
-+          - `assertFalse` Ok if False
-+          - `with self.assertRaises(AttributeError):` statement that raise error.
-+  - tests can be written in separate py files (modules) and the folder `tests` can have `__init__.py` as blank to make it a pkg
-+  - in `flasky.py` you can add code to run tests automatically by adding a cli command.
-+  - do `flask --app flasky.py test` to run all test cases
-+
-+  ```python
-+  @app.cli.command()
-+  def test():
-+    """Run the unit tests.""" # help msg on cli
-+    import unittest
-+    tests = unittest.TestLoader().discover('tests')
-+    unittest.TextTestRunner(verbosity=2).run(tests)
-+  ```
-+
-+## GIT
-+
-+If you want to create a new branch to retain commits you create, you may
-+do so (now or later) by using -c with the switch command. Example:
-+
-+- `git switch -c <new-branch-name>`
-+
-+## Python
-+
-+`Decorators` are a standard feature of the Python language. A com‐
-+mon use of decorators is to register functions as handler functions
-+to be invoked when certain events occur.
-+
-+`Package` is usually a folder with `__init__.py` in it. Other python files are `modules`.
-+
-+- Public, Private, Protected in python
-+  - public - every member of class in python is public by defaut, can be accessed outside class using object.
-+  - protected attribute needs to be prefixed with underscore, `_name`. It can be accessed, just a convension.
-+  - private members can be `__name` prefixed with double underscore, this makes them non accessible outside "directly". though can be accessed using `_Classname__attrname`
-+  - Python provides conceptual implementation but not exactly like java or C++. As the underscores tell what is protected and private but does not make them non accessible.
-+  - To implement a "write-only" attribute use "propertly"
-+    - getter - use `@property` decorator with function, `def pvt_prop_name(self):` raise err in this func so no one can get this property.
-+    - setter - use `@pvt_prop_name.setter` with function `def pvt_prop_name(self, value):` to implement setting some values. You can set value to another public property. Thus this makes `pvt_prop_name` as write-only.
-+
-+  ```python
-+  class Book():
-+      scrambled = None # public, can be get or set
-+      __safe = None    # pvt, can't be directly get or set
-+
-+      @property
-+      def secret(self):
-+          raise AttributeError()
-+      
-+      @secret.setter
-+      def secret(self,value):
-+          self.scrambled = value[::-1]
-+
-+      # `secret` is write_only member
-+  ```
-+
-+
-+[ ] what is context in python
-+
-+## Computer Science
-+
-+A thread is the smallest sequence of instructions that can be man‐
-+aged independently. It is common for a process to have multiple
-+active threads, sometimes sharing resources such as memory or file
-+handles. Multithreaded web servers start a pool of threads and
-+select a thread from the pool to handle each incoming request.
-+
-+### OOPS
-+
-+- Object is a Class and has
-+  - `attributes` - variables
-+  - `methods()` - functions
-diff --git a/readme.md b/readme.md
-index 5d1d313..882fced 100644
---- a/readme.md
-+++ b/readme.md
-@@ -27,11 +27,6 @@ Visit at: <https://iYadavVaibhav.github.io/wiki>
- - [x] update time updated and created plugin
-   - added `source-file.html` and modified the code use `date` in meta as created and show revision from file git history.
- - [ ] suggest to use branch option in view and edit
--- [ ] Explore for blogging <https://gist.github.com/>
--- [ ] Other wikis for inspiration
--  - <https://developers.google.com/style>
--- [ ] Follow for self contribution <https://github.com/github/docs/blob/main/CONTRIBUTING.md>
--- [ ] separate title, h1 and sidebar title?
+-### 11 Handover - User Training Socialisation
++### 11 Handover - User Training
  
- ## Hierarchy
+ - Prepare a `Training Guide` - for end users. This can be video as well.
+ - Make a `Handover Document` - if this need to be handed over to maintenance team to work on manual tasks.
+@@ -142,14 +141,6 @@ Step 3: Test the document
  
+ Step 4: Keep it upated.
+ 
+-### Spinx
+-
+-- Sphinx is the de-facto documentation tool for Python.
+-- version controlled, sourced from repo
+-- read everywhere, confluence, wiki, PDF
+-- Also lets document functions and classes
+-
+-
+ ## Talk - Product Strategy, Systems, and Frameworks with Sachin Rekhi
+ 
+ - Sachin built `LinkedIn Sales Navigator`, $200m in 1.5yr, 0-500 employee

@@ -62,6 +62,12 @@ a[Storage / Warehousing] --> b[Movement / ETL] --> c[Analytics / Reporting]
 - Big part of design of warehouse.
 - usually a weekly or nightly batch job that updates data warehouse.
 
+### Data Virtualization
+
+- It is used to connect and query different data sources, transform it. It **does not store** or move the data. Query goes down to source systems.
+- Eg, Tibco Data Virtualization.
+- Link - [Difference in ETL & Virtualization](https://community.denodo.com/kb/en/view/document/Data%20Virtualization%20and%20ETL)
+
 ## Data Analytics, Reporting & Visualization
 
 Flat data, denormalized is best to query for visualization.

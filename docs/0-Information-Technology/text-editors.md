@@ -102,3 +102,9 @@ cSpell disable code check in Markdown code blocks:
         }
     ],
 ```
+
+## PyCharm
+
+- Keyboard Shortcuts
+  - Back and forth - `ctrl-alt-left` ro `ctrl-alt-right`
+

@@ -6,7 +6,7 @@ title: CSE Basics
 
 *all about standards, conventions, ethics, practices*
 
-## Best Practices
+## Coding Best Practices - Ways of Working
 
 - Follow coding standards
 - Use git
@@ -17,10 +17,20 @@ title: CSE Basics
 - Work with people smarter than you
 - do pair programming
 
+- Link
+  - [td.io - Software Development 101](https://www.patricksoftwareblog.com/software-development-checklist-for-python-applications/)
+  - [Open Sourcing a Python Project the Right Way](https://jeffknupp.com/blog/2013/08/16/open-sourcing-a-python-project-the-right-way/)
+
+## Open Source Contribution
+
+- Why? - It is a great way to grow and evovle, learn, build your skill and be part of community, grow your network, showcase your presence.
+
+- Links - [OpenSourceGuide](https://opensource.guide/)
+
 ## Working on someone else's code
 
 - Start a debugger
-- Step into and over, understand the var values, add breakpoints.
+- Step into and over, understand the variable values, add breakpoints.
 
 ## Links
 

@@ -8,12 +8,7 @@ _all about ETL pipeplines scheduling_
 - Python multiprocessing Pool - low level native python code, expilictly implement prallel processing
 - Python dask - library having multiprocessing out of box
 - Hive - framework that lets extract data using SQL. Behind it converts to MapReduce job.
-- Spark - InMemory to avoid diskwrites slowness  of mapreduce
-  - Data Structure is RDDs
-  - Interactive analytics are faster, just like we do in Jupyter where next step is based on prev.
-  - Transformations - `filter()` map groupByKey union - give RDD
-  - Actions - count first collect reduce - give single result
-  - PySpark - Python API for spark, RDD as DataFrame so makes similar to Pandas.
+- Spark - Apache Spark is InMemory to avoid diskwrites slowness  of mapreduce
 - Map Reduce - technique/algorithm
 - Hadoop - framework
 - [ ] move to bigData Notes
@@ -51,33 +46,35 @@ _all about ETL pipeplines scheduling_
   ```
 
 - Cron - Linux in build to schedule a job. Can't manage depndencies.
-- Apache Airflow
+
+
+- **Apache Airflow**
   - Create DAGs in Python
   - Define tasks of DAGs using Operators. Operators can operate various things like bash code, python code, StartCluster or SparkJob.
   - Set up dependency of tasks - using `set_downstream()`. This will create relationships in jobs.
 
-- configuration 
-  - make `mkdir airflow` dir
-  - export its location to variable `AIRFLOW_HOME`
-- installation - `pip install airflow`
-- initiation
-  - `airflow db init` to generate airflow db, config and webserver files.
-  - make an admin user, code from docs.
-- implementation
-  - define ETL tasks functions in `./airflow/dags/etl_tasks.py`
+  - configuration
+    - make `mkdir airflow` dir
+    - export its location to variable `AIRFLOW_HOME`
+  - installation - `pip install airflow`
+  - initiation
+    - `airflow db init` to generate airflow db, config and webserver files.
+    - make an admin user, code from docs.
+  - implementation
+    - define ETL tasks functions in `./airflow/dags/etl_tasks.py`
 
-  - define `./airflow/dags/dags.py`, here
-    - it will have airflow module implementation to schedule and execute tasks via DAG.
-    - import ETL tasks file as module.
-    - define execution function to run ETL tasks
-    - define DAG using DAG class.
-    - add config, like when to run, retries to try, gap in retries, email to send on faliure, and many other configrations as dictionary object and pas that to `default_args` param of `DAG` class.
-    - define ETL Task using `operator`. this executes the execution function.
+    - define `./airflow/dags/dags.py`, here
+      - it will have airflow module implementation to schedule and execute tasks via DAG.
+      - import ETL tasks file as module.
+      - define execution function to run ETL tasks
+      - define DAG using DAG class.
+      - add config, like when to run, retries to try, gap in retries, email to send on faliure, and many other configrations as dictionary object and pas that to `default_args` param of `DAG` class.
+      - define ETL Task using `operator`. this executes the execution function.
 
-- schedule - `airflow scheduler` to add dag to server
-- monitor
-  - `airflow webserver` this starts flask webserver where you can look the jobs.
-  - view dags, srart/stop/pause jobs
+  - schedule - `airflow scheduler` to add dag to server
+  - monitor
+    - `airflow webserver` this starts flask webserver where you can look the jobs.
+    - view dags, srart/stop/pause jobs
 
 ### Code Example Airflow DAG
 

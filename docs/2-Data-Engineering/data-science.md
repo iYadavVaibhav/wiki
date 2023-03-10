@@ -5,7 +5,13 @@ date: 2021-05-05
 
 # Data Science
 
-Table of Index:
+- **BERT**
+  - ML Framework for **NLP**. It helps computer to **understand a language** and context of text by using surrounding text.
+  - Bidirectional Encoder Representations from Transformers
+
+- **Generative design** is a technology in which **3D models** are created and optimized by cloud computing and AI. A user sets up requirements for the model, such as manufacturing processes, loads, and constraints, and then the software offers designs that meet those requirements.
+
+## Table of Index Kaggle
 
 Maths:
 
